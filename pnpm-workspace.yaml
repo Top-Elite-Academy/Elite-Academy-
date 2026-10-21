@@ -1,0 +1,17 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Supply-chain protection: never install a version published less than 7 days ago
+# (gives the community time to catch hijacked releases). Value is in minutes.
+minimumReleaseAge: 10080
+
+# pnpm 10 blocks install scripts by default; only these packages may run them.
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - '@swc/core'
+  - argon2
+  - esbuild
+  - prisma
+  - sharp
+  - unrs-resolver
