@@ -1,0 +1,10 @@
+{
+  "invitation": {
+    "subject": "You're invited to Elite Tech Academy",
+    "body": "Hello {firstName},\n\nAn account has been created for you at Elite Tech Academy.\nSet your password using this link (valid for {hours} hours, single use):\n\n{link}\n\nIf you did not expect this email, you can ignore it.\n\nElite Tech Academy · Scientia et Innovatio"
+  },
+  "passwordReset": {
+    "subject": "Reset your Elite Tech Academy password",
+    "body": "Hello {firstName},\n\nWe received a request to reset your password.\nUse this link within {minutes} minutes (single use):\n\n{link}\n\nIf you did not ask for this, ignore this email; your password stays the same.\n\nElite Tech Academy · Scientia et Innovatio"
+  }
+}

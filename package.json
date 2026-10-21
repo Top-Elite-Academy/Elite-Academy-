@@ -18,7 +18,7 @@
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
     "db:migrate": "pnpm --filter @eta/db migrate:dev",
-    "db:seed": "pnpm --filter @eta/db seed"
+    "db:seed": "pnpm --filter @eta/api build && pnpm --filter @eta/api seed"
   },
   "devDependencies": {
     "prettier": "^3.9.10",

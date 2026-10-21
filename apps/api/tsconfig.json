@@ -1,0 +1,9 @@
+{
+  "extends": "@eta/tsconfig/nestjs.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "types": ["node"]
+  },
+  "include": ["src", "test"]
+}
