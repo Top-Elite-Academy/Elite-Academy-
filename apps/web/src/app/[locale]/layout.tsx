@@ -39,7 +39,12 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={fontVariables}
       {...prefsAttributes(await getA11yPrefs())}
     >
-      <body className="flex min-h-dvh flex-col bg-cream text-ink antialiased">
+      {/* Browser extensions (e.g. test recorders) add attributes to <body> before React loads.
+          This ignores attribute differences on <body> itself only, never inside the page. */}
+      <body
+        className="flex min-h-dvh flex-col bg-cream text-ink antialiased"
+        suppressHydrationWarning
+      >
         <NextIntlClientProvider>
           {children}
           <AccessibilityMenu />
