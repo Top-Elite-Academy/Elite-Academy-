@@ -11,7 +11,7 @@
   "files": [
     "*.js"
   ],
-  "dependencies": {
+  "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@next/eslint-plugin-next": "^16.4.0",
     "eslint": "^9.39.5",
@@ -22,5 +22,6 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.71.2"
-  }
+  },
+  "description": "Lint rules only — never shipped, so its packages are dev dependencies."
 }

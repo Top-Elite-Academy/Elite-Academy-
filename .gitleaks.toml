@@ -1,0 +1,12 @@
+# Secret scanning (spec §9.7). Uses gitleaks' built-in rules.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documented public test values"
+# Cloudflare Turnstile's official always-pass TEST keys and the CI-only database password.
+regexes = [
+  '''1x0000000000000000000000000000000AA''',
+  '''1x00000000000000000000AA''',
+  '''ci-only-password''',
+]

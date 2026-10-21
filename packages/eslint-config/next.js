@@ -43,6 +43,10 @@ export default tseslint.config(
   },
   {
     files: ['**/*.test.tsx', '**/e2e/**'],
-    rules: { 'i18next/no-literal-string': 'off' },
+    rules: {
+      'i18next/no-literal-string': 'off',
+      // Playwright fixtures call a function named `use`, which is not a React hook.
+      'react-hooks/rules-of-hooks': 'off',
+    },
   },
 );

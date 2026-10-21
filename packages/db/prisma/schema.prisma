@@ -45,27 +45,27 @@ enum ConsentType {
 }
 
 model User {
-  id               String     @id @default(uuid()) @db.Uuid
+  id            String     @id @default(uuid()) @db.Uuid
   /// Always stored lower-case (normalised by the shared Zod schema).
-  email            String     @unique
+  email         String     @unique
   /// E.164, e.g. +972501234567
-  phone            String?
-  firstName        String     @map("first_name")
-  lastName         String     @map("last_name")
+  phone         String?
+  firstName     String     @map("first_name")
+  lastName      String     @map("last_name")
   /// Argon2id hash. Null until the invitation is accepted.
-  passwordHash     String?    @map("password_hash")
-  locale           Locale     @default(en)
-  timeZone         String     @default("Asia/Jerusalem") @map("time_zone")
+  passwordHash  String?    @map("password_hash")
+  locale        Locale     @default(en)
+  timeZone      String     @default("Asia/Jerusalem") @map("time_zone")
   /// TOTP secret encrypted with AES-256-GCM (FIELD_ENCRYPTION_KEY). Never returned by the API.
-  totpSecretEnc    String?    @map("totp_secret_enc")
-  totpEnabledAt    DateTime?  @map("totp_enabled_at")
+  totpSecretEnc String?    @map("totp_secret_enc")
+  totpEnabledAt DateTime?  @map("totp_enabled_at")
   /// Last accepted TOTP time step; a code can never be used twice.
-  totpLastStep     Int?       @map("totp_last_step")
-  status           UserStatus @default(invited)
-  lastLoginAt      DateTime?  @map("last_login_at")
-  createdAt        DateTime   @default(now()) @map("created_at")
-  updatedAt        DateTime   @updatedAt @map("updated_at")
-  deletedAt        DateTime?  @map("deleted_at")
+  totpLastStep  Int?       @map("totp_last_step")
+  status        UserStatus @default(invited)
+  lastLoginAt   DateTime?  @map("last_login_at")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+  deletedAt     DateTime?  @map("deleted_at")
 
   roles      UserRole[]
   sessions   Session[]
