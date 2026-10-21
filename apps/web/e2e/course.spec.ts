@@ -25,6 +25,10 @@ test.describe('course details (spec §3.3)', () => {
       await expect(page.getByRole('heading', { level: 2, name: title })).toBeVisible();
     }
     await expect(page.getByRole('main')).not.toContainText('₪');
+    // A course page counts as being under "Courses" in the header.
+    await expect(
+      page.getByRole('banner').getByRole('link', { name: 'Courses', exact: true }),
+    ).toHaveAttribute('aria-current', 'page');
   });
 
   test('tabs link to each section', async ({ page }) => {

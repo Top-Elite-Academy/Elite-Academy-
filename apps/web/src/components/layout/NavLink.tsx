@@ -7,7 +7,7 @@ import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/cn';
 
 /**
- * True when `href` is the current page: same path and, if the link has a query
+ * True when `href` is the current page (or a page under it): same path and, if the link has a query
  * (e.g. ?tab=career), the same values — a missing value counts as the page default.
  * Links to a section (#stories) never match.
  */
@@ -16,7 +16,10 @@ function useIsCurrent(href: string): boolean {
   const searchParams = useSearchParams();
   if (href.includes('#')) return false;
   const target = new URL(href, 'http://local');
-  if (target.pathname !== pathname) return false;
+  // Sub-pages count too: /courses/full-stack-advanced-ai is under "Courses".
+  const samePage = target.pathname === pathname;
+  const subPage = target.pathname !== '/' && pathname.startsWith(`${target.pathname}/`);
+  if (!samePage && !subPage) return false;
   return [...target.searchParams].every(
     ([key, value]) => (searchParams.get(key) ?? DEFAULT_QUERY[key]) === value,
   );
