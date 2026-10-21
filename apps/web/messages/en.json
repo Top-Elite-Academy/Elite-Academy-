@@ -407,5 +407,103 @@
       "syllabus": "Read the syllabus meanwhile",
       "courses": "Back to courses"
     }
+  },
+  "DaysShort": {
+    "sun": "Sun",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat"
+  },
+  "Course": {
+    "stats": {
+      "duration": "Duration",
+      "weeks": "{weeks} weeks",
+      "tbd": "To be announced",
+      "nextCohort": "Next cohort",
+      "format": "Format",
+      "formatValue": "Live online meetings",
+      "language": "Language"
+    },
+    "nav": {
+      "label": "On this page",
+      "overview": "Overview",
+      "outcomes": "What you’ll learn",
+      "curriculum": "Curriculum",
+      "schedule": "Schedule",
+      "access": "How you access the lessons",
+      "instructor": "Instructor",
+      "faq": "FAQ"
+    },
+    "overview": {
+      "title": "Overview",
+      "audience": "Who it’s for:",
+      "stagesTitle": "Two stages, both included",
+      "stageLearning": "Learning stage — live classes, weekly tasks and projects with your instructor.",
+      "stagePractical": "Practical stage — work on a real product at a partner company."
+    },
+    "outcomes": {
+      "title": "What you’ll learn"
+    },
+    "curriculum": {
+      "title": "Curriculum",
+      "summary": "{units, plural, one {# unit} other {# units}} · {weeks} weeks",
+      "weeks": "Weeks {from}–{to}",
+      "week": "Week {week}",
+      "empty": "The detailed curriculum will be published soon. An advisor can walk you through it on the call.",
+      "syllabus": "View full syllabus"
+    },
+    "schedule": {
+      "title": "Schedule and upcoming cohorts",
+      "intro": "Meetings are online, with a link sent before each one. Times are Jerusalem time. Every meeting is recorded so you can review it later.",
+      "cohort": "Cohort",
+      "starts": "Starts",
+      "daysTime": "Days and time",
+      "seats": "Seats",
+      "cohortName": "{month} cohort",
+      "seatsLeft": "{count, plural, one {# seat left} other {# seats left}}",
+      "open": "Enrollment open",
+      "full": "Full — join waitlist",
+      "none": "New dates will be announced soon. Leave your details and an advisor will let you know."
+    },
+    "access": {
+      "title": "How you access the lessons",
+      "live": "Live classes on Zoom with your instructor and group",
+      "recordings": "Every class recorded and available in the student area",
+      "materials": "Lesson summaries, exercises and files to download",
+      "support": "Questions to your instructor through messages in the platform"
+    },
+    "instructor": {
+      "title": "Instructor",
+      "mentoring": "Available for mentoring",
+      "book": "Book a mentoring session"
+    },
+    "faq": {
+      "title": "Course questions"
+    },
+    "card": {
+      "nextCohort": "Next cohort",
+      "noDates": "Dates coming soon",
+      "chooseCohort": "Choose a cohort",
+      "starts": "Starts {date}",
+      "fewSeats": "{count, plural, one {Only # seat} other {Only # seats}}",
+      "open": "Open",
+      "full": "Full — join waitlist",
+      "enroll": "Enroll — book a call",
+      "noPayment": "No payment now.",
+      "noPaymentBody": "An advisor calls you to go over price and installments.",
+      "included": "What’s included",
+      "includedItems": {
+        "live": "Live classes",
+        "recordings": "Recordings of every class",
+        "projects": "Weekly tasks and projects",
+        "practical": "A practical stage at a company",
+        "certificate": "Certificate of completion"
+      },
+      "question": "Have a question first?",
+      "questionBody": "Message the academy team"
+    }
   }
 }

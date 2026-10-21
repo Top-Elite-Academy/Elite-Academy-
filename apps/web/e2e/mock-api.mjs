@@ -79,6 +79,57 @@ const stories = [
   },
 ];
 
+/** Course details (spec §3.3) for two programs: a full one and one without curriculum. */
+const details = {
+  'full-stack-advanced-ai': {
+    ...programs[1],
+    overview: 'A 24-week program.',
+    audience: 'For people who know basic programming.',
+    outcomes: ['Build typed front ends', 'Design REST APIs'],
+    teachingLanguages: ['ar', 'he'],
+    modules: [
+      { order: 1, title: 'Modern JavaScript', weekFrom: 1, weekTo: 4, topics: ['Async/await'] },
+      { order: 2, title: 'React', weekFrom: 5, weekTo: 9, topics: ['Components'] },
+    ],
+    cohorts: [
+      {
+        id: 'c1111111-1111-4111-8111-111111111111',
+        startDate: '2030-11-09',
+        schedule: { days: ['mon', 'wed'], from: '18:00', to: '21:00' },
+        seatsLeft: 2,
+        status: 'open',
+      },
+      {
+        id: 'c2222222-2222-4222-8222-222222222222',
+        startDate: '2031-01-10',
+        schedule: null,
+        seatsLeft: 0,
+        status: 'full',
+      },
+      {
+        id: 'c3333333-3333-4333-8333-333333333333',
+        startDate: '2031-03-02',
+        schedule: { days: ['sun'], from: '19:00', to: '22:00' },
+        seatsLeft: 12,
+        status: 'open',
+      },
+    ],
+    instructor: { ...instructors[1], languages: ['ar', 'en'] },
+    faqs: [{ key: 'q1', question: 'Do I get a certificate?', answer: 'Yes.' }],
+  },
+  devops: {
+    ...programs[2],
+    overview: 'Ship software.',
+    audience: '',
+    outcomes: [],
+    teachingLanguages: [],
+    modules: [],
+    cohorts: [],
+    instructor: null,
+    faqs: [],
+  },
+};
+
 const routes = {
   '/api/programs': programs,
   '/api/instructors': instructors,
@@ -90,7 +141,10 @@ const routes = {
 createServer((request, response) => {
   const { pathname, searchParams } = new URL(request.url ?? '/', 'http://localhost');
   const isTop = pathname === '/api/programs' && searchParams.get('top') === 'true';
-  const body = isTop ? programs.slice(0, 2) : routes[pathname];
+  const slug = pathname.startsWith('/api/programs/')
+    ? pathname.slice('/api/programs/'.length)
+    : null;
+  const body = isTop ? programs.slice(0, 2) : slug ? details[slug] : routes[pathname];
   response.writeHead(body ? 200 : 404, { 'content-type': 'application/json' });
   response.end(JSON.stringify(body ?? { statusCode: 404, code: 'notFound' }));
 }).listen(PORT, '127.0.0.1');

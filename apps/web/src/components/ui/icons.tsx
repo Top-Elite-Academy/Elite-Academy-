@@ -106,6 +106,24 @@ export const SearchIcon = icon(
 );
 export const FiltersIcon = icon(<path d="M4 7h10M18 7h2M4 17h4M12 17h8M14 4v6M8 14v6" />);
 
+export const CheckIcon = icon(<path d="M5 12.5l4.5 4.5L19 7.5" />);
+export const CheckCircleIcon = icon(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M8 12.5l3 3 5-6" />
+  </>,
+);
+export const PlayIcon = icon(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M10 8.5v7l6-3.5-6-3.5Z" />
+  </>,
+);
+export const DownloadIcon = icon(<path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" />);
+export const MessageIcon = icon(
+  <path d="M5 5h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 3.5V6a1 1 0 0 1 1-1Z" />,
+);
+
 /** Points "forward" in reading direction: flips automatically in Arabic and Hebrew. */
 export function ArrowForwardIcon({ className, ...props }: IconProps) {
   return (

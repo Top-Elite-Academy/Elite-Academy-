@@ -34,8 +34,9 @@ export const programPath = (slug: string) => `/courses/${encodeURIComponent(slug
 export const syllabusPath = (slug: string) => `${programPath(slug)}/syllabus`;
 
 /** Enroll form with the program preselected (spec §3.2). */
-export const enrollPath = (programSlug: string) =>
-  `/enroll?program=${encodeURIComponent(programSlug)}`;
+export const enrollPath = (programSlug: string, cohortId?: string) =>
+  `/enroll?program=${encodeURIComponent(programSlug)}` +
+  (cohortId ? `&cohort=${encodeURIComponent(cohortId)}` : '');
 
 /** Booking flow with mentoring and a mentor preselected (spec §3.5). */
 export const bookMentorPath = (mentorId: string) =>
