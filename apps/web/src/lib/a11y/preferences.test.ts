@@ -1,74 +1,56 @@
 import { describe, expect, it } from 'vitest';
 import {
-  A11Y_BOOT_SCRIPT,
-  A11Y_STORAGE_KEY,
   type A11yPrefs,
   applyPrefs,
   DEFAULT_PREFS,
   parsePrefs,
+  prefsAttributes,
+  serializePrefs,
 } from './preferences';
 
 /** Just enough of an element to record attributes (no DOM library needed). */
 function fakeElement() {
   const attributes = new Map<string, string>();
-  return {
-    attributes,
+  const element = {
+    getAttributeNames: () => [...attributes.keys()],
     setAttribute: (name: string, value: string) => attributes.set(name, value),
     removeAttribute: (name: string) => attributes.delete(name),
-    toggleAttribute: (name: string, force: boolean) => {
-      if (force) attributes.set(name, '');
-      else attributes.delete(name);
-      return force;
-    },
   };
+  return { attributes, root: element as unknown as HTMLElement };
 }
 
-/** Runs the <head> script with a fake localStorage and document. */
-function runBootScript(prefs: A11yPrefs) {
-  const root = fakeElement();
-  const storage = {
-    getItem: (key: string) => (key === A11Y_STORAGE_KEY ? JSON.stringify(prefs) : null),
-  };
-  // eslint-disable-next-line no-new-func, @typescript-eslint/no-implied-eval -- runs our own constant, as the page does
-  new Function('localStorage', 'document', A11Y_BOOT_SCRIPT)(storage, { documentElement: root });
-  return root.attributes;
-}
+describe('cookie value', () => {
+  it('round-trips, storing only what differs from the default', () => {
+    const prefs: A11yPrefs = { ...DEFAULT_PREFS, textSize: 'large', contrast: true };
+    expect(decodeURIComponent(serializePrefs(prefs))).toBe('{"textSize":"large","contrast":true}');
+    expect(parsePrefs(serializePrefs(prefs))).toEqual(prefs);
+  });
 
-describe('parsePrefs', () => {
-  it('keeps valid settings and ignores anything else', () => {
-    expect(parsePrefs(JSON.stringify({ textSize: 'large', contrast: true, links: 'yes' }))).toEqual(
-      {
-        ...DEFAULT_PREFS,
-        textSize: 'large',
-        contrast: true,
-      },
+  it('ignores anything unexpected', () => {
+    expect(parsePrefs(encodeURIComponent('{"textSize":"huge","links":"yes"}'))).toEqual(
+      DEFAULT_PREFS,
     );
-    expect(parsePrefs(JSON.stringify({ textSize: 'huge' }))).toEqual(DEFAULT_PREFS);
-    expect(parsePrefs('{not json')).toEqual(DEFAULT_PREFS);
-    expect(parsePrefs(null)).toEqual(DEFAULT_PREFS);
+    expect(parsePrefs('%7Bnot json')).toEqual(DEFAULT_PREFS);
+    expect(parsePrefs('%E0%A4%A')).toEqual(DEFAULT_PREFS); // broken encoding
+    expect(parsePrefs(undefined)).toEqual(DEFAULT_PREFS);
   });
 });
 
-describe('applyPrefs and the boot script', () => {
-  it('set the same attributes, so the page never flashes the default style', () => {
+describe('attributes', () => {
+  it('the live page gets exactly what the server renders, and reset removes it all', () => {
     const prefs: A11yPrefs = { ...DEFAULT_PREFS, textSize: 'larger', motion: true, font: true };
-    const applied = fakeElement();
-    applyPrefs(applied as unknown as HTMLElement, prefs);
-
-    expect(Object.fromEntries(runBootScript(prefs))).toEqual(
-      Object.fromEntries(applied.attributes),
-    );
-    expect(applied.attributes.get('data-a11y-text')).toBe('larger');
-  });
-
-  it('removes everything when reset', () => {
-    const root = fakeElement();
-    applyPrefs(root as unknown as HTMLElement, {
-      ...DEFAULT_PREFS,
-      textSize: 'large',
-      links: true,
+    expect(prefsAttributes(prefs)).toEqual({
+      'data-a11y-text': 'larger',
+      'data-a11y-font': '',
+      'data-a11y-motion': '',
     });
-    applyPrefs(root as unknown as HTMLElement, DEFAULT_PREFS);
-    expect(root.attributes.size).toBe(0);
+
+    const { attributes, root } = fakeElement();
+    attributes.set('lang', 'en');
+    applyPrefs(root, prefs);
+    expect(Object.fromEntries(attributes)).toEqual({ lang: 'en', ...prefsAttributes(prefs) });
+
+    applyPrefs(root, DEFAULT_PREFS);
+    expect(Object.fromEntries(attributes)).toEqual({ lang: 'en' });
   });
 });

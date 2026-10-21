@@ -6,8 +6,8 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { AccessibilityMenu } from '@/components/a11y/AccessibilityMenu';
 import { routing } from '@/i18n/routing';
-import { A11Y_BOOT_SCRIPT } from '@/lib/a11y/preferences';
-import { getNonce } from '@/lib/nonce';
+import { prefsAttributes } from '@/lib/a11y/preferences';
+import { getA11yPrefs } from '@/lib/a11y/server-prefs';
 import { fontVariables } from '@/styles/fonts';
 import '@/styles/globals.css';
 
@@ -33,18 +33,12 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
 
   return (
-    // suppressHydrationWarning: the head script adds the visitor's accessibility settings first.
     <html
       lang={locale}
       dir={directionOf(locale)}
       className={fontVariables}
-      suppressHydrationWarning
+      {...prefsAttributes(await getA11yPrefs())}
     >
-      <head>
-        {/* Our own constant script (no user data), allowed by the CSP nonce. */}
-        {/* eslint-disable-next-line react/no-danger */}
-        <script nonce={await getNonce()} dangerouslySetInnerHTML={{ __html: A11Y_BOOT_SCRIPT }} />
-      </head>
       <body className="flex min-h-dvh flex-col bg-cream text-ink antialiased">
         <NextIntlClientProvider>
           {children}

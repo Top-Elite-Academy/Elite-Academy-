@@ -2,25 +2,25 @@
 
 import { useSyncExternalStore } from 'react';
 import {
-  A11Y_STORAGE_KEY,
+  A11Y_COOKIE,
+  A11Y_COOKIE_MAX_AGE,
   type A11yPrefs,
   applyPrefs,
   DEFAULT_PREFS,
   parsePrefs,
+  serializePrefs,
 } from './preferences';
 
 let current: A11yPrefs | null = null;
 const listeners = new Set<() => void>();
 
 function read(): A11yPrefs {
-  if (!current) {
-    try {
-      current = parsePrefs(localStorage.getItem(A11Y_STORAGE_KEY));
-    } catch {
-      // Storage blocked (private mode, site data off): settings still work for this page.
-      current = DEFAULT_PREFS;
-    }
-  }
+  current ??= parsePrefs(
+    document.cookie
+      .split('; ')
+      .find((part) => part.startsWith(`${A11Y_COOKIE}=`))
+      ?.slice(A11Y_COOKIE.length + 1),
+  );
   return current;
 }
 
@@ -36,11 +36,8 @@ function subscribe(listener: () => void) {
 export function updateA11yPrefs(change: Partial<A11yPrefs>): void {
   const prefs = { ...read(), ...change };
   current = prefs;
-  try {
-    localStorage.setItem(A11Y_STORAGE_KEY, JSON.stringify(prefs));
-  } catch {
-    // See read(): not saved, but applied.
-  }
+  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = `${A11Y_COOKIE}=${serializePrefs(prefs)}; Path=/; Max-Age=${A11Y_COOKIE_MAX_AGE}; SameSite=Lax${secure}`;
   applyPrefs(document.documentElement, prefs);
   for (const listener of listeners) listener();
 }

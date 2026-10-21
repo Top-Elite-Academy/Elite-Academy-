@@ -20,14 +20,27 @@ export const DEFAULT_PREFS: A11yPrefs = {
   spacing: false,
 };
 
-/** Kept in this browser only: a per-visitor convenience, nothing is sent to the server. */
-export const A11Y_STORAGE_KEY = 'eta-a11y';
+/**
+ * Saved in a cookie on this device so the server can render the page with the
+ * settings already applied: no flash of the default style, no inline script,
+ * and it works without JavaScript. A preference only — nothing personal.
+ */
+export const A11Y_COOKIE = 'eta_a11y';
+export const A11Y_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+/** Cookie value: only the settings that differ from the default, as URL-encoded JSON. */
+export function serializePrefs(prefs: A11yPrefs): string {
+  const changed = Object.fromEntries(
+    Object.entries(prefs).filter(([key, value]) => DEFAULT_PREFS[key as keyof A11yPrefs] !== value),
+  );
+  return encodeURIComponent(JSON.stringify(changed));
+}
 
 /** Reads saved settings; anything unexpected falls back to the default. */
-export function parsePrefs(raw: string | null): A11yPrefs {
+export function parsePrefs(raw: string | null | undefined): A11yPrefs {
   let saved: Record<string, unknown> = {};
   try {
-    const value: unknown = raw ? JSON.parse(raw) : {};
+    const value: unknown = raw ? JSON.parse(decodeURIComponent(raw)) : {};
     if (value && typeof value === 'object') saved = value as Record<string, unknown>;
   } catch {
     // Corrupt value: ignore it.
@@ -39,20 +52,19 @@ export function parsePrefs(raw: string | null): A11yPrefs {
   return prefs;
 }
 
-/** Sets or removes the data-a11y-* attributes on the root element. */
-export function applyPrefs(root: HTMLElement, prefs: A11yPrefs): void {
-  if (prefs.textSize === 'normal') root.removeAttribute('data-a11y-text');
-  else root.setAttribute('data-a11y-text', prefs.textSize);
-  for (const key of A11Y_TOGGLES) root.toggleAttribute(`data-a11y-${key}`, prefs[key]);
+/** The data-a11y-* attributes for <html>; globals.css styles them. */
+export function prefsAttributes(prefs: A11yPrefs): Record<string, string> {
+  const attributes: Record<string, string> = {};
+  if (prefs.textSize !== 'normal') attributes['data-a11y-text'] = prefs.textSize;
+  for (const key of A11Y_TOGGLES) if (prefs[key]) attributes[`data-a11y-${key}`] = '';
+  return attributes;
 }
 
-/**
- * Runs in <head> before the page paints, so a visitor who chose large text or
- * high contrast never sees the page flash in the default style. Mirrors
- * parsePrefs + applyPrefs in plain ES5.
- */
-export const A11Y_BOOT_SCRIPT = `try{var p=JSON.parse(localStorage.getItem(${JSON.stringify(
-  A11Y_STORAGE_KEY,
-)})||'{}'),d=document.documentElement;if(${JSON.stringify(TEXT_SIZES.slice(1))}.indexOf(p.textSize)>-1)d.setAttribute('data-a11y-text',p.textSize);${JSON.stringify(
-  A11Y_TOGGLES,
-)}.forEach(function(k){if(p[k]===true)d.setAttribute('data-a11y-'+k,'')})}catch(e){}`;
+/** Applies settings to the live page (same attributes the server renders). */
+export function applyPrefs(root: HTMLElement, prefs: A11yPrefs): void {
+  const wanted = prefsAttributes(prefs);
+  for (const name of root.getAttributeNames()) {
+    if (name.startsWith('data-a11y-') && !(name in wanted)) root.removeAttribute(name);
+  }
+  for (const [name, value] of Object.entries(wanted)) root.setAttribute(name, value);
+}
