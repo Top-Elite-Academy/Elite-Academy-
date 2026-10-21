@@ -98,7 +98,7 @@ export function ChatAssistant({
           if (open) close();
           else setOpen(true);
         }}
-        className="chat-launcher fixed end-4 bottom-4 z-40 flex size-16 items-center justify-center rounded-full border-4 border-gold-400 bg-crimson-700 text-white shadow-xl hover:bg-crimson-800 sm:end-6 sm:bottom-6"
+        className="chat-launcher fixed end-4 bottom-4 z-40 flex size-14 items-center justify-center rounded-full border-4 border-gold-400 bg-crimson-700 text-white shadow-xl hover:bg-crimson-800 sm:end-6 sm:bottom-6 lg:size-16"
       >
         {open ? <CloseIcon className="size-7" /> : <MessageIcon className="size-7" />}
         <span className="sr-only">{open ? t('close') : t('open')}</span>

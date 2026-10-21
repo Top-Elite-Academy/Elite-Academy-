@@ -41,7 +41,10 @@ export function StepActions({
         )}
       </div>
       {next && (
-        <div className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-white px-4 py-3 shadow-[0_-4px_12px_rgb(0_0_0/0.06)] lg:hidden">
+        <div
+          data-bottom-bar
+          className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-white px-4 py-3 shadow-[0_-4px_12px_rgb(0_0_0/0.06)] lg:hidden"
+        >
           <div className="mx-auto flex max-w-xl items-center justify-between gap-4">
             <p className="text-sm text-ink-muted">
               {t('summary.total')}{' '}

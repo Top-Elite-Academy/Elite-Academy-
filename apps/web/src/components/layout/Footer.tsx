@@ -14,7 +14,8 @@ export function Footer() {
   const t = useTranslations();
 
   return (
-    <footer className="on-dark mt-auto bg-maroon-900 bg-dots text-white">
+    // pb-20: the last lines can scroll clear of the floating chat and accessibility buttons.
+    <footer className="on-dark mt-auto bg-maroon-900 bg-dots pb-20 text-white">
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
         <div className="flex flex-col items-start gap-4">
           <Logo onDark size="lg" />

@@ -49,7 +49,7 @@ export function CourseHero({ program }: { program: ProgramDetails }) {
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/85">{program.summary}</p>
 
-        <dl className="mt-8 grid gap-3 sm:grid-cols-2 lg:max-w-[calc(100%-24rem)] lg:grid-cols-4">
+        <dl className="mt-8 grid gap-3 sm:grid-cols-2 lg:max-w-[calc(100%-24rem)] xl:grid-cols-4">
           <Fact icon={<ClockIcon className="size-4" />} label={t('Course.stats.duration')}>
             {program.lengthWeeks
               ? t('Course.stats.weeks', { weeks: program.lengthWeeks })

@@ -10,8 +10,8 @@ import { updateA11yPrefs, useA11yPrefs } from '@/lib/a11y/use-a11y-prefs';
 import { cn } from '@/lib/cn';
 
 /**
- * Accessibility settings (IS 5568): a tab on the side of every page — clear of
- * the bottom action bars and the chat button — that opens a native <dialog>
+ * Accessibility settings (IS 5568): a round button in the bottom corner of every
+ * page (opposite the chat, lifted above bottom action bars) that opens a native <dialog>
  * (focus trapped, Escape closes, focus returns to the tab).
  */
 export function AccessibilityMenu() {
@@ -26,7 +26,7 @@ export function AccessibilityMenu() {
         type="button"
         aria-haspopup="dialog"
         onClick={() => dialogRef.current?.showModal()}
-        className="fixed start-0 top-1/2 z-40 flex size-12 -translate-y-1/2 items-center justify-center rounded-e-[var(--radius-control)] bg-slate-700 text-white shadow-lg hover:bg-ink"
+        className="a11y-launcher fixed start-4 bottom-4 z-40 flex size-12 items-center justify-center rounded-full bg-slate-700 text-white shadow-lg hover:bg-ink sm:start-6 sm:bottom-6"
       >
         <AccessibilityIcon className="size-7" />
         <span className="sr-only">{t('open')}</span>
