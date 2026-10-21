@@ -82,8 +82,6 @@ export interface SeedProgram {
   tags: string[];
   topOrder: number | null;
   instructorSlug: string | null;
-  /** Example open cohort (date string YYYY-MM-DD). */
-  cohort: { name: string; startDate: string; seatsTotal: number; seatsTaken: number } | null;
 }
 
 export const PROGRAMS: SeedProgram[] = [
@@ -105,7 +103,6 @@ export const PROGRAMS: SeedProgram[] = [
     tags: ['SQL', 'Python', 'AI'],
     topOrder: 1,
     instructorSlug: 'rana-arafat',
-    cohort: { name: 'November 2026', startDate: '2026-11-02', seatsTotal: 20, seatsTaken: 12 },
   },
   {
     slug: 'full-stack-advanced-ai',
@@ -125,7 +122,6 @@ export const PROGRAMS: SeedProgram[] = [
     tags: ['React', 'Node', 'AI'],
     topOrder: 2,
     instructorSlug: 'dania-hih',
-    cohort: { name: 'November 2026', startDate: '2026-11-09', seatsTotal: 20, seatsTaken: 15 },
   },
   {
     slug: 'python-ai',
@@ -141,7 +137,6 @@ export const PROGRAMS: SeedProgram[] = [
     tags: ['Python', 'ML', 'AI'],
     topOrder: 3,
     instructorSlug: 'muhammad-wattad',
-    cohort: { name: 'November 2026', startDate: '2026-11-16', seatsTotal: 20, seatsTaken: 8 },
   },
   {
     slug: 'full-stack-diploma',
@@ -157,7 +152,6 @@ export const PROGRAMS: SeedProgram[] = [
     tags: ['HTML', 'JavaScript', 'SQL'],
     topOrder: null,
     instructorSlug: null,
-    cohort: null,
   },
   {
     slug: 'devops',
@@ -173,7 +167,6 @@ export const PROGRAMS: SeedProgram[] = [
     tags: ['Linux', 'Docker', 'Cloud'],
     topOrder: null,
     instructorSlug: null,
-    cohort: null,
   },
 ];
 

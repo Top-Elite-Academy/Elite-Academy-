@@ -37,5 +37,10 @@ export default tseslint.config(
       '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
+  {
+    // Content files (translated seed data) are long by nature; the limit is for logic.
+    files: ['**/seed-data/**'],
+    rules: { 'max-lines': 'off' },
+  },
   prettier,
 );

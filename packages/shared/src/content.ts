@@ -69,3 +69,70 @@ export interface StoryItem {
   quote: string;
   photoPath: string | null;
 }
+
+// ---- Course details (spec §3.3) --------------------------------------------
+
+/** Public lists stored once per language. */
+export type LocalizedList = Record<Locale, string[]>;
+
+const localizedListSchema = z.object({
+  en: z.array(z.string()),
+  ar: z.array(z.string()),
+  he: z.array(z.string()),
+});
+
+/** Like localize(), for lists; falls back to English when the language is missing or empty. */
+export function localizeList(value: unknown, locale: Locale): string[] {
+  const parsed = localizedListSchema.partial().safeParse(value);
+  if (!parsed.success) return [];
+  const list = parsed.data[locale];
+  return list?.length ? list : (parsed.data[DEFAULT_LOCALE] ?? []);
+}
+
+export const programSlugSchema = z.string().regex(/^[a-z0-9-]{1,80}$/);
+
+/** Cohort meeting days and times, e.g. {days: ["sun","wed"], from: "18:00", to: "21:00"}. */
+export const cohortScheduleSchema = z.object({
+  days: z.array(z.enum(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'])).min(1),
+  from: z.string().regex(/^\d{2}:\d{2}$/),
+  to: z.string().regex(/^\d{2}:\d{2}$/),
+});
+export type CohortSchedule = z.infer<typeof cohortScheduleSchema>;
+
+export interface CohortInfo {
+  id: string;
+  /** ISO date YYYY-MM-DD */
+  startDate: string;
+  schedule: CohortSchedule | null;
+  seatsLeft: number;
+  status: 'open' | 'full';
+}
+
+export interface ModuleInfo {
+  order: number;
+  title: string;
+  weekFrom: number;
+  weekTo: number;
+  topics: string[];
+}
+
+export interface ProgramInstructor {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  photoPath: string | null;
+  languages: Locale[];
+}
+
+export interface ProgramDetails extends ProgramSummary {
+  overview: string;
+  audience: string;
+  outcomes: string[];
+  teachingLanguages: Locale[];
+  modules: ModuleInfo[];
+  /** Upcoming cohorts that are open or full (full ones are shown disabled). */
+  cohorts: CohortInfo[];
+  instructor: ProgramInstructor | null;
+  faqs: FaqItem[];
+}

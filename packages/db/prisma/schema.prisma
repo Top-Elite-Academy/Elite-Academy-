@@ -209,30 +209,39 @@ enum MentorKind {
 }
 
 model Program {
-  id           String         @id @default(uuid()) @db.Uuid
-  slug         String         @unique
+  id                String         @id @default(uuid()) @db.Uuid
+  slug              String         @unique
   /// {en, ar, he}
-  title        Json
+  title             Json
   /// {en, ar, he} — one-line summary for cards
-  summary      Json
-  level        ProgramLevel
-  subject      ProgramSubject @default(web)
+  summary           Json
+  /// {en, ar, he} — course details "Overview" paragraph
+  overview          Json?
+  /// {en, ar, he} — "Who it is for"
+  audience          Json?
+  /// {en: [...], ar: [...], he: [...]} — "What you will learn" bullets
+  outcomes          Json?
+  /// Languages the classes are taught in
+  teachingLanguages Locale[]       @map("teaching_languages")
+  level             ProgramLevel
+  subject           ProgramSubject @default(web)
   /// Null while not decided (spec §12 open item)
-  lengthWeeks  Int?           @map("length_weeks")
+  lengthWeeks       Int?           @map("length_weeks")
   /// Short technology tags shown on cards, e.g. ["SQL", "Python", "AI"]
-  tags         String[]
-  isTop        Boolean        @default(false) @map("is_top")
-  topOrder     Int?           @map("top_order")
-  published    Boolean        @default(false)
+  tags              String[]
+  isTop             Boolean        @default(false) @map("is_top")
+  topOrder          Int?           @map("top_order")
+  published         Boolean        @default(false)
   /// INTERNAL ONLY — never returned by public endpoints (spec §1: no program prices on the website)
-  priceAgorot  Int?           @map("price_agorot")
-  instructorId String?        @map("instructor_id") @db.Uuid
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
-  deletedAt    DateTime?      @map("deleted_at")
+  priceAgorot       Int?           @map("price_agorot")
+  instructorId      String?        @map("instructor_id") @db.Uuid
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  deletedAt         DateTime?      @map("deleted_at")
 
-  instructor MentorProfile? @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+  instructor MentorProfile?  @relation(fields: [instructorId], references: [id], onDelete: SetNull)
   cohorts    Cohort[]
+  modules    ProgramModule[]
   leads      Lead[]
   faqs       Faq[]
   stories    SuccessStory[]
@@ -460,4 +469,24 @@ model Task {
   @@index([assigneeId, status, dueAt])
   @@index([leadId])
   @@map("tasks")
+}
+
+/// A unit of a program's curriculum (spec §3.3, §7 Module). Weeks and lessons are added with the syllabus.
+model ProgramModule {
+  id        String   @id @default(uuid()) @db.Uuid
+  programId String   @map("program_id") @db.Uuid
+  sortOrder Int      @map("sort_order")
+  /// {en, ar, he}
+  title     Json
+  weekFrom  Int      @map("week_from")
+  weekTo    Int      @map("week_to")
+  /// {en: [...], ar: [...], he: [...]}
+  topics    Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, sortOrder])
+  @@map("program_modules")
 }

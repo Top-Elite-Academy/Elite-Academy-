@@ -5,13 +5,8 @@ import { CommonModule } from '../common/common.module';
 import { PrismaService } from '../common/prisma/prisma.service';
 import { AppConfigModule } from '../config/app-config.module';
 import { loadEnvFile } from '../config/load-env';
-import {
-  EXAMPLE_STORIES,
-  FAQS,
-  INSTRUCTORS,
-  PROGRAMS,
-  type SeedProgram,
-} from './seed-data/public-content';
+import { EXAMPLE_STORIES, FAQS, INSTRUCTORS, PROGRAMS } from './seed-data/public-content';
+import { seedProgramDetails } from './seed-program-details';
 
 @Module({ imports: [AppConfigModule, CommonModule] })
 class SeedModule {}
@@ -30,19 +25,8 @@ async function seedInstructors(prisma: PrismaService): Promise<Map<string, strin
   return ids;
 }
 
-async function upsertCohort(
-  prisma: PrismaService,
-  programId: string,
-  cohort: NonNullable<SeedProgram['cohort']>,
-): Promise<void> {
-  const data = { ...cohort, startDate: new Date(`${cohort.startDate}T00:00:00Z`) };
-  const existing = await prisma.cohort.findFirst({ where: { programId, name: cohort.name } });
-  if (existing) await prisma.cohort.update({ where: { id: existing.id }, data });
-  else await prisma.cohort.create({ data: { programId, ...data } });
-}
-
 async function seedPrograms(prisma: PrismaService, instructorIds: Map<string, string>) {
-  for (const { slug, instructorSlug, cohort, topOrder, ...data } of PROGRAMS) {
+  for (const { slug, instructorSlug, topOrder, ...data } of PROGRAMS) {
     const fields = {
       ...data,
       isTop: topOrder !== null,
@@ -55,7 +39,7 @@ async function seedPrograms(prisma: PrismaService, instructorIds: Map<string, st
       create: { slug, ...fields },
       update: fields,
     });
-    if (cohort) await upsertCohort(prisma, program.id, cohort);
+    await seedProgramDetails(prisma, program.id, slug);
   }
 }
 

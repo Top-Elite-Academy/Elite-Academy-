@@ -175,3 +175,80 @@ describe('GET /api/stories (spec §9.10)', () => {
     expect(response.body.map((s: { key: string }) => s.key)).toEqual(['with-consent']);
   });
 });
+
+describe('GET /api/programs/:slug (spec §3.3)', () => {
+  it('returns localized details, upcoming open/full cohorts, modules and program FAQ — never a price', async () => {
+    const program = await createProgram('fullstack', {
+      overview: text('Overview'),
+      outcomes: { en: ['Build apps'], ar: ['ابنِ'], he: [] },
+      teachingLanguages: ['ar', 'he'],
+    });
+    await t.prisma.programModule.create({
+      data: {
+        programId: program.id,
+        sortOrder: 1,
+        title: text('Basics'),
+        weekFrom: 1,
+        weekTo: 2,
+        topics: { en: ['HTML'], ar: [], he: [] },
+      },
+    });
+    await t.prisma.cohort.createMany({
+      data: [
+        {
+          programId: program.id,
+          name: 'open',
+          startDate: daysFromNow(5),
+          seatsTotal: 10,
+          seatsTaken: 8,
+          schedule: { days: ['sun', 'wed'], from: '18:00', to: '21:00' },
+        },
+        {
+          programId: program.id,
+          name: 'sold out',
+          startDate: daysFromNow(9),
+          seatsTotal: 10,
+          seatsTaken: 10,
+        },
+        { programId: program.id, name: 'past', startDate: daysFromNow(-3), seatsTotal: 10 },
+        {
+          programId: program.id,
+          name: 'running',
+          startDate: daysFromNow(20),
+          seatsTotal: 10,
+          status: 'running',
+        },
+      ],
+    });
+    await t.prisma.faq.create({
+      data: { key: 'p1', programId: program.id, question: text('Q?'), answer: text('A') },
+    });
+
+    const response = await new Browser(t).get('/api/programs/fullstack?locale=ar');
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({
+      overview: 'Overview (ar)',
+      outcomes: ['ابنِ'],
+      teachingLanguages: ['ar', 'he'],
+      modules: [{ order: 1, title: 'Basics (ar)', weekFrom: 1, weekTo: 2, topics: ['HTML'] }],
+      faqs: [{ key: 'p1', question: 'Q? (ar)' }],
+    });
+    expect(response.body.cohorts).toEqual([
+      expect.objectContaining({
+        seatsLeft: 2,
+        status: 'open',
+        schedule: { days: ['sun', 'wed'], from: '18:00', to: '21:00' },
+      }),
+      expect.objectContaining({ seatsLeft: 0, status: 'full', schedule: null }),
+    ]);
+    expect(JSON.stringify(response.body)).not.toMatch(/price|1500000/i);
+  });
+
+  it('answers 404 for unknown, unpublished or malformed slugs', async () => {
+    await createProgram('draft', { published: false });
+    const browser = new Browser(t);
+    expect((await browser.get('/api/programs/nope')).status).toBe(404);
+    expect((await browser.get('/api/programs/draft')).status).toBe(404);
+    expect((await browser.get('/api/programs/..%2Fusers')).status).toBe(404);
+  });
+});

@@ -29,3 +29,12 @@ describe('programsQuerySchema', () => {
     expect(programsQuerySchema.safeParse({ locale: 'fr' }).success).toBe(false);
   });
 });
+
+describe('localizeList', () => {
+  it('returns the requested language and falls back to English when empty', async () => {
+    const { localizeList } = await import('./content');
+    expect(localizeList({ en: ['a'], ar: ['ب'], he: [] }, 'ar')).toEqual(['ب']);
+    expect(localizeList({ en: ['a'], ar: ['ب'], he: [] }, 'he')).toEqual(['a']);
+    expect(localizeList('nope', 'en')).toEqual([]);
+  });
+});
