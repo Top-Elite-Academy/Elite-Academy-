@@ -12,6 +12,7 @@ import { AppConfig } from './config/app-config';
 import { AppConfigModule } from './config/app-config.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
 import { SessionGuard } from './modules/auth/session.guard';
 import { ConsentModule } from './modules/consent/consent.module';
 import { HealthController } from './modules/health/health.controller';
@@ -36,6 +37,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     InvitationsModule,
     ConsentModule,
+    CatalogModule,
   ],
   controllers: [HealthController],
   providers: [

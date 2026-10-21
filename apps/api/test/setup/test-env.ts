@@ -20,6 +20,7 @@ export function applyTestEnv(): void {
     WEB_ORIGIN: 'http://localhost:3000',
     HIBP_ENABLED: 'false',
     OPENAPI_ENABLED: 'false',
+    SHOW_EXAMPLE_CONTENT: 'false',
   });
 }
 

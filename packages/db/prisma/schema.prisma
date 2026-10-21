@@ -67,11 +67,12 @@ model User {
   updatedAt     DateTime   @updatedAt @map("updated_at")
   deletedAt     DateTime?  @map("deleted_at")
 
-  roles      UserRole[]
-  sessions   Session[]
-  authTokens AuthToken[]
-  consents   Consent[]
-  auditLogs  AuditLog[]
+  roles         UserRole[]
+  sessions      Session[]
+  authTokens    AuthToken[]
+  consents      Consent[]
+  auditLogs     AuditLog[]
+  mentorProfile MentorProfile?
 
   @@map("users")
 }
@@ -165,9 +166,158 @@ model Consent {
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
 
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  story SuccessStory?
 
   @@index([userId])
   @@index([leadId])
   @@map("consents")
+}
+
+// ---------------------------------------------------------------------------
+// Catalog and public content (milestone 2).
+// Text shown to the public is stored per language as JSON: {"en": "...", "ar": "...", "he": "..."}.
+// ---------------------------------------------------------------------------
+
+enum ProgramLevel {
+  beginner
+  intermediate
+  advanced
+}
+
+enum CohortStatus {
+  open
+  full
+  running
+  finished
+}
+
+enum MentorKind {
+  instructor
+  career
+}
+
+model Program {
+  id           String       @id @default(uuid()) @db.Uuid
+  slug         String       @unique
+  /// {en, ar, he}
+  title        Json
+  /// {en, ar, he} — one-line summary for cards
+  summary      Json
+  level        ProgramLevel
+  /// Null while not decided (spec §12 open item)
+  lengthWeeks  Int?         @map("length_weeks")
+  /// Short technology tags shown on cards, e.g. ["SQL", "Python", "AI"]
+  tags         String[]
+  isTop        Boolean      @default(false) @map("is_top")
+  topOrder     Int?         @map("top_order")
+  published    Boolean      @default(false)
+  /// INTERNAL ONLY — never returned by public endpoints (spec §1: no program prices on the website)
+  priceAgorot  Int?         @map("price_agorot")
+  instructorId String?      @map("instructor_id") @db.Uuid
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  deletedAt    DateTime?    @map("deleted_at")
+
+  instructor MentorProfile? @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+  cohorts    Cohort[]
+  faqs       Faq[]
+  stories    SuccessStory[]
+
+  @@map("programs")
+}
+
+model Cohort {
+  id           String       @id @default(uuid()) @db.Uuid
+  programId    String       @map("program_id") @db.Uuid
+  name         String
+  startDate    DateTime     @map("start_date") @db.Date
+  /// {days: ["sun","tue"], from: "18:00", to: "21:00"}
+  schedule     Json?
+  seatsTotal   Int          @map("seats_total")
+  seatsTaken   Int          @default(0) @map("seats_taken")
+  status       CohortStatus @default(open)
+  zoomSeriesId String?      @map("zoom_series_id")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@index([programId, startDate])
+  @@map("cohorts")
+}
+
+/// Program instructors and career advisors shown on the site (spec §7 MentorProfile).
+model MentorProfile {
+  id             String     @id @default(uuid()) @db.Uuid
+  slug           String     @unique
+  /// Linked when the person gets a staff account.
+  userId         String?    @unique @map("user_id") @db.Uuid
+  kind           MentorKind
+  /// {en, ar, he}
+  name           Json
+  /// {en, ar, he} e.g. "Program instructor and mentor"
+  role           Json
+  /// {en, ar, he}
+  bio            Json
+  languages      Locale[]
+  photoPath      String?    @map("photo_path")
+  sessionMinutes Int        @default(60) @map("session_minutes")
+  /// Shown first in the landing spotlight (spec §3.1: Dania selected on load).
+  featured       Boolean    @default(false)
+  sortOrder      Int        @default(0) @map("sort_order")
+  active         Boolean    @default(true)
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  programs Program[]
+
+  @@map("mentor_profiles")
+}
+
+model Faq {
+  id        String   @id @default(uuid()) @db.Uuid
+  /// Stable identifier used by the seed, e.g. "landing.prior-experience"
+  key       String   @unique
+  /// Null = general FAQ (landing); set = that program's FAQ
+  programId String?  @map("program_id") @db.Uuid
+  /// {en, ar, he}
+  question  Json
+  /// {en, ar, he}
+  answer    Json
+  sortOrder Int      @default(0) @map("sort_order")
+  published Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  program Program? @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@map("faqs")
+}
+
+/// Graduate stories (spec §3.1, §9.10): public only when published AND consent is recorded.
+model SuccessStory {
+  id           String   @id @default(uuid()) @db.Uuid
+  key          String   @unique
+  personName   String   @map("person_name")
+  /// {en, ar, he} e.g. "Web development graduate"
+  programLabel Json     @map("program_label")
+  /// {en, ar, he} e.g. "Now works as a junior developer"
+  outcome      Json?
+  /// {en, ar, he}
+  quote        Json
+  photoPath    String?  @map("photo_path")
+  programId    String?  @map("program_id") @db.Uuid
+  consentId    String?  @unique @map("consent_id") @db.Uuid
+  published    Boolean  @default(false)
+  /// Illustrative placeholder: shown only when SHOW_EXAMPLE_CONTENT=true (never in production).
+  isExample    Boolean  @default(false) @map("is_example")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  program Program? @relation(fields: [programId], references: [id], onDelete: SetNull)
+  consent Consent? @relation(fields: [consentId], references: [id], onDelete: SetNull)
+
+  @@map("success_stories")
 }

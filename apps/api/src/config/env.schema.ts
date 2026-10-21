@@ -21,6 +21,7 @@ export const envSchema = z
       .optional()
       .or(z.literal('').transform(() => undefined)),
     OPENAPI_ENABLED: bool.default(false),
+    SHOW_EXAMPLE_CONTENT: bool.default(false),
 
     DATABASE_URL: z.url(),
     REDIS_URL: z.url(),
@@ -54,6 +55,10 @@ export const envSchema = z
   .refine((env) => env.NODE_ENV !== 'production' || env.WEB_ORIGIN.startsWith('https://'), {
     message: 'must use https:// in production',
     path: ['WEB_ORIGIN'],
+  })
+  .refine((env) => env.NODE_ENV !== 'production' || !env.SHOW_EXAMPLE_CONTENT, {
+    message: 'illustrative example content must never be shown in production',
+    path: ['SHOW_EXAMPLE_CONTENT'],
   });
 
 export type Env = z.infer<typeof envSchema>;

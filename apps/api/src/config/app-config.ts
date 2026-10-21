@@ -61,6 +61,11 @@ export class AppConfig {
     };
   }
 
+  /** Illustrative stories (spec §9.10: never in production). */
+  get showExampleContent(): boolean {
+    return this.env.SHOW_EXAMPLE_CONTENT;
+  }
+
   get totpIssuer(): string {
     return this.env.TOTP_ISSUER;
   }
