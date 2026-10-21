@@ -1,0 +1,31 @@
+{
+  "name": "@eta/db",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0"
+  },
+  "devDependencies": {
+    "@eta/tsconfig": "workspace:*",
+    "dotenv": "^17.4.2",
+    "prisma": "^7.10.0",
+    "typescript": "~5.9.3"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "generate": "prisma generate",
+    "build": "prisma generate && tsc -p tsconfig.json",
+    "dev": "prisma generate && tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "typecheck": "prisma generate && tsc --noEmit",
+    "lint": "prisma validate && prisma format --check",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:reset": "prisma migrate reset",
+    "studio": "prisma studio"
+  }
+}

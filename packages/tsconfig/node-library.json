@@ -3,7 +3,6 @@
   "extends": "./base.json",
   "compilerOptions": {
     "module": "CommonJS",
-    "moduleResolution": "Node10",
-    "outDir": "dist"
+    "moduleResolution": "Node10"
   }
 }

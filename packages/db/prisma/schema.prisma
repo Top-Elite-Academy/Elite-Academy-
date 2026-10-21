@@ -1,0 +1,173 @@
+// Elite Tech Academy — database schema (spec §7).
+// Milestone 1: User, UserRole, Session, AuthToken, AuditLog, Consent.
+// Conventions: UUID ids, snake_case in the database, camelCase in code,
+// created_at/updated_at on every table, times in UTC.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  student
+  instructor
+  mentor
+  sales
+  admin
+}
+
+enum Locale {
+  en
+  ar
+  he
+}
+
+enum UserStatus {
+  invited
+  active
+  deactivated
+}
+
+enum AuthTokenType {
+  invitation
+  password_reset
+}
+
+enum ConsentType {
+  contact
+  marketing
+  story
+}
+
+model User {
+  id               String     @id @default(uuid()) @db.Uuid
+  /// Always stored lower-case (normalised by the shared Zod schema).
+  email            String     @unique
+  /// E.164, e.g. +972501234567
+  phone            String?
+  firstName        String     @map("first_name")
+  lastName         String     @map("last_name")
+  /// Argon2id hash. Null until the invitation is accepted.
+  passwordHash     String?    @map("password_hash")
+  locale           Locale     @default(en)
+  timeZone         String     @default("Asia/Jerusalem") @map("time_zone")
+  /// TOTP secret encrypted with AES-256-GCM (FIELD_ENCRYPTION_KEY). Never returned by the API.
+  totpSecretEnc    String?    @map("totp_secret_enc")
+  totpEnabledAt    DateTime?  @map("totp_enabled_at")
+  status           UserStatus @default(invited)
+  failedLoginCount Int        @default(0) @map("failed_login_count")
+  lockedUntil      DateTime?  @map("locked_until")
+  lastLoginAt      DateTime?  @map("last_login_at")
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+  deletedAt        DateTime?  @map("deleted_at")
+
+  roles      UserRole[]
+  sessions   Session[]
+  authTokens AuthToken[]
+  consents   Consent[]
+  auditLogs  AuditLog[]
+
+  @@map("users")
+}
+
+model UserRole {
+  userId    String   @map("user_id") @db.Uuid
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, role])
+  @@map("user_roles")
+}
+
+/// Server-side session. The cookie holds a random token; only its SHA-256 hash is stored.
+model Session {
+  id                String    @id @default(uuid()) @db.Uuid
+  tokenHash         String    @unique @map("token_hash")
+  userId            String    @map("user_id") @db.Uuid
+  /// False until the second step (TOTP) is passed. Such sessions can only reach the 2FA endpoints.
+  mfaVerified       Boolean   @default(false) @map("mfa_verified")
+  lastSeenAt        DateTime  @default(now()) @map("last_seen_at")
+  idleTimeoutSec    Int       @map("idle_timeout_sec")
+  absoluteExpiresAt DateTime  @map("absolute_expires_at")
+  ip                String?
+  userAgent         String?   @map("user_agent")
+  revokedAt         DateTime? @map("revoked_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+/// Single-use invitation and password-reset links. Only the SHA-256 hash is stored.
+model AuthToken {
+  id        String        @id @default(uuid()) @db.Uuid
+  type      AuthTokenType
+  tokenHash String        @unique @map("token_hash")
+  userId    String        @map("user_id") @db.Uuid
+  expiresAt DateTime      @map("expires_at")
+  usedAt    DateTime?     @map("used_at")
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+  @@map("auth_tokens")
+}
+
+/// Append-only (a database trigger blocks UPDATE and DELETE). Never contains secrets.
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  actorId   String?  @map("actor_id") @db.Uuid
+  action    String
+  entity    String
+  entityId  String?  @map("entity_id")
+  before    Json?
+  after     Json?
+  ip        String?
+  userAgent String?  @map("user_agent")
+  at        DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entity, entityId])
+  @@index([actorId])
+  @@index([at])
+  @@map("audit_logs")
+}
+
+/// Proof of consent (spec §9.10). The subject is a user, or a lead (added in milestone 3).
+model Consent {
+  id          String      @id @default(uuid()) @db.Uuid
+  userId      String?     @map("user_id") @db.Uuid
+  /// Foreign key to leads is added with the Lead table in milestone 3.
+  leadId      String?     @map("lead_id") @db.Uuid
+  type        ConsentType
+  /// Version id of the consent wording, e.g. "contact-2026-10".
+  textVersion String      @map("text_version")
+  /// Exact wording the person agreed to, in the language shown.
+  text        String
+  grantedAt   DateTime    @default(now()) @map("granted_at")
+  withdrawnAt DateTime?   @map("withdrawn_at")
+  ip          String?
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([leadId])
+  @@map("consents")
+}
