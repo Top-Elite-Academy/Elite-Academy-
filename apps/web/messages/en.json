@@ -190,6 +190,25 @@
     },
     "user": {
       "exists": "An account with this email already exists."
+    },
+    "phone": {
+      "invalid": "Enter a valid phone number, e.g. 050-123-4567 or +44 7911 123456."
+    },
+    "days": {
+      "required": "Choose at least one day."
+    },
+    "hours": {
+      "required": "Choose at least one time range."
+    },
+    "consent": {
+      "required": "Please agree so we can contact you."
+    },
+    "program": {
+      "required": "Choose a program.",
+      "invalid": "This program is not available. Please choose another one."
+    },
+    "text": {
+      "tooLong": "This text is too long."
     }
   },
   "Levels": {
@@ -325,6 +344,68 @@
       "title": "Not sure which level fits?",
       "body": "Book a short career advice session and we’ll suggest where to start.",
       "cta": "Book career advice"
+    }
+  },
+  "Enroll": {
+    "crumb": "Enroll",
+    "metaTitle": "Enroll — book a call",
+    "title": "Enroll — book a call with us",
+    "intro": "Leave your details and the times that suit you. An academy advisor will call you back to answer your questions and complete your enrollment.",
+    "detailsTitle": "Your details",
+    "program": "Program",
+    "programPlaceholder": "Choose a program",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone number",
+    "phonePlaceholder": "05X-XXX-XXXX",
+    "occupation": "Occupation",
+    "occupationPlaceholder": "e.g. Student, accountant, junior developer",
+    "optional": "(optional)",
+    "whenTitle": "When can we call you?",
+    "whenIntro": "Choose the days and the times you are usually free. We’ll call within those hours.",
+    "days": "Days",
+    "dayNames": {
+      "sun": "Sunday",
+      "mon": "Monday",
+      "tue": "Tuesday",
+      "wed": "Wednesday",
+      "thu": "Thursday",
+      "fri": "Friday",
+      "sat": "Saturday"
+    },
+    "hours": "Available hours",
+    "hourNames": {
+      "morning": "Morning",
+      "midday": "Midday",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    },
+    "notes": "Anything we should know?",
+    "notesPlaceholder": "e.g. I prefer to talk in Arabic, or I have a question about installments.",
+    "privacy": "We use these details only to contact you about the program.",
+    "privacyLink": "Privacy policy",
+    "captcha": "Security check",
+    "submit": "Submit — book my call",
+    "noPayment": "No payment now.",
+    "next": {
+      "title": "What happens next",
+      "step1Lead": "We call you",
+      "step1": "at one of the times you chose, usually within 24 hours.",
+      "step2Lead": "We talk it through:",
+      "step2": "the program, schedule, the practical stage, price and installments.",
+      "step3Lead": "You choose a cohort",
+      "step3": "and register — no payment is taken on this website."
+    },
+    "talkNow": {
+      "title": "Prefer to talk now?",
+      "body": "Call or WhatsApp us:",
+      "whatsapp": "WhatsApp"
+    },
+    "thanks": {
+      "title": "Thank you, {firstName}!",
+      "body": "We received your details. An advisor will call you at one of the times you chose.",
+      "syllabus": "Read the syllabus meanwhile",
+      "courses": "Back to courses"
     }
   }
 }

@@ -1,71 +1,52 @@
-import { type ComponentProps, useId } from 'react';
-import { useTranslations } from 'next-intl';
+import type { ComponentProps } from 'react';
 import { cn } from '@/lib/cn';
+import { CONTROL_CLASS, FieldError, FieldHint, FieldLabel, useFieldIds } from './FieldParts';
 
 interface TextFieldProps extends Omit<ComponentProps<'input'>, 'id'> {
   name: string;
   label: string;
   hint?: string;
+  /** Shown after the label, e.g. "(optional)". */
+  optionalText?: string;
   /** Already translated error message. */
   error?: string;
-  /** Keep e.g. emails, codes and passwords left-to-right inside Arabic and Hebrew pages. */
+  /** Keep e.g. emails, phones, codes and passwords left-to-right inside Arabic and Hebrew pages. */
   ltr?: boolean;
 }
 
-/**
- * Labelled input with hint and error linked through aria-describedby,
- * so screen readers announce them (WCAG 1.3.1, 3.3.1, 3.3.2).
- */
+/** Labelled input with hint and error linked for screen readers. */
 export function TextField({
   name,
   label,
   hint,
+  optionalText,
   error,
   ltr,
   required,
   className,
   ...props
 }: TextFieldProps) {
-  const t = useTranslations('Forms');
-  const id = useId();
-  const hintId = hint ? `${id}-hint` : undefined;
-  const errorId = error ? `${id}-error` : undefined;
-
+  const ids = useFieldIds(hint, error);
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
-      <label htmlFor={id} className="text-sm font-semibold text-ink">
-        {label}
-        {required && (
-          <span className="text-crimson-700">
-            {' '}
-            *<span className="sr-only">{t('required')}</span>
-          </span>
-        )}
-      </label>
-      {hint && (
-        <p id={hintId} className="text-sm text-ink-muted">
-          {hint}
-        </p>
-      )}
+      <FieldLabel htmlFor={ids.id} label={label} required={required} optionalText={optionalText} />
+      <FieldHint id={ids.hintId} text={hint} />
       <input
-        id={id}
+        id={ids.id}
         name={name}
         required={required}
         aria-invalid={error ? true : undefined}
-        aria-describedby={[hintId, errorId].filter(Boolean).join(' ') || undefined}
+        aria-describedby={ids.describedBy}
         dir={ltr ? 'ltr' : undefined}
         className={cn(
-          'min-h-11 rounded-[var(--radius-control)] border bg-white px-3 py-2 text-base text-ink',
+          CONTROL_CLASS,
+          'min-h-11',
           ltr && 'text-start rtl:text-end',
           error ? 'border-danger' : 'border-ink/30',
         )}
         {...props}
       />
-      {error && (
-        <p id={errorId} className="text-sm font-medium text-danger">
-          {error}
-        </p>
-      )}
+      <FieldError id={ids.errorId} text={error} />
     </div>
   );
 }

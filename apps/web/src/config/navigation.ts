@@ -30,6 +30,9 @@ export const ROUTES = {
 /** Course details page of a program (spec §3.3). */
 export const programPath = (slug: string) => `/courses/${encodeURIComponent(slug)}`;
 
+/** Syllabus page of a program (spec §3.4). */
+export const syllabusPath = (slug: string) => `${programPath(slug)}/syllabus`;
+
 /** Enroll form with the program preselected (spec §3.2). */
 export const enrollPath = (programSlug: string) =>
   `/enroll?program=${encodeURIComponent(programSlug)}`;

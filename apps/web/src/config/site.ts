@@ -9,6 +9,8 @@ export const CONTACT = {
   phoneE164: '+972000000000',
   /** Display form; always rendered left-to-right, even in Arabic and Hebrew. */
   phoneDisplay: '+972-00-000-0000',
+  /** WhatsApp chat link (wa.me + number without the plus). */
+  whatsappUrl: 'https://wa.me/972000000000',
   social: {
     instagram: 'https://www.instagram.com/',
     linkedin: 'https://www.linkedin.com/',

@@ -10,6 +10,10 @@ type FieldErrors = Record<string, string>;
 interface SubmitOptions {
   /** Values not in the form fields, e.g. a captcha token or the link token. */
   extra?: Record<string, unknown>;
+  /** Fields sent as lists (checkbox groups that share one name). */
+  arrayFields?: string[];
+  /** Single checkboxes sent as true/false. */
+  booleanFields?: string[];
   /** Extra handling after the error is shown, e.g. reveal the captcha. */
   onError?: (error: ApiError) => void;
 }
@@ -34,7 +38,9 @@ export function useApiForm<S extends z.ZodType<Record<string, unknown>>>(schema:
     setFieldErrors(translated);
     const first = Object.keys(translated)[0];
     const element = first ? form.elements.namedItem(first) : null;
-    if (element instanceof HTMLElement) element.focus();
+    // A checkbox group returns a list: focus its first box.
+    const target = element instanceof RadioNodeList ? element[0] : element;
+    if (target instanceof HTMLElement) target.focus();
     if (!element) setFormError(t('validation'));
   };
 
@@ -46,14 +52,12 @@ export function useApiForm<S extends z.ZodType<Record<string, unknown>>>(schema:
       setFormError(null);
       setFieldErrors({});
 
-      const parsed = schema.safeParse({
-        ...Object.fromEntries(new FormData(form)),
-        ...options.extra,
-      });
+      const parsed = schema.safeParse({ ...valuesOf(form, options), ...options.extra });
       if (!parsed.success) {
         const errors: Record<string, string[]> = {};
         for (const issue of parsed.error.issues) {
-          const field = issue.path.join('.') || '_form';
+          // "days.0" → "days": errors belong to the form field, not to one list item.
+          const field = issue.path[0]?.toString() ?? '_form';
           (errors[field] ??= []).push(issue.message);
         }
         showFieldErrors(form, errors);
@@ -76,4 +80,16 @@ export function useApiForm<S extends z.ZodType<Record<string, unknown>>>(schema:
     };
 
   return { fieldErrors, formError, submitting, onSubmit, setFormError };
+}
+
+/** Form fields as a plain object (schemas decide what an empty field means). */
+function valuesOf(form: HTMLFormElement, options: SubmitOptions): Record<string, unknown> {
+  const data = new FormData(form);
+  const values: Record<string, unknown> = {};
+  for (const [key, value] of data.entries()) {
+    if (typeof value === 'string') values[key] = value;
+  }
+  for (const key of options.arrayFields ?? []) values[key] = data.getAll(key);
+  for (const key of options.booleanFields ?? []) values[key] = data.get(key) === 'on';
+  return values;
 }
