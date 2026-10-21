@@ -3,6 +3,8 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   type FaqItem,
   type InstructorProfile,
+  type MentorCard,
+  type PackageInfo,
   type ProgramDetails,
   programSlugSchema,
   type ProgramSummary,
@@ -10,9 +12,10 @@ import {
 } from '@eta/shared';
 import { ApiException } from '../../common/errors/api.exception';
 import { Public } from '../../common/authz/decorators';
-import { ContentQueryDto, ProgramsQueryDto } from './catalog.dto';
+import { ContentQueryDto, MentorsQueryDto, ProgramsQueryDto } from './catalog.dto';
 import { FaqsService } from './faqs.service';
 import { InstructorsService } from './instructors.service';
+import { MentoringService } from './mentoring.service';
 import { ProgramDetailsService } from './program-details.service';
 import { ProgramsService } from './programs.service';
 import { StoriesService } from './stories.service';
@@ -26,6 +29,7 @@ export class CatalogController {
     private readonly programs: ProgramsService,
     private readonly programDetails: ProgramDetailsService,
     private readonly instructors: InstructorsService,
+    private readonly mentoring: MentoringService,
     private readonly faqs: FaqsService,
     private readonly stories: StoriesService,
   ) {}
@@ -47,6 +51,17 @@ export class CatalogController {
   @Get('instructors')
   listInstructors(@Query() query: ContentQueryDto): Promise<InstructorProfile[]> {
     return this.instructors.list(query.locale);
+  }
+
+  /** Mentoring and career advice packages with their public prices (spec §3.5). */
+  @Get('packages')
+  listPackages(): Promise<PackageInfo[]> {
+    return this.mentoring.packages();
+  }
+
+  @Get('mentors')
+  listMentors(@Query() query: MentorsQueryDto): Promise<MentorCard[]> {
+    return this.mentoring.mentors(query.kind, query.locale);
   }
 
   @Get('faqs')

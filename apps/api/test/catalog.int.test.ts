@@ -252,3 +252,90 @@ describe('GET /api/programs/:slug (spec §3.3)', () => {
     expect((await browser.get('/api/programs/..%2Fusers')).status).toBe(404);
   });
 });
+
+describe('mentoring (spec §3.5)', () => {
+  it('lists active packages with prices from the database', async () => {
+    await t.prisma.package.createMany({
+      data: [
+        {
+          code: 'mentoring-8',
+          kind: 'instructor',
+          sessions: 8,
+          priceAgorot: 200_000,
+          recommended: true,
+          sortOrder: 2,
+        },
+        { code: 'mentoring-1', kind: 'instructor', sessions: 1, priceAgorot: 25_000, sortOrder: 1 },
+        { code: 'old', kind: 'instructor', sessions: 2, priceAgorot: 1, active: false },
+      ],
+    });
+    const response = await new Browser(t).get('/api/packages');
+    expect(response.body).toEqual([
+      {
+        code: 'mentoring-1',
+        kind: 'instructor',
+        sessions: 1,
+        priceAgorot: 25_000,
+        recommended: false,
+      },
+      {
+        code: 'mentoring-8',
+        kind: 'instructor',
+        sessions: 8,
+        priceAgorot: 200_000,
+        recommended: true,
+      },
+    ]);
+  });
+
+  it('lists active mentors of a kind with their program subject and skills', async () => {
+    const dania = await t.prisma.mentorProfile.create({
+      data: {
+        slug: 'dania',
+        kind: 'instructor',
+        name: text('Dania'),
+        role: text('r'),
+        bio: text('b'),
+        languages: ['ar', 'en'],
+        skills: { en: ['React'], ar: ['ريأكت'], he: [] },
+      },
+    });
+    await createProgram('fullstack', { instructorId: dania.id, subject: 'web' });
+    await t.prisma.mentorProfile.create({
+      data: {
+        slug: 'career',
+        kind: 'career',
+        name: text('Noa'),
+        role: text('r'),
+        bio: text('b'),
+        languages: ['he'],
+      },
+    });
+    await t.prisma.mentorProfile.create({
+      data: {
+        slug: 'gone',
+        kind: 'instructor',
+        name: text('Gone'),
+        role: text('r'),
+        bio: text('b'),
+        languages: [],
+        active: false,
+      },
+    });
+
+    const browser = new Browser(t);
+    const instructors = await browser.get('/api/mentors?locale=ar');
+    expect(instructors.body).toEqual([
+      expect.objectContaining({
+        name: 'Dania (ar)',
+        subject: 'web',
+        skills: ['ريأكت'],
+        languages: ['ar', 'en'],
+        program: { slug: 'fullstack', title: 'Program fullstack (ar)' },
+      }),
+    ]);
+    const career = await browser.get('/api/mentors?kind=career');
+    expect(career.body.map((m: { kind: string }) => m.kind)).toEqual(['career']);
+    expect((await browser.get('/api/mentors?kind=admin')).status).toBe(400);
+  });
+});

@@ -284,6 +284,8 @@ model MentorProfile {
   /// {en, ar, he}
   bio            Json
   languages      Locale[]
+  /// {en: [...], ar: [...], he: [...]} — topics shown as chips on mentor cards
+  skills         Json?
   photoPath      String?    @map("photo_path")
   sessionMinutes Int        @default(60) @map("session_minutes")
   /// Shown first in the landing spotlight (spec §3.1: Dania selected on load).
@@ -489,4 +491,23 @@ model ProgramModule {
 
   @@unique([programId, sortOrder])
   @@map("program_modules")
+}
+
+/// Bookable services and their prices (spec §3.5, §7 Package). Prices always come from here, never from the page.
+model Package {
+  id          String     @id @default(uuid()) @db.Uuid
+  /// Stable code used in links, e.g. "mentoring-8", "career"
+  code        String     @unique
+  kind        MentorKind
+  sessions    Int
+  /// Integer agorot: ₪250 = 25000
+  priceAgorot Int        @map("price_agorot")
+  /// Highlighted as the recommended choice (spec: 8-session plan)
+  recommended Boolean    @default(false)
+  sortOrder   Int        @default(0) @map("sort_order")
+  active      Boolean    @default(true)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@map("packages")
 }

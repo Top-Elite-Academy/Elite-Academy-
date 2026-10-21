@@ -1,4 +1,10 @@
-import type { LocalizedText, ProgramLevel, ProgramSubject } from '@eta/shared';
+import type {
+  Locale,
+  LocalizedList,
+  LocalizedText,
+  ProgramLevel,
+  ProgramSubject,
+} from '@eta/shared';
 
 /**
  * Starting content for the public site, in en/ar/he. Admin editing replaces this later (spec §3.1).
@@ -15,6 +21,10 @@ export interface SeedInstructor {
   name: LocalizedText;
   role: LocalizedText;
   bio: LocalizedText;
+  /** Topic chips on mentor cards (spec §3.5). */
+  skills: LocalizedList;
+  /** Session languages, used by the language filter. */
+  languages: Locale[];
   photoPath: string;
   featured: boolean;
   sortOrder: number;
@@ -36,6 +46,12 @@ export const INSTRUCTORS: SeedInstructor[] = [
       ar: 'تقود رنا برنامج تحليل البيانات مع الذكاء الاصطناعي. تدرّس SQL وبايثون وتصوير البيانات باستخدام بيانات حقيقية، وترافق كل دفعة خلال المرحلة العملية في شركة شريكة.',
       he: 'ראנה מובילה את תוכנית ניתוח נתונים עם AI. היא מלמדת SQL,‏ Python והצגת נתונים על מאגרי נתונים אמיתיים, ומלווה כל מחזור בשלב המעשי בחברה שותפה.',
     },
+    skills: {
+      en: ['SQL', 'Python for data', 'Dashboards', 'AI for analysis'],
+      ar: ['SQL', 'بايثون للبيانات', 'لوحات المعلومات', 'الذكاء الاصطناعي للتحليل'],
+      he: ['SQL', 'Python לנתונים', 'דשבורדים', 'AI לניתוח'],
+    },
+    languages: ['ar', 'en'],
     photoPath: '/images/instructors/rana-arafat.jpg',
     featured: false,
     sortOrder: 1,
@@ -49,6 +65,12 @@ export const INSTRUCTORS: SeedInstructor[] = [
       ar: 'تقود دانية برنامج Full Stack المتقدّم مع الذكاء الاصطناعي. تدرّس تطوير الويب الحديث باستخدام TypeScript وReact وNext.js وNode.js، مع التركيز على الكود النظيف والمشاريع الحقيقية، وترافق كل دفعة من الدرس الأول حتى المرحلة العملية في شركة شريكة.',
       he: 'דניה מובילה את תוכנית Full Stack מתקדם עם AI. היא מלמדת פיתוח ווב מודרני עם TypeScript,‏ React,‏ Next.js ו-Node.js, עם דגש על קוד נקי ופרויקטים אמיתיים, ומלווה כל מחזור מהשיעור הראשון ועד השלב המעשי בחברה שותפה.',
     },
+    skills: {
+      en: ['React', 'Node.js', 'Databases', 'AI in web apps'],
+      ar: ['React', 'Node.js', 'قواعد البيانات', 'الذكاء الاصطناعي في تطبيقات الويب'],
+      he: ['React', 'Node.js', 'מסדי נתונים', 'AI באפליקציות ווב'],
+    },
+    languages: ['ar', 'en'],
     photoPath: '/images/instructors/dania-hih.jpg',
     featured: true,
     sortOrder: 2,
@@ -66,6 +88,12 @@ export const INSTRUCTORS: SeedInstructor[] = [
       ar: 'يقود د. محمد برنامج بايثون مع الذكاء الاصطناعي. يدرّس بايثون وتعلّم الآلة والذكاء الاصطناعي التطبيقي، ويجمع بين العمق الأكاديمي والمشاريع العملية، ويرافق كل دفعة حتى المرحلة العملية.',
       he: 'ד"ר מוחמד מוביל את תוכנית Python עם AI. הוא מלמד Python, למידת מכונה ובינה מלאכותית יישומית, משלב עומק אקדמי עם פרויקטים מעשיים ומלווה כל מחזור עד השלב המעשי.',
     },
+    skills: {
+      en: ['Python', 'Machine learning', 'AI applications'],
+      ar: ['بايثون', 'تعلّم الآلة', 'تطبيقات الذكاء الاصطناعي'],
+      he: ['Python', 'למידת מכונה', 'יישומי AI'],
+    },
+    languages: ['ar', 'en'],
     photoPath: '/images/instructors/muhammad-wattad.jpg',
     featured: false,
     sortOrder: 3,
@@ -277,4 +305,36 @@ export const EXAMPLE_STORIES: SeedStory[] = [
       he: 'השיעורים המוקלטים אפשרו לי ללמוד אחרי העבודה, ופגישת הייעוץ הבהירה לי את הצעד הבא.',
     },
   },
+];
+
+export interface SeedPackage {
+  code: string;
+  kind: 'instructor' | 'career';
+  sessions: number;
+  priceAgorot: number;
+  recommended: boolean;
+}
+
+/**
+ * Mentoring and career advice prices (spec §1, §3.5), in agorot.
+ * ⚠ The career advice price (₪250) comes from the design ("from ₪250") — to confirm.
+ */
+export const PACKAGES: SeedPackage[] = [
+  { code: 'mentoring-1', kind: 'instructor', sessions: 1, priceAgorot: 25_000, recommended: false },
+  {
+    code: 'mentoring-4',
+    kind: 'instructor',
+    sessions: 4,
+    priceAgorot: 100_000,
+    recommended: false,
+  },
+  { code: 'mentoring-8', kind: 'instructor', sessions: 8, priceAgorot: 200_000, recommended: true },
+  {
+    code: 'mentoring-12',
+    kind: 'instructor',
+    sessions: 12,
+    priceAgorot: 300_000,
+    recommended: false,
+  },
+  { code: 'career', kind: 'career', sessions: 1, priceAgorot: 25_000, recommended: false },
 ];

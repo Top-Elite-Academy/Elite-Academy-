@@ -136,3 +136,37 @@ export interface ProgramDetails extends ProgramSummary {
   instructor: ProgramInstructor | null;
   faqs: FaqItem[];
 }
+
+// ---- Mentoring and career advice (spec §3.5) --------------------------------
+
+export const MENTOR_KINDS = ['instructor', 'career'] as const;
+export type MentorKind = (typeof MENTOR_KINDS)[number];
+
+export const mentorsQuerySchema = contentQuerySchema.extend({
+  kind: z.enum(MENTOR_KINDS).default('instructor'),
+});
+
+/** A bookable package. Prices are public only for mentoring and career advice (spec §1). */
+export interface PackageInfo {
+  /** e.g. "mentoring-8", "career" — used in booking links */
+  code: string;
+  kind: MentorKind;
+  sessions: number;
+  /** Integer agorot: ₪250 = 25000 */
+  priceAgorot: number;
+  recommended: boolean;
+}
+
+export interface MentorCard {
+  id: string;
+  name: string;
+  role: string;
+  kind: MentorKind;
+  /** Subject of the program they teach; used by the specialty filter. */
+  subject: ProgramSubject | null;
+  program: { slug: string; title: string } | null;
+  skills: string[];
+  languages: Locale[];
+  sessionMinutes: number;
+  photoPath: string | null;
+}

@@ -5,7 +5,7 @@ import { CommonModule } from '../common/common.module';
 import { PrismaService } from '../common/prisma/prisma.service';
 import { AppConfigModule } from '../config/app-config.module';
 import { loadEnvFile } from '../config/load-env';
-import { EXAMPLE_STORIES, FAQS, INSTRUCTORS, PROGRAMS } from './seed-data/public-content';
+import { EXAMPLE_STORIES, FAQS, INSTRUCTORS, PACKAGES, PROGRAMS } from './seed-data/public-content';
 import { seedProgramDetails } from './seed-program-details';
 
 @Module({ imports: [AppConfigModule, CommonModule] })
@@ -17,7 +17,7 @@ async function seedInstructors(prisma: PrismaService): Promise<Map<string, strin
   for (const { slug, ...data } of INSTRUCTORS) {
     const profile = await prisma.mentorProfile.upsert({
       where: { slug },
-      create: { slug, kind: 'instructor', languages: ['ar', 'he', 'en'], ...data },
+      create: { slug, kind: 'instructor', ...data },
       update: data,
     });
     ids.set(slug, profile.id);
@@ -40,6 +40,13 @@ async function seedPrograms(prisma: PrismaService, instructorIds: Map<string, st
       update: fields,
     });
     await seedProgramDetails(prisma, program.id, slug);
+  }
+}
+
+async function seedPackages(prisma: PrismaService) {
+  for (const [index, { code, ...data }] of PACKAGES.entries()) {
+    const fields = { ...data, sortOrder: index + 1, active: true };
+    await prisma.package.upsert({ where: { code }, create: { code, ...fields }, update: fields });
   }
 }
 
@@ -72,6 +79,7 @@ async function seedContent(): Promise<void> {
   try {
     await seedPrograms(prisma, await seedInstructors(prisma));
     await seedFaqs(prisma);
+    await seedPackages(prisma);
     await seedExampleStories(prisma);
     process.stdout.write(
       `Seeded ${PROGRAMS.length} programs, ${INSTRUCTORS.length} instructors, ` +
