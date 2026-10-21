@@ -22,6 +22,8 @@ async function getList<T>(path: string, locale: Locale): Promise<T[]> {
   }
 }
 
+/** All published programs for the catalog (filtered in the page). */
+export const getPrograms = (locale: Locale) => getList<ProgramSummary>('programs', locale);
 export const getTopPrograms = (locale: Locale) =>
   getList<ProgramSummary>('programs?top=true', locale);
 export const getInstructors = (locale: Locale) => getList<InstructorProfile>('instructors', locale);

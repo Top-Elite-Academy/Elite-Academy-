@@ -30,6 +30,10 @@ export const ROUTES = {
 /** Course details page of a program (spec §3.3). */
 export const programPath = (slug: string) => `/courses/${encodeURIComponent(slug)}`;
 
+/** Enroll form with the program preselected (spec §3.2). */
+export const enrollPath = (programSlug: string) =>
+  `/enroll?program=${encodeURIComponent(programSlug)}`;
+
 /** Booking flow with mentoring and a mentor preselected (spec §3.5). */
 export const bookMentorPath = (mentorId: string) =>
   `/book?service=mentoring&mentor=${encodeURIComponent(mentorId)}`;

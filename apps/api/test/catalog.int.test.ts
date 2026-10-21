@@ -79,6 +79,7 @@ describe('GET /api/programs', () => {
       title: 'Program first (ar)',
       instructorName: 'Rana (ar)',
       nextCohortStart: daysFromNow(7).toISOString().slice(0, 10),
+      subject: 'web',
     });
     expect(JSON.stringify(response.body)).not.toMatch(/price|1500000/i);
   });

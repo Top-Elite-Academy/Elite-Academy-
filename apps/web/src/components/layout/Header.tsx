@@ -3,9 +3,9 @@ import { Logo } from '@/components/brand/Logo';
 import { ButtonLink } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { HEADER_NAV, ROUTES } from '@/config/navigation';
-import { Link } from '@/i18n/navigation';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { MobileMenu } from './MobileMenu';
+import { NavLink } from './NavLink';
 
 /**
  * Public header (spec §2). "Log in" is intentionally not shown in version 1;
@@ -22,12 +22,7 @@ export function Header() {
             <ul className="flex items-center gap-1">
               {HEADER_NAV.map((item) => (
                 <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="rounded-[var(--radius-control)] px-2.5 py-2 text-[0.95rem] font-medium text-ink hover:text-crimson-700"
-                  >
-                    {t(item.label)}
-                  </Link>
+                  <NavLink href={item.href}>{t(item.label)}</NavLink>
                 </li>
               ))}
             </ul>

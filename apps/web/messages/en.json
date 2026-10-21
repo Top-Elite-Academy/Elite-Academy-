@@ -202,7 +202,11 @@
     "practicalStage": "Includes a practical stage at a company",
     "nextCohort": "Next cohort: {date}",
     "nextCohortSoon": "Next cohort: dates coming soon",
-    "viewDetails": "View details"
+    "viewDetails": "View details",
+    "liveCourse": "Live course",
+    "enroll": "Enroll",
+    "moreDetails": "More details",
+    "lengthWeeks": "{weeks} weeks"
   },
   "Landing": {
     "hero": {
@@ -282,6 +286,44 @@
     "closing": {
       "title": "Not sure where to start?",
       "body": "Book a career advice session with a tech professional and we’ll help you choose the right path.",
+      "cta": "Book career advice"
+    }
+  },
+  "Breadcrumbs": {
+    "label": "Breadcrumb",
+    "home": "Home"
+  },
+  "Subjects": {
+    "web": "Web development",
+    "data": "Data",
+    "ai": "AI",
+    "devops": "DevOps"
+  },
+  "Catalog": {
+    "title": "Course catalog",
+    "intro": "Live programs on a fixed schedule, each with a practical stage at a partner company. Use the filters to find the right place to start.",
+    "search": "Search programs",
+    "searchPlaceholder": "e.g. Python, web development, data",
+    "sortBy": "Sort by",
+    "sort": {
+      "soonest": "Starting soonest",
+      "name": "Name A–Z"
+    },
+    "filters": "Filters",
+    "filtersWithCount": "Filters ({count})",
+    "closeFilters": "Close filters",
+    "clearAll": "Clear all",
+    "clearFilters": "Clear filters",
+    "apply": "Apply",
+    "subject": "Subject",
+    "level": "Level",
+    "all": "All",
+    "resultCount": "{count, plural, one {# program} other {# programs}}",
+    "emptyTitle": "No programs match",
+    "emptyBody": "Try another subject or level, or clear the filters.",
+    "careerBox": {
+      "title": "Not sure which level fits?",
+      "body": "Book a short career advice session and we’ll suggest where to start.",
       "cta": "Book career advice"
     }
   }

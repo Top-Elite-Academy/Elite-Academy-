@@ -92,6 +92,20 @@ export const QuoteIcon = icon(
   />,
 );
 
+export const InfoIcon = icon(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 11v5M12 8h.01" />
+  </>,
+);
+export const SearchIcon = icon(
+  <>
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="M20 20l-4.2-4.2" />
+  </>,
+);
+export const FiltersIcon = icon(<path d="M4 7h10M18 7h2M4 17h4M12 17h8M14 4v6M8 14v6" />);
+
 /** Points "forward" in reading direction: flips automatically in Arabic and Hebrew. */
 export function ArrowForwardIcon({ className, ...props }: IconProps) {
   return (

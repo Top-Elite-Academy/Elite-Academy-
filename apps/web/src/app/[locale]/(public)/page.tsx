@@ -1,4 +1,5 @@
 import type { Locale } from '@eta/shared';
+import type { Metadata } from 'next';
 import { getLocale } from 'next-intl/server';
 import { ClosingCtaSection } from '@/components/landing/ClosingCtaSection';
 import { FaqSection } from '@/components/landing/FaqSection';
@@ -8,7 +9,13 @@ import { LandingHero } from '@/components/landing/LandingHero';
 import { LearningWaysSection } from '@/components/landing/LearningWaysSection';
 import { StoriesSection } from '@/components/landing/StoriesSection';
 import { TopProgramsSection } from '@/components/landing/TopProgramsSection';
+import { ROUTES } from '@/config/navigation';
 import { getFaqs, getInstructors, getStories, getTopPrograms } from '@/lib/api/content';
+import { pageAlternates } from '@/lib/seo';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return { alternates: pageAlternates(ROUTES.home, (await getLocale()) as Locale) };
+}
 
 /** Landing page (spec §3.1): sections in the order of the design. */
 export default async function HomePage() {

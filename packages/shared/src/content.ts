@@ -4,6 +4,9 @@ import { DEFAULT_LOCALE, LOCALES, type Locale } from './locales';
 export const PROGRAM_LEVELS = ['beginner', 'intermediate', 'advanced'] as const;
 export type ProgramLevel = (typeof PROGRAM_LEVELS)[number];
 
+export const PROGRAM_SUBJECTS = ['web', 'data', 'ai', 'devops'] as const;
+export type ProgramSubject = (typeof PROGRAM_SUBJECTS)[number];
+
 /** Public text stored once per language. */
 export type LocalizedText = Record<Locale, string>;
 
@@ -33,6 +36,7 @@ export interface ProgramSummary {
   title: string;
   summary: string;
   level: ProgramLevel;
+  subject: ProgramSubject;
   tags: string[];
   lengthWeeks: number | null;
   /** ISO date (YYYY-MM-DD) of the next open cohort, or null. */

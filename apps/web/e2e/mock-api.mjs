@@ -10,6 +10,7 @@ const programs = [
     title: 'Data Analysis with AI',
     summary: 'Data',
     level: 'beginner',
+    subject: 'data',
     tags: ['SQL', 'Python', 'AI'],
     lengthWeeks: null,
     nextCohortStart: '2030-11-02',
@@ -20,10 +21,22 @@ const programs = [
     title: 'Full Stack Advanced with AI',
     summary: 'Web',
     level: 'advanced',
+    subject: 'web',
     tags: ['React', 'Node', 'AI'],
     lengthWeeks: 24,
     nextCohortStart: null,
     instructorName: 'Dania Hih',
+  },
+  {
+    slug: 'devops',
+    title: 'DevOps',
+    summary: 'Ship software',
+    level: 'intermediate',
+    subject: 'devops',
+    tags: ['Linux', 'Docker'],
+    lengthWeeks: null,
+    nextCohortStart: null,
+    instructorName: null,
   },
 ];
 
@@ -75,8 +88,9 @@ const routes = {
 };
 
 createServer((request, response) => {
-  const { pathname } = new URL(request.url ?? '/', 'http://localhost');
-  const body = routes[pathname];
+  const { pathname, searchParams } = new URL(request.url ?? '/', 'http://localhost');
+  const isTop = pathname === '/api/programs' && searchParams.get('top') === 'true';
+  const body = isTop ? programs.slice(0, 2) : routes[pathname];
   response.writeHead(body ? 200 : 404, { 'content-type': 'application/json' });
   response.end(JSON.stringify(body ?? { statusCode: 404, code: 'notFound' }));
 }).listen(PORT, '127.0.0.1');

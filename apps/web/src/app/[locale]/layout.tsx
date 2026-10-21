@@ -17,6 +17,8 @@ export async function generateMetadata({ params }: Omit<Props, 'children'>): Pro
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Metadata' });
   return {
+    // Turns the relative canonical/hreflang URLs of each page into absolute ones.
+    metadataBase: new URL(process.env['WEB_ORIGIN'] ?? 'http://localhost:3000'),
     title: { default: t('siteName'), template: `%s · ${t('siteName')}` },
     description: t('description'),
   };

@@ -1,4 +1,4 @@
-import type { LocalizedText, ProgramLevel } from '@eta/shared';
+import type { LocalizedText, ProgramLevel, ProgramSubject } from '@eta/shared';
 
 /**
  * Starting content for the public site, in en/ar/he. Admin editing replaces this later (spec §3.1).
@@ -77,6 +77,7 @@ export interface SeedProgram {
   title: LocalizedText;
   summary: LocalizedText;
   level: ProgramLevel;
+  subject: ProgramSubject;
   lengthWeeks: number | null;
   tags: string[];
   topOrder: number | null;
@@ -99,6 +100,7 @@ export const PROGRAMS: SeedProgram[] = [
       he: 'הופכים נתונים להחלטות עם SQL,‏ Python, דשבורדים וכלי AI.',
     },
     level: 'beginner',
+    subject: 'data',
     lengthWeeks: null,
     tags: ['SQL', 'Python', 'AI'],
     topOrder: 1,
@@ -118,6 +120,7 @@ export const PROGRAMS: SeedProgram[] = [
       he: 'בונים אפליקציות ווב אמיתיות עם React,‏ Next.js,‏ Node.js ויכולות AI ב-24 שבועות.',
     },
     level: 'advanced',
+    subject: 'web',
     lengthWeeks: 24,
     tags: ['React', 'Node', 'AI'],
     topOrder: 2,
@@ -133,6 +136,7 @@ export const PROGRAMS: SeedProgram[] = [
       he: 'מיסודות Python ועד למידת מכונה ופרויקטים של AI יישומי.',
     },
     level: 'intermediate',
+    subject: 'ai',
     lengthWeeks: null,
     tags: ['Python', 'ML', 'AI'],
     topOrder: 3,
@@ -148,6 +152,7 @@ export const PROGRAMS: SeedProgram[] = [
       he: 'מסלול של שנה מהשורה הראשונה של קוד ועד מפתח/ת Full Stack מוכנ/ה לעבודה.',
     },
     level: 'beginner',
+    subject: 'web',
     lengthWeeks: 52,
     tags: ['HTML', 'JavaScript', 'SQL'],
     topOrder: null,
@@ -163,6 +168,7 @@ export const PROGRAMS: SeedProgram[] = [
       he: 'משחררים ומפעילים תוכנה באמינות: Linux,‏ Docker,‏ CI/CD וענן.',
     },
     level: 'intermediate',
+    subject: 'devops',
     lengthWeeks: null,
     tags: ['Linux', 'Docker', 'Cloud'],
     topOrder: null,
