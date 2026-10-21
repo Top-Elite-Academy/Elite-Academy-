@@ -22,9 +22,11 @@ export const ROUTES = {
   refunds: '/refunds',
   accessibility: '/accessibility',
   login: '/login',
+  signup: '/signup',
   account: '/app',
   /** Mentoring booking flow with career advice preselected (spec §3.1 closing CTA). */
   bookCareerAdvice: '/book?service=career',
+  book: '/book',
 } as const;
 
 /**
@@ -50,6 +52,17 @@ export const enrollPath = (programSlug: string, cohortId?: string) =>
  */
 export const bookMentorPath = (mentorId: string, service = 'mentoring-8') =>
   `/book?service=${encodeURIComponent(service)}&mentor=${encodeURIComponent(mentorId)}`;
+
+/** A booking step with its choices, e.g. /book?service=mentoring-8&mentor=…&step=review. */
+export const bookingPath = (query: string) => `/book?${query}`;
+
+/** After payment: confirmation page that follows the booking until it is paid (spec §3.7 step 5). */
+export const bookingConfirmationPath = (bookingId: string) =>
+  `/book/confirmation?booking=${encodeURIComponent(bookingId)}`;
+
+/** Sign-in or sign-up that returns to the given page afterwards. */
+export const withNext = (route: string, next: string) =>
+  `${route}?next=${encodeURIComponent(next)}`;
 
 /** Desktop header links. */
 export const HEADER_NAV: NavItem[] = [

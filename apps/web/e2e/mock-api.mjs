@@ -130,19 +130,34 @@ const details = {
   },
 };
 
+const pkg = (code, kind, sessions, priceAgorot, recommended = false) => ({
+  code,
+  kind,
+  sessions,
+  priceAgorot,
+  sessionMinutes: kind === 'career' ? 45 : 60,
+  recommended,
+});
 const packages = [
-  { code: 'mentoring-1', kind: 'instructor', sessions: 1, priceAgorot: 25000, recommended: false },
-  { code: 'mentoring-4', kind: 'instructor', sessions: 4, priceAgorot: 100000, recommended: false },
-  { code: 'mentoring-8', kind: 'instructor', sessions: 8, priceAgorot: 200000, recommended: true },
-  {
-    code: 'mentoring-12',
-    kind: 'instructor',
-    sessions: 12,
-    priceAgorot: 300000,
-    recommended: false,
-  },
-  { code: 'career', kind: 'career', sessions: 1, priceAgorot: 25000, recommended: false },
+  pkg('mentoring-1', 'instructor', 1, 25000),
+  pkg('mentoring-4', 'instructor', 4, 100000),
+  pkg('mentoring-8', 'instructor', 8, 200000, true),
+  pkg('mentoring-12', 'instructor', 12, 300000),
+  pkg('career-cv', 'career', 1, 25000),
+  pkg('career-interview', 'career', 1, 30000),
 ];
+
+/** Signed in when the test sets the mock_session cookie (forwarded by the web server). */
+const student = {
+  id: '99999999-9999-4999-8999-999999999999',
+  email: 'maya@example.com',
+  firstName: 'Maya',
+  lastName: 'Rizk',
+  roles: ['student'],
+  locale: 'en',
+  timeZone: 'Asia/Jerusalem',
+  totpEnabled: false,
+};
 
 const mentor = (id, name, subject, program, languages, skills) => ({
   id,
@@ -191,6 +206,12 @@ createServer((request, response) => {
     ? pathname.slice('/api/programs/'.length)
     : null;
   const mentorList = searchParams.get('kind') === 'career' ? [] : mentors;
+  if (pathname === '/api/users/me') {
+    const signedIn = (request.headers.cookie ?? '').includes('mock_session=');
+    response.writeHead(signedIn ? 200 : 401, { 'content-type': 'application/json' });
+    response.end(JSON.stringify(signedIn ? student : { statusCode: 401, code: 'auth.required' }));
+    return;
+  }
   const body = isTop
     ? programs.slice(0, 2)
     : slug

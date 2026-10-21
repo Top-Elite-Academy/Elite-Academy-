@@ -31,7 +31,8 @@ export default defineConfig({
     {
       command: `pnpm exec next start --port ${PORT}`,
       url: `http://localhost:${PORT}/en`,
-      env: { API_INTERNAL_URL: `http://127.0.0.1:${MOCK_API_PORT}` },
+      // PAYMENT_PROVIDER=test turns on the stand-in payment page used by the booking tests.
+      env: { API_INTERNAL_URL: `http://127.0.0.1:${MOCK_API_PORT}`, PAYMENT_PROVIDER: 'test' },
       reuseExistingServer: !process.env['CI'],
       timeout: 120_000,
     },

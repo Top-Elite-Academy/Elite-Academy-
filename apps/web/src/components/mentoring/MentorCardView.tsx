@@ -1,12 +1,12 @@
 'use client';
 
 import type { MentorCard } from '@eta/shared';
-import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/Badge';
 import { ButtonLink } from '@/components/ui/Button';
 import { BriefcaseIcon, UsersIcon } from '@/components/ui/icons';
 import { bookMentorPath } from '@/config/navigation';
+import { MentorAvatar } from './MentorAvatar';
 
 /** Mentor card (spec §3.5): photo, name, specialty, languages, session length, price, booking link. */
 export function MentorCardView({
@@ -28,7 +28,7 @@ export function MentorCardView({
   return (
     <article className="flex w-full flex-col rounded-[var(--radius-card)] border border-border bg-white p-5 shadow-sm">
       <div className="flex gap-3">
-        <Avatar mentor={mentor} />
+        <MentorAvatar name={mentor.name} photoPath={mentor.photoPath} />
         <div className="min-w-0">
           <h3 className="font-semibold text-ink">{mentor.name}</h3>
           <p className="text-sm text-ink-muted">
@@ -88,35 +88,5 @@ export function MentorCardView({
         </ButtonLink>
       </div>
     </article>
-  );
-}
-
-function Avatar({ mentor }: { mentor: MentorCard }) {
-  if (mentor.photoPath) {
-    return (
-      <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-gold-500/60">
-        <Image
-          src={mentor.photoPath}
-          alt=""
-          fill
-          sizes="3rem"
-          className="object-cover object-top"
-        />
-      </span>
-    );
-  }
-  const initials = mentor.name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(-2)
-    .map((part) => part.charAt(0).toUpperCase())
-    .join('');
-  return (
-    <span
-      aria-hidden="true"
-      className="flex size-12 shrink-0 items-center justify-center rounded-full bg-crimson-50 font-semibold text-crimson-700"
-    >
-      {initials}
-    </span>
   );
 }

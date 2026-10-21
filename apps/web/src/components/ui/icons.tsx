@@ -124,6 +124,13 @@ export const MessageIcon = icon(
   <path d="M5 5h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 3.5V6a1 1 0 0 1 1-1Z" />,
 );
 
+export const LockIcon = icon(
+  <>
+    <rect x="5" y="11" width="14" height="9" rx="1.5" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+  </>,
+);
+
 /** Points "forward" in reading direction: flips automatically in Arabic and Hebrew. */
 export function ArrowForwardIcon({ className, ...props }: IconProps) {
   return (
