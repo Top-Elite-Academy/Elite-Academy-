@@ -771,5 +771,54 @@
     "contactEmail": "Email",
     "contactPhone": "Phone",
     "updated": "This statement was last updated on {date}."
+  },
+  "Chat": {
+    "open": "Chat with the Elite Tech assistant",
+    "close": "Close the chat",
+    "title": "Elite Tech assistant",
+    "status": "Online · replies instantly",
+    "log": "Conversation",
+    "you": "You",
+    "assistant": "Assistant",
+    "inputLabel": "Your question",
+    "placeholder": "Ask about programs, dates, mentoring…",
+    "send": "Send",
+    "footer": "Automated assistant · a person can take over anytime",
+    "chips": {
+      "fit": "Which program fits me?",
+      "prices": "Prices & installments",
+      "dates": "Next start dates",
+      "person": "Talk to a person",
+      "mentoring": "Mentoring & career advice",
+      "notSure": "Not sure yet",
+      "startOver": "Start over"
+    },
+    "bot": {
+      "greeting": "Hi, I’m the Elite Tech assistant. I can help you choose a program, explain how enrollment works, or connect you with an advisor.",
+      "ask": "What would you like to know?",
+      "askLevel": "Happy to help. How much experience do you have with programming?",
+      "askSubject": "And what interests you most?",
+      "fitResults": "{count, plural, one {This program could be a good fit:} other {These programs could be a good fit:}}",
+      "fitNone": "I couldn’t find a matching program yet. An advisor can suggest the best path for you.",
+      "prices": "Program prices and payment options, including installments, depend on the program and are explained by an advisor in a free call — there is no online payment for programs.",
+      "mentoringPrices": "Mentoring prices: {single} for a single session, or {plan} for an 8-session plan.",
+      "dates": "Next groups starting soon:",
+      "noDates": "New start dates will be announced soon. An advisor can tell you what’s planned.",
+      "startsOn": "Starts {date}",
+      "person": "Of course. You can write to us on WhatsApp now, or leave your details and an advisor will call you back.",
+      "whatsapp": "Write on WhatsApp",
+      "callback": "Ask for a call back",
+      "mentoring": "We offer one-to-one mentoring with our instructors and career advice (CV review, mock interviews).",
+      "mentoringLink": "See mentoring and career advice",
+      "viewProgram": "View program",
+      "notUnderstood": "Sorry, I’m not sure I understood. You can pick one of the options below or talk to a person."
+    },
+    "keywords": {
+      "prices": "price, prices, cost, costs, pay, payment, installment, installments, fee, fees, how much, discount",
+      "dates": "date, dates, start, starts, when, cohort, next group, schedule, begin",
+      "person": "person, human, agent, advisor, adviser, call, phone, talk, speak, whatsapp, contact",
+      "fit": "which program, fit, suits, suitable, recommend, choose, beginner, career change",
+      "mentoring": "mentoring, mentor, career, cv, resume, interview, session"
+    }
   }
 }

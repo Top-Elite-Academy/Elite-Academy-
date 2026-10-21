@@ -131,6 +131,8 @@ export const AccessibilityIcon = icon(
     <path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v4.5M12 14l-3 6M12 14l3 6" />
   </>,
 );
+/** Paper plane (send). */
+export const SendIcon = icon(<path d="M21 3 10 14M21 3l-6.5 18-4.5-7-7-4.5L21 3Z" />);
 export const LockIcon = icon(
   <>
     <rect x="5" y="11" width="14" height="9" rx="1.5" />

@@ -118,7 +118,10 @@ function MobileEnrollBar({ href, cohort }: { href: string; cohort: CohortInfo | 
   const t = useTranslations('Course.card');
   const format = useCohortFormat();
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-border bg-white px-4 py-3 shadow-[0_-4px_12px_rgb(0_0_0/0.06)] lg:hidden">
+    <div
+      data-bottom-bar
+      className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-border bg-white px-4 py-3 shadow-[0_-4px_12px_rgb(0_0_0/0.06)] lg:hidden"
+    >
       <p className="flex-1 text-sm">
         <span className="block text-ink-muted">{t('nextCohort')}</span>
         <span className="block font-semibold text-ink">

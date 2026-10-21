@@ -147,3 +147,13 @@ html[data-a11y-spacing] body * {
 html[data-a11y-spacing]:not([lang='ar']) body * {
   letter-spacing: 0.05em !important;
 }
+
+/* Pages with an action bar fixed to the bottom on phones (data-bottom-bar): lift the chat above it. */
+@media (width < 64rem) {
+  body:has([data-bottom-bar]) .chat-launcher {
+    bottom: 5.5rem;
+  }
+  body:has([data-bottom-bar]) .chat-panel {
+    bottom: 10.5rem;
+  }
+}
