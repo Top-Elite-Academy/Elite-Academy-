@@ -820,5 +820,110 @@
       "fit": "which program, fit, suits, suitable, recommend, choose, beginner, career change",
       "mentoring": "mentoring, mentor, career, cv, resume, interview, session"
     }
+  },
+  "Student": {
+    "nav": {
+      "label": "Student area",
+      "overview": "Overview",
+      "courses": "My courses",
+      "sessions": "Sessions",
+      "payments": "Payments",
+      "profile": "Profile",
+      "messages": "Messages & support",
+      "home": "Home",
+      "account": "Account",
+      "backToSite": "Back to the website"
+    },
+    "account": {
+      "signedInAs": "Signed in as {name}"
+    },
+    "overview": {
+      "metaTitle": "Overview",
+      "welcome": "Welcome back, {firstName}",
+      "intro": "Here is what’s next for you.",
+      "upcomingTitle": "Upcoming sessions",
+      "viewAll": "View all sessions",
+      "noUpcoming": "You have no upcoming sessions.",
+      "bookSession": "Book a mentoring session",
+      "packageTitle": "Your mentoring plan",
+      "packageUsed": "{used} of {total} meetings used",
+      "packageNext": "Next meeting: {when}",
+      "packageNoNext": "No meeting booked yet.",
+      "packageMentor": "With {name}",
+      "coursesTitle": "My courses",
+      "noCourses": "You are not enrolled in a program yet. After you enroll, your program and lessons appear here.",
+      "browseCourses": "Browse courses"
+    },
+    "sessions": {
+      "metaTitle": "Sessions",
+      "title": "Sessions",
+      "tabsLabel": "Which sessions",
+      "tabs": {
+        "upcoming": "Upcoming",
+        "past": "Past"
+      },
+      "emptyUpcoming": "You have no upcoming sessions.",
+      "emptyPast": "No past sessions yet.",
+      "join": "Join",
+      "joinOpens": "Join opens at {time}",
+      "noLinkYet": "The meeting link will appear here 15 minutes before the start.",
+      "calendar": "Add to calendar",
+      "with": "with {name}",
+      "kinds": {
+        "instructor": "Mentoring",
+        "career": "Career advice"
+      },
+      "status": {
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "no_show": "Missed",
+        "confirmed": "Took place"
+      },
+      "policy": "Need to reschedule or cancel? Contact us at least 24 hours before the session.",
+      "contact": "Contact us on WhatsApp"
+    },
+    "payments": {
+      "metaTitle": "Payments",
+      "title": "Payments",
+      "intro": "Your orders and their status. Card details are never stored on this site.",
+      "empty": "You have no payments yet.",
+      "date": "Date",
+      "amount": "Amount",
+      "statuses": {
+        "paid": "Paid",
+        "failed": "Failed",
+        "refunded": "Refunded",
+        "pending": "Pending"
+      },
+      "sessions": "{count, plural, one {# session} other {# sessions}}",
+      "reason": "Reason: {reason}",
+      "tryAgain": "Try payment again"
+    },
+    "courses": {
+      "metaTitle": "My courses",
+      "title": "My courses",
+      "empty": "You are not enrolled in a program yet. After you enroll, your program, lessons and progress appear here.",
+      "browse": "Browse courses",
+      "advisor": "Talk to an advisor"
+    },
+    "messages": {
+      "metaTitle": "Messages & support",
+      "title": "Messages & support",
+      "soon": "Messages with your instructors and the support team will be available here soon. Until then, you can reach us here:",
+      "whatsapp": "WhatsApp",
+      "email": "Email"
+    },
+    "profile": {
+      "metaTitle": "Profile",
+      "title": "Profile and settings",
+      "details": "Personal details",
+      "name": "Name",
+      "email": "Email",
+      "changeNote": "To change your name or email, contact support.",
+      "language": "Language",
+      "languageNote": "Choose the language in the menu at the top of the page. It is saved to your profile.",
+      "security": "Security",
+      "signOutAllNote": "Signed in on another computer or phone you no longer use? Sign out everywhere."
+    }
   }
 }

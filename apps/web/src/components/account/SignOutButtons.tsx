@@ -31,6 +31,7 @@ export function SignOutButton({ scope }: { scope: keyof typeof ENDPOINTS }) {
   return (
     <Button
       variant={scope === 'all' ? 'secondary' : 'ghost'}
+      className="whitespace-nowrap"
       disabled={busy}
       onClick={() => void signOut()}
     >

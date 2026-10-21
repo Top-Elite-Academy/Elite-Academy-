@@ -131,6 +131,17 @@ export const AccessibilityIcon = icon(
     <path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v4.5M12 14l-3 6M12 14l3 6" />
   </>,
 );
+export const HomeIcon = icon(<path d="M4 11l8-7 8 7M6 9.5V20h12V9.5M10 20v-5h4v5" />);
+export const BookIcon = icon(
+  <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5v-13ZM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5v-13Z" />,
+);
+export const CardIcon = icon(
+  <>
+    <rect x="3" y="5.5" width="18" height="13" rx="1.5" />
+    <path d="M3 10h18M7 15h3" />
+  </>,
+);
+
 /** Paper plane (send). */
 export const SendIcon = icon(<path d="M21 3 10 14M21 3l-6.5 18-4.5-7-7-4.5L21 3Z" />);
 export const LockIcon = icon(

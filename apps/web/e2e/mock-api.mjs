@@ -190,6 +190,68 @@ const mentors = [
   ),
 ];
 
+/** Student area (spec §4): one session starting soon (Join open), one past, an 8-session plan. */
+const inMinutes = (n) => new Date(Date.now() + n * 60_000).toISOString();
+const rana = { id: mentors[0].id, name: 'Rana Arafat', photoPath: null };
+const session = (id, startIn, extra = {}) => ({
+  id,
+  kind: 'instructor',
+  service: 'mentoring-8',
+  mentor: rana,
+  startAt: inMinutes(startIn),
+  endAt: inMinutes(startIn + 60),
+  status: 'confirmed',
+  joinUrl: null,
+  joinOpensAt: inMinutes(startIn - 15),
+  ...extra,
+});
+const studentArea = {
+  '/api/me/overview': () => ({
+    upcoming: [
+      session('s0000000-0000-4000-8000-000000000001', 10, { joinUrl: 'https://zoom.example/j/1' }),
+    ],
+    packages: [
+      {
+        id: 'p1',
+        service: 'mentoring-8',
+        mentor: rana,
+        total: 8,
+        used: 1,
+        nextSessionAt: inMinutes(10),
+      },
+    ],
+  }),
+  '/api/me/sessions?scope=upcoming': () => [
+    session('s0000000-0000-4000-8000-000000000001', 10, { joinUrl: 'https://zoom.example/j/1' }),
+    session('s0000000-0000-4000-8000-000000000002', 3 * 24 * 60),
+  ],
+  '/api/me/sessions?scope=past': () => [
+    session('s0000000-0000-4000-8000-000000000003', -2 * 24 * 60, { status: 'completed' }),
+  ],
+  '/api/me/orders': () => [
+    {
+      id: 'o1',
+      createdAt: '2030-01-05T10:00:00.000Z',
+      service: 'mentoring-8',
+      sessions: 8,
+      amountAgorot: 200000,
+      status: 'paid',
+      failureReason: null,
+      retryBookingId: null,
+    },
+    {
+      id: 'o2',
+      createdAt: '2030-01-04T10:00:00.000Z',
+      service: 'career-cv',
+      sessions: 1,
+      amountAgorot: 25000,
+      status: 'failed',
+      failureReason: 'card_declined',
+      retryBookingId: 'b0000000-0000-4000-8000-000000000009',
+    },
+  ],
+};
+
 const routes = {
   '/api/programs': programs,
   '/api/instructors': instructors,
@@ -206,6 +268,12 @@ createServer((request, response) => {
     ? pathname.slice('/api/programs/'.length)
     : null;
   const mentorList = searchParams.get('kind') === 'career' ? [] : mentors;
+  const studentRoute = studentArea[pathname] ?? studentArea[request.url ?? ''];
+  if (studentRoute) {
+    response.writeHead(200, { 'content-type': 'application/json' });
+    response.end(JSON.stringify(studentRoute()));
+    return;
+  }
   if (pathname === '/api/users/me') {
     const signedIn = (request.headers.cookie ?? '').includes('mock_session=');
     response.writeHead(signedIn ? 200 : 401, { 'content-type': 'application/json' });

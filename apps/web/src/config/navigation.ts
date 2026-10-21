@@ -116,3 +116,40 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     ],
   },
 ];
+
+/** Student area pages (spec §4.2). */
+export const STUDENT_ROUTES = {
+  overview: '/app',
+  courses: '/app/courses',
+  sessions: '/app/sessions',
+  payments: '/app/payments',
+  profile: '/app/profile',
+  messages: '/app/messages',
+} as const;
+
+export type StudentNavIcon = 'home' | 'courses' | 'sessions' | 'payments' | 'profile' | 'messages';
+
+export interface StudentNavItem {
+  label: string;
+  href: string;
+  icon: StudentNavIcon;
+}
+
+/** Sidebar on large screens (spec §4.2). Labels are keys under "Student.nav". */
+export const STUDENT_SIDEBAR: StudentNavItem[] = [
+  { label: 'overview', href: STUDENT_ROUTES.overview, icon: 'home' },
+  { label: 'courses', href: STUDENT_ROUTES.courses, icon: 'courses' },
+  { label: 'sessions', href: STUDENT_ROUTES.sessions, icon: 'sessions' },
+  { label: 'payments', href: STUDENT_ROUTES.payments, icon: 'payments' },
+  { label: 'profile', href: STUDENT_ROUTES.profile, icon: 'profile' },
+  { label: 'messages', href: STUDENT_ROUTES.messages, icon: 'messages' },
+];
+
+/** Bottom tab bar on phones (spec §4.10: Home · Courses · Sessions · Messages · Account). */
+export const STUDENT_TABS: StudentNavItem[] = [
+  { label: 'home', href: STUDENT_ROUTES.overview, icon: 'home' },
+  { label: 'courses', href: STUDENT_ROUTES.courses, icon: 'courses' },
+  { label: 'sessions', href: STUDENT_ROUTES.sessions, icon: 'sessions' },
+  { label: 'messages', href: STUDENT_ROUTES.messages, icon: 'messages' },
+  { label: 'account', href: STUDENT_ROUTES.profile, icon: 'profile' },
+];
