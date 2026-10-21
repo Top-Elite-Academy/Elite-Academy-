@@ -68,6 +68,5 @@ seedAdmin().catch((error: unknown) => {
 
 /** CLI output for the person running the seed (Nest logging is silenced above). */
 function report(message: string): void {
-  process.stdout.write(`${message}
-`);
+  process.stdout.write(`${message}\n`);
 }
