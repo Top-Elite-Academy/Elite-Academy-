@@ -11,7 +11,10 @@ export const BOOKING_INCLUDE = {
 export type BookingRecord = Prisma.BookingGetPayload<{ include: typeof BOOKING_INCLUDE }>;
 
 /** A hold counts only until it expires. */
-export function liveHoldUntil(booking: BookingRecord, now = new Date()): Date | null {
+export function liveHoldUntil(
+  booking: Pick<BookingRecord, 'status' | 'holdExpiresAt'>,
+  now = new Date(),
+): Date | null {
   const until = booking.holdExpiresAt;
   return booking.status === 'held' && until && until > now ? until : null;
 }
