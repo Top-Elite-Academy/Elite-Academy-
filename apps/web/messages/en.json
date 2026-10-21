@@ -716,5 +716,60 @@
     "captcha": "Security check",
     "submit": "Create account",
     "haveAccount": "Already have an account? Sign in"
+  },
+  "A11yMenu": {
+    "open": "Accessibility settings",
+    "title": "Accessibility settings",
+    "intro": "Adjust the site to suit you. Your choices are saved on this device.",
+    "close": "Close accessibility settings",
+    "textSize": "Text size",
+    "sizes": {
+      "normal": "Normal",
+      "large": "Large",
+      "larger": "Larger"
+    },
+    "options": {
+      "contrast": "High contrast",
+      "links": "Underline links",
+      "font": "Easy-to-read font",
+      "motion": "Stop animations",
+      "spacing": "More space between lines and words"
+    },
+    "reset": "Reset all settings",
+    "statement": "Accessibility statement"
+  },
+  "AccessibilityStatement": {
+    "metaTitle": "Accessibility statement",
+    "title": "Accessibility statement",
+    "intro": "Elite Tech Academy wants everyone, including people with disabilities, to be able to learn with us. We work to make this site easy to use for every visitor.",
+    "standardTitle": "Accessibility level",
+    "standard": "The site is built to meet Israeli Standard IS 5568, which is based on the Web Content Accessibility Guidelines (WCAG) 2.2, level AA.",
+    "doneTitle": "What we have done",
+    "done": {
+      "keyboard": "Every page and form can be used with a keyboard only, with a clearly visible focus.",
+      "screenReader": "Pages are built with correct headings, labels and landmarks for screen readers.",
+      "skip": "A “Skip to main content” link appears first on every page.",
+      "contrast": "Text colours meet the required contrast, and colour is never the only way information is shown.",
+      "languages": "The site is in Arabic, Hebrew and English, with the correct reading direction for each.",
+      "errors": "Form errors are explained in words and the cursor moves to the first field that needs attention.",
+      "zoom": "The site works when zoomed to 200% and on small phone screens.",
+      "motion": "Animations stop when your device asks for reduced motion.",
+      "testing": "Every page is checked automatically for accessibility problems before each release."
+    },
+    "menuTitle": "Accessibility settings menu",
+    "menu": "The “Accessibility settings” button on the side of every page lets you enlarge the text, turn on high contrast, underline links, use an easy-to-read font, stop animations and add space between lines.",
+    "limitsTitle": "Known limitations",
+    "limits": {
+      "captcha": "The security check on some forms is provided by Cloudflare and has its own accessibility support.",
+      "payment": "Payments are made on the payment provider’s secure page, which is not run by us.",
+      "videos": "Captions for recorded lessons are being added gradually."
+    },
+    "limitsNote": "If you have trouble with any part of the site, please tell us and we will help you by another way, for example by phone.",
+    "contactTitle": "Accessibility coordinator",
+    "contact": "For questions, problems or requests for accessibility adjustments, contact our accessibility coordinator. We reply within {days} working days.",
+    "contactName": "Name",
+    "contactEmail": "Email",
+    "contactPhone": "Phone",
+    "updated": "This statement was last updated on {date}."
   }
 }

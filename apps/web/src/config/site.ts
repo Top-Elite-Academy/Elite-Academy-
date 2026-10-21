@@ -24,3 +24,18 @@ export const LOCALE_NAMES = {
   he: 'עברית',
   en: 'English',
 } as const;
+
+/**
+ * Accessibility coordinator named in the accessibility statement (IS 5568, required by law).
+ * ⚠ PLACEHOLDERS — the real coordinator's name, email and phone are an open item.
+ */
+export const ACCESSIBILITY_CONTACT = {
+  name: 'Accessibility coordinator',
+  email: 'accessibility@elitetech.example',
+  phoneE164: '+972000000000',
+  phoneDisplay: '+972-00-000-0000',
+  /** Promised reply time, in working days. */
+  replyDays: 5,
+  /** Date the statement was last reviewed (YYYY-MM-DD). Update it with every review. */
+  statementUpdated: '2026-10-21',
+} as const;

@@ -124,6 +124,13 @@ export const MessageIcon = icon(
   <path d="M5 5h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 3.5V6a1 1 0 0 1 1-1Z" />,
 );
 
+/** International accessibility symbol (person with open arms). */
+export const AccessibilityIcon = icon(
+  <>
+    <circle cx="12" cy="4.5" r="1.75" />
+    <path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v4.5M12 14l-3 6M12 14l3 6" />
+  </>,
+);
 export const LockIcon = icon(
   <>
     <rect x="5" y="11" width="14" height="9" rx="1.5" />

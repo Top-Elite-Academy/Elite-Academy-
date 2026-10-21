@@ -93,3 +93,57 @@
     background-size: 22px 22px;
   }
 }
+
+/*
+ * Accessibility settings menu (IS 5568). components/a11y/AccessibilityMenu sets these
+ * attributes on <html>. Unlayered on purpose: they must win over every utility class.
+ */
+html[data-a11y-text='large'] {
+  font-size: 112.5%;
+}
+html[data-a11y-text='larger'] {
+  font-size: 125%;
+}
+
+/* Darker text and borders, plain white backgrounds: well above 7:1 (WCAG AAA). */
+html[data-a11y-contrast] {
+  --color-ink: #000000;
+  --color-ink-muted: #1e1b19;
+  --color-border: #4a4440;
+  --color-cream: #ffffff;
+  --color-sand: #ffffff;
+  --color-ivory: #ffffff;
+  --color-crimson-700: #5c0f1a;
+  --color-crimson-800: #450a13;
+  --color-gold-700: #4d3a12;
+}
+
+html[data-a11y-links] a {
+  text-decoration-line: underline !important;
+  text-underline-offset: 3px;
+}
+
+/* Plain system fonts with wide letters; Tahoma also covers Arabic and Hebrew. */
+html[data-a11y-font] {
+  --font-sans: Verdana, Tahoma, Arial, sans-serif;
+  --font-display: Verdana, Tahoma, Arial, sans-serif;
+  --font-serif: Verdana, Tahoma, Arial, sans-serif;
+}
+
+html[data-a11y-motion] *,
+html[data-a11y-motion] *::before,
+html[data-a11y-motion] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* WCAG 1.4.12 text spacing. No extra letter spacing in Arabic: it breaks joined letters. */
+html[data-a11y-spacing] body * {
+  line-height: 1.8 !important;
+  word-spacing: 0.16em !important;
+}
+html[data-a11y-spacing]:not([lang='ar']) body * {
+  letter-spacing: 0.05em !important;
+}
