@@ -2,11 +2,10 @@
 
 ## Reporting a vulnerability
 
-Please report security issues privately to **security@elitetech.example**
 <!-- ⚠ placeholder: replace with the academy's real security contact (spec §12 open item) -->
 
-with steps to reproduce. Do not open a public issue. We aim to acknowledge
-reports within 3 working days.
+Please report security issues privately to **security@elitetech.example** with steps to
+reproduce. Do not open a public issue. We aim to acknowledge reports within 3 working days.
 
 ## What is in place (milestone 1)
 
