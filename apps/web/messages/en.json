@@ -1,0 +1,180 @@
+{
+  "Metadata": {
+    "siteName": "Elite Tech Academy",
+    "description": "Practical technology programs with a practical stage at a partner company. Book a call with an advisor."
+  },
+  "Brand": {
+    "name": "Elite Tech Academy",
+    "motto": "Scientia et Innovatio",
+    "homeLink": "Elite Tech Academy — home"
+  },
+  "A11y": {
+    "skipToContent": "Skip to main content",
+    "opensInNewTab": "(opens in a new tab)"
+  },
+  "Nav": {
+    "primary": "Main navigation",
+    "courses": "Courses",
+    "mentoring": "Mentoring",
+    "teacherMentoring": "Teacher mentoring",
+    "careerAdvice": "Career advice",
+    "successStories": "Success stories",
+    "faq": "FAQ",
+    "contact": "Contact us",
+    "exploreCourses": "Explore courses",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mobileMenu": "Menu"
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "current": "Current language: {language}"
+  },
+  "Footer": {
+    "learn": "Learn",
+    "help": "Help",
+    "legal": "Legal",
+    "contact": "Contact",
+    "helpCenter": "Help center",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "refunds": "Cancellation & refund policy",
+    "accessibility": "Accessibility statement",
+    "email": "Email",
+    "phone": "Phone",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "facebook": "Facebook",
+    "copyright": "© {year} Elite Tech Academy. All rights reserved."
+  },
+  "Home": {
+    "eyebrow": "Technology academy · Practical learning",
+    "title": "Start your path into high tech, one clear step at a time",
+    "body": "Live programs, a practical stage at a partner company, and mentors who know the industry.",
+    "exploreCourses": "Explore courses",
+    "bookMentoring": "Book a mentoring session"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "body": "The page you are looking for does not exist or has moved.",
+    "home": "Go to the home page",
+    "courses": "Browse courses"
+  },
+  "ServerError": {
+    "title": "Something went wrong",
+    "body": "Please try again in a moment. If the problem continues, contact us.",
+    "retry": "Try again"
+  },
+  "Forms": {
+    "required": "required",
+    "submitting": "Please wait…",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "errorSummary": "Please fix the highlighted fields."
+  },
+  "Login": {
+    "title": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "forgot": "Forgot your password?",
+    "captcha": "Security check"
+  },
+  "TwoFactor": {
+    "setupTitle": "Set up two-step verification",
+    "setupIntro": "Staff accounts must use two-step verification. Scan this QR code with an authenticator app (for example Google Authenticator or Microsoft Authenticator), then enter the 6-digit code it shows.",
+    "qrAlt": "QR code for your authenticator app",
+    "manualKey": "Can't scan? Enter this key manually:",
+    "verifyTitle": "Enter your verification code",
+    "verifyIntro": "Open your authenticator app and enter the 6-digit code for Elite Tech Academy.",
+    "code": "6-digit code",
+    "submit": "Verify",
+    "loadingQr": "Preparing your QR code…",
+    "startOver": "Back to sign in"
+  },
+  "ForgotPassword": {
+    "title": "Reset your password",
+    "intro": "Enter the email of your account. If it exists, we will send a link to reset your password.",
+    "email": "Email",
+    "submit": "Send reset link",
+    "sent": "If an account exists for this email, a reset link is on its way. The link is valid for 30 minutes.",
+    "backToLogin": "Back to sign in"
+  },
+  "ResetPassword": {
+    "title": "Choose a new password",
+    "password": "New password",
+    "confirm": "Repeat the new password",
+    "hint": "At least 10 characters. A long phrase is easy to remember and hard to guess.",
+    "submit": "Save new password",
+    "done": "Your password has been changed. You can now sign in.",
+    "signIn": "Sign in",
+    "missingToken": "This link is incomplete. Please use the full link from the email, or request a new one.",
+    "requestNew": "Request a new link"
+  },
+  "Invite": {
+    "title": "Welcome to Elite Tech Academy",
+    "intro": "Choose a password to activate your account.",
+    "submit": "Activate my account",
+    "done": "Your account is ready. You can now sign in."
+  },
+  "Account": {
+    "title": "Welcome, {firstName}",
+    "intro": "You are signed in. Your area is being built and will appear here soon.",
+    "roles": "Your roles",
+    "signOut": "Sign out",
+    "signOutAll": "Sign out of all devices",
+    "adminTitle": "Admin",
+    "adminIntro": "The admin area will be available in a later release."
+  },
+  "Roles": {
+    "student": "Student",
+    "instructor": "Instructor",
+    "mentor": "Mentor",
+    "sales": "Sales / admissions",
+    "admin": "Admin"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "We could not reach the server. Check your connection and try again.",
+    "required": "This field is required.",
+    "validation": "Please check the form.",
+    "badRequest": "The request could not be processed.",
+    "notFound": "Not found.",
+    "rateLimited": "Too many attempts. Please wait a moment and try again.",
+    "payloadTooLarge": "The submitted data is too large.",
+    "email": { "invalid": "Enter a valid email address." },
+    "password": {
+      "tooShort": "Use at least 10 characters.",
+      "tooLong": "Use at most 128 characters.",
+      "breached": "This password appeared in a known data breach. Please choose another one.",
+      "mismatch": "The passwords do not match."
+    },
+    "name": {
+      "tooShort": "Use at least 2 letters.",
+      "tooLong": "Use at most 50 letters.",
+      "invalid": "Use letters only."
+    },
+    "token": { "invalid": "This link is invalid or has expired. Please request a new one." },
+    "totp": {
+      "invalid": "The code is not correct. Wait for a new code and try again.",
+      "tooManyAttempts": "Too many wrong codes. Please sign in again.",
+      "alreadyEnabled": "Two-step verification is already set up.",
+      "setupFirst": "Please scan the QR code first.",
+      "notEnabled": "Two-step verification is not set up for this account."
+    },
+    "auth": {
+      "invalidCredentials": "Email or password is incorrect.",
+      "locked": "Too many attempts. Please try again later or reset your password.",
+      "required": "Please sign in.",
+      "mfaRequired": "Please complete two-step verification.",
+      "forbidden": "You do not have access to this page."
+    },
+    "captcha": { "required": "Please complete the security check." },
+    "csrf": { "invalid": "Your session expired. Please reload the page and try again." },
+    "server": { "error": "Something went wrong on our side. Please try again." },
+    "timeZone": { "invalid": "Choose a valid time zone." },
+    "roles": { "required": "Choose at least one role." },
+    "field": { "notAllowed": "This field cannot be changed." },
+    "user": { "exists": "An account with this email already exists." }
+  }
+}

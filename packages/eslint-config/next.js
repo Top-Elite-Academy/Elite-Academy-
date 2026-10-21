@@ -27,7 +27,14 @@ export default tseslint.config(
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs['core-web-vitals'].rules,
       // Every user-facing string must come from messages/{ar,he,en}.json.
-      'i18next/no-literal-string': ['error', { mode: 'jsx-only' }],
+      'i18next/no-literal-string': [
+        'error',
+        {
+          mode: 'jsx-only',
+          // Only attributes people read or hear; technical ones (name, href, type…) are fine.
+          'jsx-attributes': { include: ['alt', 'aria-label', 'title', 'placeholder', 'label'] },
+        },
+      ],
       // XSS: raw HTML only through a reviewed, sanitised helper.
       'react/no-danger': 'error',
       'react/jsx-no-target-blank': ['error', { enforceDynamicLinks: 'always' }],

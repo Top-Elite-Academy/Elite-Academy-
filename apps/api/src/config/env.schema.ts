@@ -15,7 +15,11 @@ export const envSchema = z
 
     WEB_ORIGIN: z.url(),
     API_PORT: positiveInt.default(4000),
-    TRUST_PROXY_HOPS: z.coerce.number().int().min(0).default(0),
+    CLIENT_IP_HEADER: z
+      .string()
+      .regex(/^[A-Za-z0-9-]+$/)
+      .optional()
+      .or(z.literal('').transform(() => undefined)),
     OPENAPI_ENABLED: bool.default(false),
 
     DATABASE_URL: z.url(),

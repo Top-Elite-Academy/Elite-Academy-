@@ -15,7 +15,7 @@ export class AppConfig {
     return {
       port: this.env.API_PORT,
       webOrigin: this.env.WEB_ORIGIN,
-      trustProxyHops: this.env.TRUST_PROXY_HOPS,
+      clientIpHeader: this.env.CLIENT_IP_HEADER,
       openApiEnabled: this.env.OPENAPI_ENABLED,
       rateLimitPerMinute: this.env.RATE_LIMIT_PER_MINUTE,
     };

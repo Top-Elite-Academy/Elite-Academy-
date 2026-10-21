@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import type { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { cleanupOpenApiDoc } from 'nestjs-zod';
+import { clientIpMiddleware } from './common/http/client-info';
 import { AppConfig } from './config/app-config';
 
 export const API_PREFIX = 'api';
@@ -13,8 +14,8 @@ const DOCS_PATH = `${API_PREFIX}/docs`;
 export function configureApp(app: NestExpressApplication): void {
   const config = app.get(AppConfig);
 
-  app.set('trust proxy', config.http.trustProxyHops);
   app.disable('x-powered-by');
+  app.use(clientIpMiddleware(config.http.clientIpHeader));
   app.use(securityHeaders(config));
   app.use(cookieParser());
   app.useBodyParser('json', { limit: '100kb' });

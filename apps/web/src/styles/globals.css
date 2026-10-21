@@ -1,0 +1,77 @@
+@import 'tailwindcss';
+
+/*
+ * EliteTech design tokens — the ONLY place colours, fonts and radii are defined.
+ * Components use these through Tailwind classes (bg-crimson-600, text-navy-900, ...).
+ *
+ * ⚠ PLACEHOLDER VALUES: replace with the exact values from the EliteTech
+ * design system (docs/design) when available. Keep every text/background pair
+ * at a contrast of at least 4.5:1 (WCAG 2.2 AA).
+ *
+ * Contrast notes for the current values:
+ *   white on crimson-600 ≈ 7.0:1 ✓   navy-900 on white ≈ 16:1 ✓
+ *   gold-400 on navy-900 ≈ 7.4:1 ✓   gold-400 on white ≈ 2.2:1 ✗ (never use gold text on light backgrounds)
+ */
+@theme {
+  --color-crimson-50: #fdf2f3;
+  --color-crimson-100: #fbe4e7;
+  --color-crimson-600: #a4152a;
+  --color-crimson-700: #8a1023;
+  --color-crimson-800: #6f0c1c;
+
+  --color-navy-50: #f2f5f9;
+  --color-navy-100: #e1e7f0;
+  --color-navy-600: #2a4268;
+  --color-navy-700: #1b3052;
+  --color-navy-800: #12243f;
+  --color-navy-900: #0b1a30;
+
+  --color-gold-300: #e3c766;
+  --color-gold-400: #d4ad3c;
+  --color-gold-600: #8a6a12;
+
+  --color-surface: #ffffff;
+  --color-surface-muted: #f6f7f9;
+  --color-ink: var(--color-navy-900);
+  --color-ink-muted: #4a5568;
+  --color-border: #d9dee6;
+  --color-danger: #b42318;
+  --color-success: #067647;
+
+  /* Placeholder: system fonts with Arabic and Hebrew coverage, until brand fonts are self-hosted. */
+  --font-sans:
+    system-ui, 'Segoe UI', 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Hebrew', Tahoma, Arial,
+    sans-serif;
+
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+}
+
+@layer base {
+  html {
+    color: var(--color-ink);
+    background: var(--color-surface);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Visible keyboard focus everywhere (WCAG 2.4.7 / 2.4.11). */
+  :focus-visible {
+    outline: 3px solid var(--color-navy-700);
+    outline-offset: 2px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-gold-400);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
