@@ -17,6 +17,7 @@ import { SessionGuard } from './modules/auth/session.guard';
 import { ConsentModule } from './modules/consent/consent.module';
 import { HealthController } from './modules/health/health.controller';
 import { InvitationsModule } from './modules/invitations/invitations.module';
+import { LeadsModule } from './modules/leads/leads.module';
 import { MailModule } from './modules/mail/mail.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -38,6 +39,7 @@ import { UsersModule } from './modules/users/users.module';
     InvitationsModule,
     ConsentModule,
     CatalogModule,
+    LeadsModule,
   ],
   controllers: [HealthController],
   providers: [

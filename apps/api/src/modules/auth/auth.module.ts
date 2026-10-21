@@ -30,6 +30,13 @@ import { SessionGuard } from './session.guard';
     TotpService,
     SessionGuard,
   ],
-  exports: [SessionService, SessionGuard, AuthCookiesService, AuthTokenService, PasswordService],
+  exports: [
+    SessionService,
+    SessionGuard,
+    AuthCookiesService,
+    AuthTokenService,
+    PasswordService,
+    CaptchaService,
+  ],
 })
 export class AuthModule {}
