@@ -22,11 +22,7 @@ export function AccountShell({ children }: { children: ReactNode }) {
           </div>
         </Container>
       </header>
-      <main
-        id={MAIN_CONTENT_ID}
-        tabIndex={-1}
-        className="flex-1 bg-surface-muted focus:outline-none"
-      >
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="flex-1 bg-cream focus:outline-none">
         <Container className="py-10">{children}</Container>
       </main>
     </>

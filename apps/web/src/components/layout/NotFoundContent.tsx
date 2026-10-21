@@ -8,7 +8,7 @@ export function NotFoundContent() {
   const t = useTranslations('NotFound');
   return (
     <Container className="py-24 text-center">
-      <h1 className="text-3xl font-bold text-navy-900">{t('title')}</h1>
+      <h1 className="text-3xl font-bold text-ink">{t('title')}</h1>
       <p className="mt-3 text-ink-muted">{t('body')}</p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <ButtonLink href={ROUTES.home}>{t('home')}</ButtonLink>

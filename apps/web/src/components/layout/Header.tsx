@@ -15,29 +15,31 @@ export function Header() {
   const t = useTranslations();
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-white/95 backdrop-blur">
-      <Container className="flex h-16 items-center justify-between gap-4">
-        <Logo />
+      <Container className="flex h-[4.5rem] items-center justify-between gap-6">
+        <div className="flex items-center gap-8">
+          <Logo />
+          <nav aria-label={t('Nav.primary')} className="hidden lg:block">
+            <ul className="flex items-center gap-1">
+              {HEADER_NAV.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="rounded-[var(--radius-control)] px-2.5 py-2 text-[0.95rem] font-medium text-ink hover:text-crimson-700"
+                  >
+                    {t(item.label)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
 
-        <nav aria-label={t('Nav.primary')} className="hidden lg:block">
-          <ul className="flex items-center gap-1">
-            {HEADER_NAV.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className="rounded-[var(--radius-control)] px-3 py-2 text-sm font-semibold text-navy-900 hover:bg-navy-50"
-                >
-                  {t(item.label)}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <LanguageSwitcher />
-          <ButtonLink href={ROUTES.courses} className="hidden sm:inline-flex">
-            {t('Nav.exploreCourses')}
-          </ButtonLink>
+          {/* Wrapped: the button's own display class would override `hidden`. */}
+          <div className="hidden sm:block">
+            <ButtonLink href={ROUTES.courses}>{t('Nav.exploreCourses')}</ButtonLink>
+          </div>
           <MobileMenu />
         </div>
       </Container>

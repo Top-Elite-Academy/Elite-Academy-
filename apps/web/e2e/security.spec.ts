@@ -19,7 +19,8 @@ test.describe('security headers (spec §9.3)', () => {
     const csp = headers['content-security-policy'] ?? '';
     expect(csp).toContain("frame-ancestors 'none'");
     expect(csp).toMatch(/script-src 'self' 'nonce-[^']+' 'strict-dynamic'/);
-    expect(csp).not.toContain('unsafe-inline');
+    expect(csp).toMatch(/script-src [^;]*/);
+    expect(csp.match(/script-src [^;]*/)?.[0]).not.toContain('unsafe-inline');
     expect(csp).not.toEqual(second.headers()['content-security-policy']);
   });
 

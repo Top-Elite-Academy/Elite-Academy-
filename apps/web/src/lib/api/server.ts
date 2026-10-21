@@ -1,8 +1,7 @@
 import 'server-only';
 import type { MeResponse } from '@eta/shared';
 import { cookies } from 'next/headers';
-
-const API_INTERNAL_URL = process.env['API_INTERNAL_URL'] ?? 'http://127.0.0.1:4000';
+import { API_INTERNAL_URL } from './internal-url';
 
 /**
  * The signed-in user for server components, or null. The browser's cookies

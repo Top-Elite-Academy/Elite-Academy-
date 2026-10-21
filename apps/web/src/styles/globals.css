@@ -2,67 +2,77 @@
 
 /*
  * EliteTech design tokens — the ONLY place colours, fonts and radii are defined.
- * Components use these through Tailwind classes (bg-crimson-600, text-navy-900, ...).
+ * Values taken from the landing design (docs/design/landing) and the crest.
+ * Components use them through Tailwind classes (bg-maroon-900, text-crimson-700, ...).
  *
- * ⚠ PLACEHOLDER VALUES: replace with the exact values from the EliteTech
- * design system (docs/design) when available. Keep every text/background pair
- * at a contrast of at least 4.5:1 (WCAG 2.2 AA).
- *
- * Contrast notes for the current values:
- *   white on crimson-600 ≈ 7.0:1 ✓   navy-900 on white ≈ 16:1 ✓
- *   gold-400 on navy-900 ≈ 7.4:1 ✓   gold-400 on white ≈ 2.2:1 ✗ (never use gold text on light backgrounds)
+ * Contrast (WCAG 2.2 AA needs ≥ 4.5:1 for text):
+ *   white on maroon-900 ≈ 14:1 ✓    gold-300 on maroon-900 ≈ 9:1 ✓    ink on gold-400 ≈ 9:1 ✓
+ *   white on crimson-700 ≈ 9:1 ✓    ink-muted on cream ≈ 7:1 ✓        gold-700 on white ≈ 5:1 ✓
+ *   ✗ never put gold-300/400/500 text on light backgrounds.
  */
 @theme {
-  --color-crimson-50: #fdf2f3;
-  --color-crimson-100: #fbe4e7;
-  --color-crimson-600: #a4152a;
-  --color-crimson-700: #8a1023;
-  --color-crimson-800: #6f0c1c;
+  --color-maroon-900: #561a22;
+  --color-maroon-800: #6a2129;
 
-  --color-navy-50: #f2f5f9;
-  --color-navy-100: #e1e7f0;
-  --color-navy-600: #2a4268;
-  --color-navy-700: #1b3052;
-  --color-navy-800: #12243f;
-  --color-navy-900: #0b1a30;
+  --color-crimson-50: #f8eeee;
+  --color-crimson-100: #f1e3e3;
+  --color-crimson-600: #8b1c2e;
+  --color-crimson-700: #7d1f2b;
+  --color-crimson-800: #681823;
 
-  --color-gold-300: #e3c766;
-  --color-gold-400: #d4ad3c;
-  --color-gold-600: #8a6a12;
+  --color-gold-100: #f7ecd6;
+  --color-gold-300: #e2cc97;
+  --color-gold-400: #d3b877;
+  --color-gold-500: #c7a35a;
+  --color-gold-700: #7f6128;
 
+  --color-ivory: #fff8ec;
+  --color-cream: #faf7f1;
+  --color-sand: #f0eadc;
   --color-surface: #ffffff;
-  --color-surface-muted: #f6f7f9;
-  --color-ink: var(--color-navy-900);
-  --color-ink-muted: #4a5568;
-  --color-border: #d9dee6;
+  --color-ink: #1e1b19;
+  --color-ink-muted: #5c5550;
+  --color-border: #e6dfd3;
   --color-danger: #b42318;
   --color-success: #067647;
 
-  /* Placeholder: system fonts with Arabic and Hebrew coverage, until brand fonts are self-hosted. */
+  --color-sage-100: #e3f0ec;
+  --color-sage-700: #2f6b5a;
+  --color-slate-100: #e6eaf0;
+  --color-slate-700: #3a4a63;
+
   --font-sans:
-    system-ui, 'Segoe UI', 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Hebrew', Tahoma, Arial,
-    sans-serif;
+    var(--font-plex-sans), var(--font-plex-arabic), var(--font-plex-hebrew), system-ui, sans-serif;
+  --font-display:
+    var(--font-cinzel), var(--font-plex-arabic), var(--font-plex-hebrew), Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-serif: var(--font-cormorant), Georgia, serif;
 
   --radius-control: 0.5rem;
-  --radius-card: 0.75rem;
+  --radius-card: 0.875rem;
 }
 
 @layer base {
   html {
     color: var(--color-ink);
-    background: var(--color-surface);
+    background: var(--color-cream);
     font-family: var(--font-sans);
     -webkit-text-size-adjust: 100%;
   }
 
   /* Visible keyboard focus everywhere (WCAG 2.4.7 / 2.4.11). */
   :focus-visible {
-    outline: 3px solid var(--color-navy-700);
+    outline: 3px solid var(--color-crimson-700);
     outline-offset: 2px;
   }
 
   .on-dark :focus-visible {
     outline-color: var(--color-gold-400);
+  }
+
+  /* Keep anchored sections clear of the sticky header. */
+  [id] {
+    scroll-margin-top: 5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -73,5 +83,13 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+@layer utilities {
+  /* Subtle dotted texture used on the hero, program cards and footer. */
+  .bg-dots {
+    background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
   }
 }

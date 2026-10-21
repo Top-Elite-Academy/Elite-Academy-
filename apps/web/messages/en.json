@@ -6,7 +6,10 @@
   "Brand": {
     "name": "Elite Tech Academy",
     "motto": "Scientia et Innovatio",
-    "homeLink": "Elite Tech Academy — home"
+    "homeLink": "Elite Tech Academy — home",
+    "wordmarkTop": "ELITE TECH",
+    "wordmarkBottom": "ACADEMY",
+    "crestAlt": "Elite Tech Academy crest — Scientia et Innovatio"
   },
   "A11y": {
     "skipToContent": "Skip to main content",
@@ -31,9 +34,6 @@
     "current": "Current language: {language}"
   },
   "Footer": {
-    "learn": "Learn",
-    "help": "Help",
-    "legal": "Legal",
     "contact": "Contact",
     "helpCenter": "Help center",
     "terms": "Terms of use",
@@ -45,14 +45,11 @@
     "instagram": "Instagram",
     "linkedin": "LinkedIn",
     "facebook": "Facebook",
-    "copyright": "© {year} Elite Tech Academy. All rights reserved."
-  },
-  "Home": {
-    "eyebrow": "Technology academy · Practical learning",
-    "title": "Start your path into high tech, one clear step at a time",
-    "body": "Live programs, a practical stage at a partner company, and mentors who know the industry.",
-    "exploreCourses": "Explore courses",
-    "bookMentoring": "Book a mentoring session"
+    "copyright": "© {year} Elite Tech Academy. All rights reserved.",
+    "platform": "Platform",
+    "support": "Support",
+    "policies": "Policies",
+    "tagline": "The official learning platform of Elite Tech Academy."
   },
   "NotFound": {
     "title": "Page not found",
@@ -142,7 +139,9 @@
     "notFound": "Not found.",
     "rateLimited": "Too many attempts. Please wait a moment and try again.",
     "payloadTooLarge": "The submitted data is too large.",
-    "email": { "invalid": "Enter a valid email address." },
+    "email": {
+      "invalid": "Enter a valid email address."
+    },
     "password": {
       "tooShort": "Use at least 10 characters.",
       "tooLong": "Use at most 128 characters.",
@@ -154,7 +153,9 @@
       "tooLong": "Use at most 50 letters.",
       "invalid": "Use letters only."
     },
-    "token": { "invalid": "This link is invalid or has expired. Please request a new one." },
+    "token": {
+      "invalid": "This link is invalid or has expired. Please request a new one."
+    },
     "totp": {
       "invalid": "The code is not correct. Wait for a new code and try again.",
       "tooManyAttempts": "Too many wrong codes. Please sign in again.",
@@ -169,12 +170,119 @@
       "mfaRequired": "Please complete two-step verification.",
       "forbidden": "You do not have access to this page."
     },
-    "captcha": { "required": "Please complete the security check." },
-    "csrf": { "invalid": "Your session expired. Please reload the page and try again." },
-    "server": { "error": "Something went wrong on our side. Please try again." },
-    "timeZone": { "invalid": "Choose a valid time zone." },
-    "roles": { "required": "Choose at least one role." },
-    "field": { "notAllowed": "This field cannot be changed." },
-    "user": { "exists": "An account with this email already exists." }
+    "captcha": {
+      "required": "Please complete the security check."
+    },
+    "csrf": {
+      "invalid": "Your session expired. Please reload the page and try again."
+    },
+    "server": {
+      "error": "Something went wrong on our side. Please try again."
+    },
+    "timeZone": {
+      "invalid": "Choose a valid time zone."
+    },
+    "roles": {
+      "required": "Choose at least one role."
+    },
+    "field": {
+      "notAllowed": "This field cannot be changed."
+    },
+    "user": {
+      "exists": "An account with this email already exists."
+    }
+  },
+  "Levels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "ProgramCard": {
+    "program": "Program",
+    "practicalStage": "Includes a practical stage at a company",
+    "nextCohort": "Next cohort: {date}",
+    "nextCohortSoon": "Next cohort: dates coming soon",
+    "viewDetails": "View details"
+  },
+  "Landing": {
+    "hero": {
+      "eyebrow": "Technology academy · Practical learning",
+      "title": "Start your path into high tech, one clear step at a time",
+      "body": "Professional programs with a real company stage, one-to-one mentoring with an instructor, and advice from people working in tech today, all in one platform.",
+      "exploreCourses": "Explore courses",
+      "bookMentoring": "Book a mentoring session",
+      "note": "No payment to enroll · An advisor calls you about price and installments"
+    },
+    "topPrograms": {
+      "title": "Our top programs",
+      "description": "Three professional programs built around AI. Each one includes a practical stage working on a real company product.",
+      "viewAll": "View all programs"
+    },
+    "ways": {
+      "title": "Three ways to learn with us",
+      "description": "Choose what fits your time and goals, or combine them.",
+      "live": {
+        "badge": "Live course",
+        "title": "Live courses",
+        "body": "Online meetings on a fixed schedule with a teacher and a group, live Q&A and weekly projects.",
+        "cta": "Live courses"
+      },
+      "mentoring": {
+        "badge": "Teacher mentoring",
+        "title": "Teacher mentoring",
+        "body": "A package of one-to-one meetings — such as 8 — for help with lessons and a practical project.",
+        "cta": "Mentoring packages"
+      },
+      "career": {
+        "badge": "Career advice",
+        "title": "Career advice",
+        "body": "A session with a tech professional: choosing a direction, CV or portfolio review, or interview preparation.",
+        "cta": "Book career advice"
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "choose": {
+        "title": "Choose your path",
+        "body": "Browse programs, or book career advice to find the right starting point.",
+        "cta": "Browse programs"
+      },
+      "enroll": {
+        "title": "Enroll",
+        "body": "Leave your details. An advisor calls you to go over the program, price and installments — no payment now.",
+        "cta": "Enroll"
+      },
+      "learn": {
+        "title": "Learn and practice",
+        "body": "Join live classes or watch recordings, and complete hands-on projects with your instructor’s guidance.",
+        "cta": "Go to the student area"
+      },
+      "career": {
+        "title": "Get ready for work",
+        "body": "Prepare your CV and portfolio, and practice interviews with professionals.",
+        "cta": "Book career advice"
+      }
+    },
+    "stories": {
+      "title": "Graduate stories",
+      "description": "Experiences in our graduates’ own words, shared with their written consent."
+    },
+    "instructors": {
+      "title": "Meet your instructors",
+      "description": "The people who teach the programs, mentor students one-to-one and stay with them until the practical stage.",
+      "spotlightLabel": "Selected instructor",
+      "bookMentoring": "Book a mentoring session",
+      "viewProgram": "View the program"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "description": "Didn’t find your answer? The support team replies to your messages inside the platform.",
+      "messageSupport": "Message support"
+    },
+    "closing": {
+      "title": "Not sure where to start?",
+      "body": "Book a career advice session with a tech professional and we’ll help you choose the right path.",
+      "cta": "Book career advice"
+    }
   }
 }

@@ -36,7 +36,7 @@ test.describe('public layout', () => {
   test('footer has every column and safe external links', async ({ page }) => {
     await page.goto('/en');
     const footer = page.getByRole('contentinfo');
-    for (const column of ['Learn', 'Help', 'Legal']) {
+    for (const column of ['Platform', 'Support', 'Policies']) {
       await expect(footer.getByRole('navigation', { name: column })).toBeVisible();
     }
     await expect(footer.getByRole('link', { name: 'Privacy policy' })).toHaveAttribute(

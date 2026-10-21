@@ -1,10 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 3100;
+const MOCK_API_PORT = 4100;
 
 /**
  * End-to-end tests against the production build (`pnpm build` first).
- * They cover the public frame and do not need the API to be running.
+ * Public content comes from e2e/mock-api.mjs, so no database is needed.
  */
 export default defineConfig({
   testDir: './e2e',
@@ -20,10 +21,19 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile', use: { ...devices['Pixel 7'] }, grep: /@mobile/ },
   ],
-  webServer: {
-    command: `pnpm exec next start --port ${PORT}`,
-    url: `http://localhost:${PORT}/en`,
-    reuseExistingServer: !process.env['CI'],
-    timeout: 120_000,
-  },
+  webServer: [
+    {
+      command: 'node e2e/mock-api.mjs',
+      url: `http://127.0.0.1:${MOCK_API_PORT}/api/health`,
+      env: { MOCK_API_PORT: String(MOCK_API_PORT) },
+      reuseExistingServer: !process.env['CI'],
+    },
+    {
+      command: `pnpm exec next start --port ${PORT}`,
+      url: `http://localhost:${PORT}/en`,
+      env: { API_INTERNAL_URL: `http://127.0.0.1:${MOCK_API_PORT}` },
+      reuseExistingServer: !process.env['CI'],
+      timeout: 120_000,
+    },
+  ],
 });

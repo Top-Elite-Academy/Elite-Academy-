@@ -5,7 +5,10 @@ test.describe('language switcher', () => {
     page,
   }) => {
     await page.goto('/en/forgot-password');
-    await page.getByRole('button', { name: 'Current language: English' }).click();
+    await page
+      .getByRole('banner')
+      .getByRole('button', { name: 'Current language: English' })
+      .click();
     await page.getByRole('link', { name: 'العربية' }).click();
 
     await expect(page).toHaveURL(/\/ar\/forgot-password$/);
@@ -25,7 +28,9 @@ test.describe('language switcher', () => {
 
   test('works with the keyboard and closes with Escape', async ({ page }) => {
     await page.goto('/en');
-    const button = page.getByRole('button', { name: 'Current language: English' });
+    const button = page
+      .getByRole('banner')
+      .getByRole('button', { name: 'Current language: English' });
     await button.focus();
     await page.keyboard.press('Enter');
     await expect(button).toHaveAttribute('aria-expanded', 'true');

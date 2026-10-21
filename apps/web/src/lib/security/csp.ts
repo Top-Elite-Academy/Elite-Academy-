@@ -23,6 +23,9 @@ export function buildCsp(nonce: string, { isDev, upgradeInsecureRequests }: CspO
     ],
     // Development style injection (hot reload) carries no nonce.
     'style-src': ["'self'", isDev ? "'unsafe-inline'" : `'nonce-${nonce}'`],
+    // Style ATTRIBUTES only (set by next/image for layout). They cannot run scripts;
+    // <style> and <script> elements still need the nonce.
+    'style-src-attr': ["'unsafe-inline'"],
     'img-src': ["'self'", 'data:', 'blob:'],
     'font-src': ["'self'"],
     'connect-src': ["'self'", TURNSTILE, ...(isDev ? ['ws:'] : [])],

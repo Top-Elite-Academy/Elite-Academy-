@@ -24,7 +24,7 @@ export function MobileMenu() {
         type="button"
         aria-haspopup="dialog"
         onClick={() => dialogRef.current?.showModal()}
-        className="inline-flex size-11 items-center justify-center rounded-[var(--radius-control)] text-navy-900 hover:bg-navy-50 lg:hidden"
+        className="inline-flex size-11 items-center justify-center rounded-[var(--radius-control)] text-ink hover:bg-sand lg:hidden"
       >
         <MenuIcon className="size-6" />
         <span className="sr-only">{t('Nav.openMenu')}</span>
@@ -33,7 +33,7 @@ export function MobileMenu() {
       <dialog
         ref={dialogRef}
         aria-label={t('Nav.mobileMenu')}
-        className="m-0 h-dvh max-h-none w-screen max-w-none bg-white p-0 backdrop:bg-navy-900/40"
+        className="m-0 h-dvh max-h-none w-screen max-w-none bg-cream p-0 backdrop:bg-maroon-900/40"
       >
         <div className="flex h-full flex-col px-4 py-3">
           <div className="flex items-center justify-between">
@@ -41,7 +41,7 @@ export function MobileMenu() {
             <button
               type="button"
               onClick={close}
-              className="inline-flex size-11 items-center justify-center rounded-[var(--radius-control)] text-navy-900 hover:bg-navy-50"
+              className="inline-flex size-11 items-center justify-center rounded-[var(--radius-control)] text-ink hover:bg-sand"
             >
               <CloseIcon className="size-6" />
               <span className="sr-only">{t('Nav.closeMenu')}</span>
@@ -55,7 +55,7 @@ export function MobileMenu() {
                   <Link
                     href={item.href}
                     onClick={close}
-                    className="block border-b border-border py-4 text-lg font-semibold text-navy-900"
+                    className="block border-b border-border py-4 text-lg font-semibold text-ink"
                   >
                     {t(item.label)}
                   </Link>

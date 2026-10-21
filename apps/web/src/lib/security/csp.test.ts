@@ -10,7 +10,9 @@ describe('buildCsp', () => {
     expect(csp).toContain("object-src 'none'");
     expect(csp).toContain('upgrade-insecure-requests');
     expect(csp).not.toContain('unsafe-eval');
-    expect(csp).not.toContain('unsafe-inline');
+    // Inline styles are allowed only as attributes, never as <style> elements.
+    expect(csp).toContain("style-src-attr 'unsafe-inline'");
+    expect(csp).not.toMatch(/style-src 'self'[^;]*unsafe-inline/);
   });
 
   it('relaxes only what development tooling needs', () => {

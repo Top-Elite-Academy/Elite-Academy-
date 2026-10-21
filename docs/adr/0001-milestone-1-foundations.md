@@ -67,3 +67,10 @@ marked placeholders (`apps/web/src/styles/globals.css`, `components/brand/Crest.
 Passkeys, magic-link sign-in, Google sign-in, recovery codes and admin "reset 2FA"
 (milestone 6), active-sessions list on the profile page (milestone 4), `hreflang`
 alternates and structured data (milestone 2).
+
+## 11. CSP allows inline style attributes (milestone 2)
+
+`next/image` sets small `style="…"` attributes for layout. The policy adds
+`style-src-attr 'unsafe-inline'`, which permits style attributes only; `<style>`
+and `<script>` elements still require the per-request nonce, so script
+injection protection is unchanged.

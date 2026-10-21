@@ -50,7 +50,7 @@ export function TotpSetup() {
         <p className="text-ink-muted">{t('TwoFactor.manualKey')}</p>
         <code
           dir="ltr"
-          className="mt-1 block break-all rounded bg-navy-50 px-3 py-2 font-mono text-navy-900"
+          className="mt-1 block break-all rounded bg-sand px-3 py-2 font-mono text-ink"
         >
           {manualKey}
         </code>

@@ -70,12 +70,16 @@ export function LanguageSwitcher({ saveToProfile = false, onDark = false }: Lang
           setOpen((value) => !value);
         }}
         className={cn(
-          'inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] px-3 text-sm font-semibold',
-          onDark ? 'text-white hover:bg-navy-800' : 'text-navy-900 hover:bg-navy-50',
+          'inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] border px-3.5 text-sm font-semibold',
+          onDark
+            ? 'border-gold-500/50 text-white hover:bg-maroon-800'
+            : 'border-ink/20 bg-white text-ink hover:border-ink/40',
         )}
       >
         <GlobeIcon />
-        <span lang={current}>{LOCALE_NAMES[current]}</span>
+        <span lang={current} className="hidden sm:inline">
+          {LOCALE_NAMES[current]}
+        </span>
         <ChevronDownIcon className={cn('size-4 transition-transform', open && 'rotate-180')} />
       </button>
 
@@ -96,7 +100,7 @@ export function LanguageSwitcher({ saveToProfile = false, onDark = false }: Lang
                 choose(locale);
               }}
               className={cn(
-                'block px-4 py-2 text-sm text-navy-900 hover:bg-navy-50',
+                'block px-4 py-2 text-sm text-ink hover:bg-sand',
                 locale === current && 'font-bold',
               )}
             >

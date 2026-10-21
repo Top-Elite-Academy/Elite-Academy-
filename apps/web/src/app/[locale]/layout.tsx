@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { routing } from '@/i18n/routing';
+import { fontVariables } from '@/styles/fonts';
 import '@/styles/globals.css';
 
 interface Props {
@@ -27,8 +28,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
 
   return (
-    <html lang={locale} dir={directionOf(locale)}>
-      <body className="flex min-h-dvh flex-col bg-surface text-ink antialiased">
+    <html lang={locale} dir={directionOf(locale)} className={fontVariables}>
+      <body className="flex min-h-dvh flex-col bg-cream text-ink antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

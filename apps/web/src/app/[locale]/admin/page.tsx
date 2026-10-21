@@ -8,7 +8,7 @@ export default async function AdminHomePage() {
 
   return (
     <section className="max-w-2xl rounded-[var(--radius-card)] bg-white p-8 shadow-sm">
-      <h1 className="text-2xl font-bold text-navy-900">{t('adminTitle')}</h1>
+      <h1 className="text-2xl font-bold text-ink">{t('adminTitle')}</h1>
       <p className="mt-2 text-ink-muted">{t('adminIntro')}</p>
     </section>
   );
