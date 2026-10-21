@@ -3,6 +3,9 @@ import type {
   FaqItem,
   InstructorProfile,
   Locale,
+  MentorCard,
+  MentorKind,
+  PackageInfo,
   ProgramDetails,
   ProgramSummary,
   StoryItem,
@@ -34,6 +37,9 @@ export const getPrograms = (locale: Locale) => getList<ProgramSummary>('programs
 export const getTopPrograms = (locale: Locale) =>
   getList<ProgramSummary>('programs?top=true', locale);
 export const getInstructors = (locale: Locale) => getList<InstructorProfile>('instructors', locale);
+export const getPackages = (locale: Locale) => getList<PackageInfo>('packages', locale);
+export const getMentors = (kind: MentorKind, locale: Locale) =>
+  getList<MentorCard>(`mentors?kind=${kind}`, locale);
 export const getFaqs = (locale: Locale) => getList<FaqItem>('faqs', locale);
 export const getStories = (locale: Locale) => getList<StoryItem>('stories', locale);
 

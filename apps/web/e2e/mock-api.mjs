@@ -130,10 +130,56 @@ const details = {
   },
 };
 
+const packages = [
+  { code: 'mentoring-1', kind: 'instructor', sessions: 1, priceAgorot: 25000, recommended: false },
+  { code: 'mentoring-4', kind: 'instructor', sessions: 4, priceAgorot: 100000, recommended: false },
+  { code: 'mentoring-8', kind: 'instructor', sessions: 8, priceAgorot: 200000, recommended: true },
+  {
+    code: 'mentoring-12',
+    kind: 'instructor',
+    sessions: 12,
+    priceAgorot: 300000,
+    recommended: false,
+  },
+  { code: 'career', kind: 'career', sessions: 1, priceAgorot: 25000, recommended: false },
+];
+
+const mentor = (id, name, subject, program, languages, skills) => ({
+  id,
+  name,
+  role: 'Program instructor and mentor',
+  kind: 'instructor',
+  subject,
+  program,
+  skills,
+  languages,
+  sessionMinutes: 60,
+  photoPath: null,
+});
+const mentors = [
+  mentor(
+    '11111111-1111-4111-8111-111111111111',
+    'Rana Arafat',
+    'data',
+    { slug: 'data-analysis-ai', title: 'Data Analysis with AI' },
+    ['ar', 'en'],
+    ['SQL'],
+  ),
+  mentor(
+    '22222222-2222-4222-8222-222222222222',
+    'Dania Hih',
+    'web',
+    { slug: 'full-stack-advanced-ai', title: 'Full Stack Advanced with AI' },
+    ['ar', 'he'],
+    ['React'],
+  ),
+];
+
 const routes = {
   '/api/programs': programs,
   '/api/instructors': instructors,
   '/api/faqs': faqs,
+  '/api/packages': packages,
   '/api/stories': stories,
   '/api/health': { status: 'ok' },
 };
@@ -144,7 +190,14 @@ createServer((request, response) => {
   const slug = pathname.startsWith('/api/programs/')
     ? pathname.slice('/api/programs/'.length)
     : null;
-  const body = isTop ? programs.slice(0, 2) : slug ? details[slug] : routes[pathname];
+  const mentorList = searchParams.get('kind') === 'career' ? [] : mentors;
+  const body = isTop
+    ? programs.slice(0, 2)
+    : slug
+      ? details[slug]
+      : pathname === '/api/mentors'
+        ? mentorList
+        : routes[pathname];
   response.writeHead(body ? 200 : 404, { 'content-type': 'application/json' });
   response.end(JSON.stringify(body ?? { statusCode: 404, code: 'notFound' }));
 }).listen(PORT, '127.0.0.1');

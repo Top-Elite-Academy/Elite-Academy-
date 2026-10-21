@@ -27,6 +27,12 @@ export const ROUTES = {
   bookCareerAdvice: '/book?service=career',
 } as const;
 
+/**
+ * Query values a page uses when they are missing from the URL, e.g. /mentoring shows
+ * the mentoring tab. Used to mark the current header link.
+ */
+export const DEFAULT_QUERY: Record<string, string> = { tab: 'mentoring' };
+
 /** Course details page of a program (spec §3.3). */
 export const programPath = (slug: string) => `/courses/${encodeURIComponent(slug)}`;
 
@@ -38,9 +44,12 @@ export const enrollPath = (programSlug: string, cohortId?: string) =>
   `/enroll?program=${encodeURIComponent(programSlug)}` +
   (cohortId ? `&cohort=${encodeURIComponent(cohortId)}` : '');
 
-/** Booking flow with mentoring and a mentor preselected (spec §3.5). */
-export const bookMentorPath = (mentorId: string) =>
-  `/book?service=mentoring&mentor=${encodeURIComponent(mentorId)}`;
+/**
+ * Booking flow with a package and a mentor preselected (spec §3.5), e.g.
+ * /book?service=mentoring-8&mentor=… — the 8-session plan is the recommended default.
+ */
+export const bookMentorPath = (mentorId: string, service = 'mentoring-8') =>
+  `/book?service=${encodeURIComponent(service)}&mentor=${encodeURIComponent(mentorId)}`;
 
 /** Desktop header links. */
 export const HEADER_NAV: NavItem[] = [

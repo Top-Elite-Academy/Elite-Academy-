@@ -505,5 +505,64 @@
       "question": "Have a question first?",
       "questionBody": "Message the academy team"
     }
+  },
+  "Mentoring": {
+    "crumb": "Mentoring and career advice",
+    "metaTitle": "Mentoring and career advice",
+    "title": "Learn with personal support",
+    "intro": "Two different services: a package of meetings with a teacher to support your learning and practical work, or a single session with a professional working in high tech to guide your next career step.",
+    "services": {
+      "label": "Choose a service",
+      "mentoring": {
+        "badge": "Teacher mentoring",
+        "price": "{price} per session",
+        "title": "Regular support while you learn",
+        "body": "One-to-one meetings with a teacher — for example 8 meetings — to explain what was hard, practise, and work through a practical project step by step."
+      },
+      "career": {
+        "badge": "Career advice",
+        "price": "Single session · {price}",
+        "title": "A session with a tech professional",
+        "body": "Choosing a career direction, CV or portfolio review, or interview preparation — including a mock interview."
+      }
+    },
+    "packages": {
+      "title": "Mentoring packages",
+      "single": "Single session",
+      "sessions": "{count} sessions",
+      "plan": "Mentoring plan · {count} sessions",
+      "detail": "{count} × {minutes}-minute sessions",
+      "perSession": "{price} per session",
+      "recommended": "Recommended",
+      "notes": {
+        "single": "Help with one specific topic",
+        "four": "Review a unit or a project",
+        "eight": "Supports a full program and project",
+        "twelve": "Intensive support"
+      }
+    },
+    "mentors": {
+      "titleInstructor": "Teachers available for mentoring",
+      "titleCareer": "Career advisors",
+      "specialty": "Specialty",
+      "allSpecialties": "All specialties",
+      "language": "Language",
+      "allLanguages": "All languages",
+      "languages": "Languages",
+      "sessionLength": "Session length",
+      "minutes": "{minutes} min",
+      "perSession": "{price} / session",
+      "book": "Book a session",
+      "instructorOf": "{program} instructor",
+      "count": "{count, plural, one {# teacher} other {# teachers}}",
+      "empty": "No teachers match these filters.",
+      "clear": "Clear filters",
+      "careerSoon": "Our career advisors will be listed here soon. Meanwhile, contact the academy team and we will arrange a session for you.",
+      "careerSoonCta": "Contact the academy team"
+    },
+    "policy": {
+      "title": "Rescheduling and cancellation",
+      "body": "You can reschedule or cancel free of charge up to 24 hours before the session starts. After that, the session is charged."
+    }
   }
 }
