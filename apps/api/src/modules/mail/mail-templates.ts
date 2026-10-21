@@ -9,6 +9,13 @@ export type MailTemplate = keyof typeof en;
 export interface MailParams {
   invitation: { firstName: string; link: string; hours: number };
   passwordReset: { firstName: string; link: string; minutes: number };
+  bookingConfirmed: {
+    firstName: string;
+    mentorName: string;
+    when: string;
+    timeZone: string;
+    link: string;
+  };
 }
 
 export interface MailMessage<T extends MailTemplate = MailTemplate> {

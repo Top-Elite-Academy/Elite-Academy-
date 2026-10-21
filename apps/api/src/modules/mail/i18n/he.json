@@ -6,5 +6,9 @@
   "passwordReset": {
     "subject": "איפוס סיסמה באקדמיית אליט טק",
     "body": "שלום {firstName},\n\nקיבלנו בקשה לאיפוס הסיסמה שלך.\nיש להשתמש בקישור הבא תוך {minutes} דקות (לשימוש חד-פעמי):\n\n{link}\n\nאם לא ביקשת זאת, אפשר להתעלם מהודעה זו והסיסמה תישאר ללא שינוי.\n\nאקדמיית אליט טק · Scientia et Innovatio"
+  },
+  "bookingConfirmed": {
+    "subject": "הפגישה שלך אושרה",
+    "body": "שלום {firstName},\n\nהפגישה שלך עם {mentorName} אושרה ל-{when} ({timeZone}).\nקישור למפגש יופיע בלוח הבקרה לפני הפגישה:\n\n{link}\n\nאפשר לשנות מועד או לבטל ללא עלות עד 24 שעות לפני.\n\nאקדמיית אליט טק · Scientia et Innovatio"
   }
 }

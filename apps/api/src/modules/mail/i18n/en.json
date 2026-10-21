@@ -6,5 +6,9 @@
   "passwordReset": {
     "subject": "Reset your Elite Tech Academy password",
     "body": "Hello {firstName},\n\nWe received a request to reset your password.\nUse this link within {minutes} minutes (single use):\n\n{link}\n\nIf you did not ask for this, ignore this email; your password stays the same.\n\nElite Tech Academy · Scientia et Innovatio"
+  },
+  "bookingConfirmed": {
+    "subject": "Your session is confirmed",
+    "body": "Hello {firstName},\n\nYour session with {mentorName} is confirmed for {when} ({timeZone}).\nThe meeting link will appear in your dashboard before the session:\n\n{link}\n\nYou can reschedule or cancel free of charge up to 24 hours before.\n\nElite Tech Academy · Scientia et Innovatio"
   }
 }

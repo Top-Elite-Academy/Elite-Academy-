@@ -9,4 +9,6 @@ regexes = [
   '''1x0000000000000000000000000000000AA''',
   '''1x00000000000000000000AA''',
   '''ci-only-password''',
+  '''ci-only-test-payment-secret-0123456789''',
+  '''test-secret-for-integration-tests-0123456789''',
 ]

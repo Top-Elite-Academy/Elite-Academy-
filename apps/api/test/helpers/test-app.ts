@@ -54,7 +54,10 @@ export async function createTestApp(): Promise<TestApp> {
     .useClass(FakeCaptchaService)
     .compile();
 
-  const app = moduleRef.createNestApplication<NestExpressApplication>({ logger: ['error'] });
+  const app = moduleRef.createNestApplication<NestExpressApplication>({
+    logger: ['error'],
+    rawBody: true,
+  });
   configureApp(app);
   await app.init();
 
@@ -74,7 +77,7 @@ export async function createTestApp(): Promise<TestApp> {
       // Triggers are skipped only here, so the append-only audit table can be emptied between tests.
       await prisma.$transaction([
         prisma.$executeRaw`SET LOCAL session_replication_role = replica`,
-        prisma.$executeRaw`TRUNCATE audit_logs, packages, program_modules, tasks, activities, leads, success_stories, faqs, cohorts, programs, mentor_profiles, consents, auth_tokens, sessions, user_roles, users CASCADE`,
+        prisma.$executeRaw`TRUNCATE audit_logs, payment_events, bookings, package_credits, orders, availability_slots, packages, program_modules, tasks, activities, leads, success_stories, faqs, cohorts, programs, mentor_profiles, consents, auth_tokens, sessions, user_roles, users CASCADE`,
       ]);
     },
     close: () => app.close(),

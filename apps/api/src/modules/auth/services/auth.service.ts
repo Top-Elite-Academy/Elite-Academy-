@@ -68,6 +68,11 @@ export class AuthService {
     });
   }
 
+  /** Drops a session that existed before signing up (no session fixation). */
+  async revokeSessionToken(token: string): Promise<void> {
+    await this.sessions.revokeByToken(token);
+  }
+
   async logout(auth: AuthContext, client: ClientInfo): Promise<void> {
     await this.sessions.revoke(auth.sessionId);
     await this.audit.record({

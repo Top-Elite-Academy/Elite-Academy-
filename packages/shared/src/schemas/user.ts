@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { LOCALES } from '../locales';
 import { ROLES } from '../roles';
-import { emailSchema } from './auth';
+import { emailSchema, passwordSchema } from './auth';
 
 /** Names: 2–50 characters, letters from Latin, Arabic or Hebrew scripts, spaces, ' and - (spec §3.6). */
 export const personNameSchema = z
@@ -56,3 +56,14 @@ export const updateMyPreferencesSchema = z
   })
   .strict();
 export type UpdateMyPreferencesInput = z.infer<typeof updateMyPreferencesSchema>;
+
+/** Student account created during booking (spec §3.7: sign-in or account creation before paying). */
+export const signupSchema = z.object({
+  firstName: personNameSchema,
+  lastName: personNameSchema,
+  email: emailSchema,
+  password: passwordSchema,
+  locale: z.enum(LOCALES),
+  captchaToken: z.string().max(2048).optional(),
+});
+export type SignupInput = z.infer<typeof signupSchema>;

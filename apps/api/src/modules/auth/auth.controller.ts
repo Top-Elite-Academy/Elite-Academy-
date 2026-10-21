@@ -5,9 +5,10 @@ import type { Request, Response } from 'express';
 import type { AuthContext } from '../../common/authz/auth-context';
 import { AllowPendingMfa, CurrentSession, Public } from '../../common/authz/decorators';
 import { Client, type ClientInfo } from '../../common/http/client-info';
-import { LoginDto, TotpCodeDto } from './auth.dto';
+import { LoginDto, SignupDto, TotpCodeDto } from './auth.dto';
 import { AuthCookiesService } from './services/auth-cookies.service';
 import { AuthService } from './services/auth.service';
+import { SignupService } from './services/signup.service';
 import { TwoFactorService } from './services/two-factor.service';
 
 @ApiTags('auth')
@@ -15,6 +16,7 @@ import { TwoFactorService } from './services/two-factor.service';
 export class AuthController {
   constructor(
     private readonly auth: AuthService,
+    private readonly signupService: SignupService,
     private readonly twoFactor: TwoFactorService,
     private readonly cookies: AuthCookiesService,
   ) {}
@@ -38,6 +40,22 @@ export class AuthController {
     const step = await this.auth.login(body, client, this.cookies.readSession(request));
     this.cookies.setSession(response, step.token);
     return { next: step.next };
+  }
+
+  /** Student account for booking (spec §3.7); signs the new student in. */
+  @Public()
+  @Post('signup')
+  @HttpCode(HttpStatus.CREATED)
+  async signup(
+    @Body() body: SignupDto,
+    @Client() client: ClientInfo,
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<LoginResponse> {
+    const previous = this.cookies.readSession(request);
+    if (previous) await this.auth.revokeSessionToken(previous);
+    this.cookies.setSession(response, await this.signupService.signup(body, client));
+    return { next: 'done' };
   }
 
   @AllowPendingMfa()

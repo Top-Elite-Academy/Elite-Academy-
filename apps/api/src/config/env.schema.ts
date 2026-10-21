@@ -51,10 +51,26 @@ export const envSchema = z
     SMTP_USER: z.string().optional(),
     SMTP_PASSWORD: z.string().optional(),
     MAIL_FROM: z.string().min(3),
+
+    /** Gateway adapter name; more are added when the gateway is chosen (spec §12). */
+    PAYMENT_PROVIDER: z
+      .enum(['test'])
+      .default('test')
+      .transform((name): string => name),
+    /** HMAC secret of the built-in test provider (signs its webhooks). */
+    PAYMENT_TEST_SECRET: z.string().min(32).optional(),
   })
   .refine((env) => env.NODE_ENV !== 'production' || env.WEB_ORIGIN.startsWith('https://'), {
     message: 'must use https:// in production',
     path: ['WEB_ORIGIN'],
+  })
+  .refine((env) => env.NODE_ENV !== 'production' || env.PAYMENT_PROVIDER !== 'test', {
+    message: 'the test payment provider must never be used in production',
+    path: ['PAYMENT_PROVIDER'],
+  })
+  .refine((env) => env.PAYMENT_PROVIDER !== 'test' || Boolean(env.PAYMENT_TEST_SECRET), {
+    message: 'set PAYMENT_TEST_SECRET (32+ random characters) for the test provider',
+    path: ['PAYMENT_TEST_SECRET'],
   })
   .refine((env) => env.NODE_ENV !== 'production' || !env.SHOW_EXAMPLE_CONTENT, {
     message: 'illustrative example content must never be shown in production',

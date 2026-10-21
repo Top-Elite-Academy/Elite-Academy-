@@ -10,6 +10,7 @@ import { LoginProtectionService } from './services/login-protection.service';
 import { PasswordResetService } from './services/password-reset.service';
 import { PasswordService } from './services/password.service';
 import { SessionService } from './services/session.service';
+import { SignupService } from './services/signup.service';
 import { TotpService } from './services/totp.service';
 import { TwoFactorService } from './services/two-factor.service';
 import { SessionGuard } from './session.guard';
@@ -18,6 +19,7 @@ import { SessionGuard } from './session.guard';
   controllers: [AuthController, PasswordController],
   providers: [
     AuthService,
+    SignupService,
     TwoFactorService,
     PasswordResetService,
     SessionService,

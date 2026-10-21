@@ -25,7 +25,7 @@ export interface SeedInstructor {
   skills: LocalizedList;
   /** Session languages, used by the language filter. */
   languages: Locale[];
-  photoPath: string;
+  photoPath: string | null;
   featured: boolean;
   sortOrder: number;
 }
@@ -312,29 +312,130 @@ export interface SeedPackage {
   kind: 'instructor' | 'career';
   sessions: number;
   priceAgorot: number;
+  sessionMinutes: number;
   recommended: boolean;
 }
 
 /**
- * Mentoring and career advice prices (spec §1, §3.5), in agorot.
- * ⚠ The career advice price (₪250) comes from the design ("from ₪250") — to confirm.
+ * Mentoring and career advice prices (spec §1, §3.5, §3.7), in agorot.
+ * ⚠ Career advice prices and lengths come from the booking design (CV review ₪250,
+ * mock interview ₪300, 45 minutes) — to confirm. Packages not listed here are switched off.
  */
 export const PACKAGES: SeedPackage[] = [
-  { code: 'mentoring-1', kind: 'instructor', sessions: 1, priceAgorot: 25_000, recommended: false },
+  {
+    code: 'mentoring-1',
+    kind: 'instructor',
+    sessions: 1,
+    priceAgorot: 25_000,
+    sessionMinutes: 60,
+    recommended: false,
+  },
   {
     code: 'mentoring-4',
     kind: 'instructor',
     sessions: 4,
     priceAgorot: 100_000,
+    sessionMinutes: 60,
     recommended: false,
   },
-  { code: 'mentoring-8', kind: 'instructor', sessions: 8, priceAgorot: 200_000, recommended: true },
+  {
+    code: 'mentoring-8',
+    kind: 'instructor',
+    sessions: 8,
+    priceAgorot: 200_000,
+    sessionMinutes: 60,
+    recommended: true,
+  },
   {
     code: 'mentoring-12',
     kind: 'instructor',
     sessions: 12,
     priceAgorot: 300_000,
+    sessionMinutes: 60,
     recommended: false,
   },
-  { code: 'career', kind: 'career', sessions: 1, priceAgorot: 25_000, recommended: false },
+  {
+    code: 'career-cv',
+    kind: 'career',
+    sessions: 1,
+    priceAgorot: 25_000,
+    sessionMinutes: 45,
+    recommended: false,
+  },
+  {
+    code: 'career-interview',
+    kind: 'career',
+    sessions: 1,
+    priceAgorot: 30_000,
+    sessionMinutes: 45,
+    recommended: false,
+  },
+];
+
+export interface SeedWindow {
+  weekday: number;
+  startTime: string;
+  endTime: string;
+}
+
+/** Example weekly availability (Jerusalem time) — mentors will manage their own in Admin (spec §5.1). */
+export const AVAILABILITY: Record<string, SeedWindow[]> = {
+  'rana-arafat': [0, 2, 4].map((weekday) => ({ weekday, startTime: '17:00', endTime: '21:00' })),
+  'dania-hih': [1, 3].map((weekday) => ({ weekday, startTime: '17:00', endTime: '21:00' })),
+  'muhammad-wattad': [0, 2].map((weekday) => ({ weekday, startTime: '16:00', endTime: '20:00' })),
+  'noa-levi': [0, 3].map((weekday) => ({ weekday, startTime: '10:00', endTime: '13:00' })),
+  'karim-odeh': [1, 4].map((weekday) => ({ weekday, startTime: '18:00', endTime: '21:00' })),
+  'rana-issa': [2].map((weekday) => ({ weekday, startTime: '12:00', endTime: '16:00' })),
+};
+
+/**
+ * ⚠ Career advisors from the designs — NOT confirmed (spec §12). Stored as examples:
+ * shown and bookable only when SHOW_EXAMPLE_CONTENT=true, never in production.
+ */
+export const EXAMPLE_CAREER_ADVISORS: SeedInstructor[] = [
+  {
+    slug: 'noa-levi',
+    name: same('Noa Levi'),
+    role: { en: 'Software engineer', ar: 'مهندسة برمجيات', he: 'מהנדסת תוכנה' },
+    bio: same(''),
+    skills: {
+      en: ['CV review', 'Mock interviews'],
+      ar: ['مراجعة السيرة الذاتية', 'مقابلات تجريبية'],
+      he: ['בדיקת קורות חיים', 'ראיונות דמה'],
+    },
+    languages: ['he', 'en'],
+    photoPath: null,
+    featured: false,
+    sortOrder: 1,
+  },
+  {
+    slug: 'karim-odeh',
+    name: same('Karim Odeh'),
+    role: { en: 'Product manager', ar: 'مدير منتج', he: 'מנהל מוצר' },
+    bio: same(''),
+    skills: {
+      en: ['Career direction', 'Portfolio review'],
+      ar: ['اختيار المسار', 'مراجعة ملف الأعمال'],
+      he: ['בחירת כיוון', 'בדיקת תיק עבודות'],
+    },
+    languages: ['ar', 'en'],
+    photoPath: null,
+    featured: false,
+    sortOrder: 2,
+  },
+  {
+    slug: 'rana-issa',
+    name: same('Rana Issa'),
+    role: { en: 'Technical recruiter', ar: 'مسؤولة توظيف تقني', he: 'מגייסת טכנית' },
+    bio: same(''),
+    skills: {
+      en: ['Interview preparation', 'Job search'],
+      ar: ['التحضير للمقابلات', 'البحث عن عمل'],
+      he: ['הכנה לראיונות', 'חיפוש עבודה'],
+    },
+    languages: ['ar', 'he'],
+    photoPath: null,
+    featured: false,
+    sortOrder: 3,
+  },
 ];

@@ -5,21 +5,46 @@ import { CommonModule } from '../common/common.module';
 import { PrismaService } from '../common/prisma/prisma.service';
 import { AppConfigModule } from '../config/app-config.module';
 import { loadEnvFile } from '../config/load-env';
-import { EXAMPLE_STORIES, FAQS, INSTRUCTORS, PACKAGES, PROGRAMS } from './seed-data/public-content';
+import {
+  AVAILABILITY,
+  EXAMPLE_CAREER_ADVISORS,
+  EXAMPLE_STORIES,
+  FAQS,
+  INSTRUCTORS,
+  PACKAGES,
+  PROGRAMS,
+  type SeedInstructor,
+} from './seed-data/public-content';
 import { seedProgramDetails } from './seed-program-details';
 
 @Module({ imports: [AppConfigModule, CommonModule] })
 class SeedModule {}
 
-/** Returns instructor ids by slug. */
-async function seedInstructors(prisma: PrismaService): Promise<Map<string, string>> {
+/** Weekly availability is replaced as a whole until mentors manage it in Admin. */
+async function replaceAvailability(prisma: PrismaService, mentorId: string, slug: string) {
+  await prisma.$transaction([
+    prisma.availabilitySlot.deleteMany({ where: { mentorId } }),
+    prisma.availabilitySlot.createMany({
+      data: (AVAILABILITY[slug] ?? []).map((window) => ({ mentorId, ...window })),
+    }),
+  ]);
+}
+
+/** Returns mentor ids by slug. */
+async function seedMentors(
+  prisma: PrismaService,
+  mentors: SeedInstructor[],
+  options: { kind: 'instructor' | 'career'; isExample: boolean; sessionMinutes: number },
+): Promise<Map<string, string>> {
   const ids = new Map<string, string>();
-  for (const { slug, ...data } of INSTRUCTORS) {
+  for (const { slug, ...data } of mentors) {
+    const fields = { ...data, ...options };
     const profile = await prisma.mentorProfile.upsert({
       where: { slug },
-      create: { slug, kind: 'instructor', ...data },
-      update: data,
+      create: { slug, ...fields },
+      update: fields,
     });
+    await replaceAvailability(prisma, profile.id, slug);
     ids.set(slug, profile.id);
   }
   return ids;
@@ -48,6 +73,11 @@ async function seedPackages(prisma: PrismaService) {
     const fields = { ...data, sortOrder: index + 1, active: true };
     await prisma.package.upsert({ where: { code }, create: { code, ...fields }, update: fields });
   }
+  // Retired packages stay for order history but can no longer be booked.
+  await prisma.package.updateMany({
+    where: { code: { notIn: PACKAGES.map((pkg) => pkg.code) } },
+    data: { active: false },
+  });
 }
 
 async function seedFaqs(prisma: PrismaService) {
@@ -77,12 +107,23 @@ async function seedContent(): Promise<void> {
   const app = await NestFactory.createApplicationContext(SeedModule, { logger: ['error', 'warn'] });
   const prisma = app.get(PrismaService);
   try {
-    await seedPrograms(prisma, await seedInstructors(prisma));
+    const instructorIds = await seedMentors(prisma, INSTRUCTORS, {
+      kind: 'instructor',
+      isExample: false,
+      sessionMinutes: 60,
+    });
+    await seedMentors(prisma, EXAMPLE_CAREER_ADVISORS, {
+      kind: 'career',
+      isExample: true,
+      sessionMinutes: 45,
+    });
+    await seedPrograms(prisma, instructorIds);
     await seedFaqs(prisma);
     await seedPackages(prisma);
     await seedExampleStories(prisma);
     process.stdout.write(
       `Seeded ${PROGRAMS.length} programs, ${INSTRUCTORS.length} instructors, ` +
+        `${EXAMPLE_CAREER_ADVISORS.length} example career advisors, ${PACKAGES.length} packages, ` +
         `${FAQS.length} FAQs, ${EXAMPLE_STORIES.length} example stories.\n`,
     );
   } finally {

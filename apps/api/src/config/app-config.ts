@@ -78,6 +78,13 @@ export class AppConfig {
     return this.env.HIBP_ENABLED;
   }
 
+  get payments() {
+    return {
+      provider: this.env.PAYMENT_PROVIDER,
+      testSecret: this.env.PAYMENT_TEST_SECRET ?? '',
+    };
+  }
+
   get mail() {
     return {
       host: this.env.SMTP_HOST,

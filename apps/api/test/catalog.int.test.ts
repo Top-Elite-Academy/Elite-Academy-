@@ -276,6 +276,7 @@ describe('mentoring (spec §3.5)', () => {
         kind: 'instructor',
         sessions: 1,
         priceAgorot: 25_000,
+        sessionMinutes: 60,
         recommended: false,
       },
       {
@@ -283,6 +284,7 @@ describe('mentoring (spec §3.5)', () => {
         kind: 'instructor',
         sessions: 8,
         priceAgorot: 200_000,
+        sessionMinutes: 60,
         recommended: true,
       },
     ]);

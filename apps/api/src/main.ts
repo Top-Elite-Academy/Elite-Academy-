@@ -9,7 +9,10 @@ import { loadEnvFile } from './config/load-env';
 
 async function bootstrap(): Promise<void> {
   loadEnvFile();
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    // Payment webhooks are verified against the exact bytes the provider signed.
+    rawBody: true,
+  });
   configureApp(app);
   const { port } = app.get(AppConfig).http;
   await app.listen(port);

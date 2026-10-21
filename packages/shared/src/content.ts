@@ -154,6 +154,7 @@ export interface PackageInfo {
   sessions: number;
   /** Integer agorot: ₪250 = 25000 */
   priceAgorot: number;
+  sessionMinutes: number;
   recommended: boolean;
 }
 

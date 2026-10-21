@@ -21,6 +21,8 @@ export function applyTestEnv(): void {
     HIBP_ENABLED: 'false',
     OPENAPI_ENABLED: 'false',
     SHOW_EXAMPLE_CONTENT: 'false',
+    PAYMENT_PROVIDER: 'test',
+    PAYMENT_TEST_SECRET: 'test-secret-for-integration-tests-0123456789',
   });
 }
 
