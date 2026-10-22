@@ -49,3 +49,29 @@ export function liveClasses(
 /** Today's calendar date in Jerusalem. */
 export const jerusalemToday = (now = new Date()) =>
   zonedCalendarDay(now, TEACHING_TIME_ZONE).isoDate;
+
+/**
+ * Class days that have happened (today included), newest first, at most
+ * `limit`. Used for attendance: one row per live class.
+ */
+export function pastClassDates(
+  cohort: { startDate: string; lengthWeeks: number | null; schedule: CohortSchedule },
+  todayIso: string,
+  limit: number,
+): string[] {
+  const dates: string[] = [];
+  for (
+    let day = todayIso;
+    day >= cohort.startDate && dates.length < limit;
+    day = addDays(day, -1)
+  ) {
+    if (liveClasses(cohort, day, 1).length > 0) dates.push(day);
+  }
+  return dates;
+}
+
+/** True when the cohort had (or has) a live class on that calendar day. */
+export const isClassDay = (
+  cohort: { startDate: string; lengthWeeks: number | null; schedule: CohortSchedule },
+  isoDate: string,
+) => liveClasses(cohort, isoDate, 1).length > 0;

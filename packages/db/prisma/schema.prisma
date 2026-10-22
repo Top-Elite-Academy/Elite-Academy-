@@ -84,6 +84,9 @@ model User {
   enrollments   Enrollment[]
   announcements Announcement[]  @relation("AnnouncementAuthor")
   notifications Notification[]
+  attendance    Attendance[]    @relation("AttendanceStudent")
+  notesAbout    StudentNote[]   @relation("NoteStudent")
+  notesWritten  StudentNote[]   @relation("NoteAuthor")
 
   @@map("users")
 }
@@ -275,6 +278,8 @@ model Cohort {
   leads         Lead[]
   enrollments   Enrollment[]
   announcements Announcement[]
+  attendance    Attendance[]
+  studentNotes  StudentNote[]
 
   @@index([programId, startDate])
   @@map("cohorts")
@@ -755,4 +760,50 @@ model MentorTimeOff {
 
   @@index([mentorId, endDate])
   @@map("mentor_time_off")
+}
+
+// ── Progress & attendance (design "Instructor 2–3") ──
+
+enum AttendanceStatus {
+  present
+  late
+  absent
+}
+
+/// One student at one live class of a cohort (the class day, Jerusalem calendar).
+model Attendance {
+  id         String           @id @default(uuid()) @db.Uuid
+  cohortId   String           @map("cohort_id") @db.Uuid
+  userId     String           @map("user_id") @db.Uuid
+  classDate  DateTime         @map("class_date") @db.Date
+  status     AttendanceStatus
+  markedById String           @map("marked_by_id") @db.Uuid
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+
+  cohort Cohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  user   User   @relation("AttendanceStudent", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([cohortId, userId, classDate])
+  @@index([cohortId, classDate])
+  @@map("attendance")
+}
+
+/// Instructor's note about a student. Staff only: never shown to the student.
+model StudentNote {
+  id                   String   @id @default(uuid()) @db.Uuid
+  cohortId             String   @map("cohort_id") @db.Uuid
+  studentId            String   @map("student_id") @db.Uuid
+  authorId             String   @map("author_id") @db.Uuid
+  body                 String
+  /// Also visible to admissions (e.g. a student who may drop out)
+  sharedWithAdmissions Boolean  @default(false) @map("shared_with_admissions")
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  cohort  Cohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  student User   @relation("NoteStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  author  User   @relation("NoteAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([cohortId, studentId, createdAt])
+  @@map("student_notes")
 }

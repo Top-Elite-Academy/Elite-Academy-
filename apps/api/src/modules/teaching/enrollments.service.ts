@@ -17,6 +17,7 @@ import {
   ANNOUNCEMENT_INCLUDE,
   COHORT_INCLUDE,
   instructorName,
+  summarise,
   toAnnouncementView,
   toCohortRef,
 } from './teaching.mapper';
@@ -100,6 +101,10 @@ export class EnrollmentsService {
       },
       orderBy: { createdAt: 'desc' },
     });
+    const marks = await this.prisma.attendance.findMany({
+      where: { userId: user.id },
+      select: { cohortId: true, status: true },
+    });
     return enrollments.map((enrollment) => ({
       id: enrollment.id,
       status: enrollment.status,
@@ -109,6 +114,10 @@ export class EnrollmentsService {
         enrollment.status === 'confirmed'
           ? enrollment.cohort.announcements.map(toAnnouncementView)
           : [],
+      attendance:
+        enrollment.status === 'confirmed'
+          ? summarise(marks.filter((mark) => mark.cohortId === enrollment.cohortId))
+          : null,
     }));
   }
 

@@ -1,6 +1,7 @@
-import type { Prisma } from '@eta/db';
+import type { AttendanceStatus, Prisma } from '@eta/db';
 import {
   type AnnouncementView,
+  type AttendanceSummary,
   cohortScheduleSchema,
   type CohortRef,
   type Locale,
@@ -61,3 +62,10 @@ export const toAnnouncementView = (announcement: AnnouncementRecord): Announceme
   authorName: `${announcement.author.firstName} ${announcement.author.lastName}`,
   createdAt: announcement.createdAt.toISOString(),
 });
+
+/** Present or late counts as attended. */
+export function summarise(marks: { status: AttendanceStatus }[]): AttendanceSummary {
+  const attended = marks.filter((mark) => mark.status !== 'absent').length;
+  const marked = marks.length;
+  return { attended, marked, rate: marked ? Math.round((attended / marked) * 100) : null };
+}

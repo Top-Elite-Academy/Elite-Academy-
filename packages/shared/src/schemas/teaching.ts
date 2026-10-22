@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { CohortSchedule } from '../content';
+import type { AttendanceSummary, ProgressStatus } from './progress';
 
 /** Teaching (instructor milestone 1): enrollments, announcements, notifications. */
 
@@ -58,6 +59,8 @@ export interface StudentEnrollment {
   instructorName: string | null;
   /** Latest announcements, only once confirmed. */
   announcements: AnnouncementView[];
+  /** The student's own attendance, once confirmed. */
+  attendance: AttendanceSummary | null;
 }
 
 /** A cohort the instructor teaches. */
@@ -79,6 +82,10 @@ export interface CohortStudent {
   /** When the student chose the cohort */
   requestedAt: string;
   confirmedAt: string | null;
+  attendance: AttendanceSummary;
+  /** On track / Behind / At risk (null: not enough classes yet) */
+  progress: ProgressStatus | null;
+  lastActiveAt: string | null;
 }
 
 export interface TeachScheduleItem {

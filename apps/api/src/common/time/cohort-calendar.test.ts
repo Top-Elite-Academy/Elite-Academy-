@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cohortWeek, liveClasses } from './cohort-calendar';
+import { cohortWeek, liveClasses, pastClassDates } from './cohort-calendar';
 
 describe('cohortWeek', () => {
   it('counts weeks from the start date', () => {
@@ -34,5 +34,26 @@ describe('liveClasses', () => {
   it('has no classes before the start or after the last week', () => {
     expect(liveClasses(cohort, '2026-10-11', 7)).toEqual([]);
     expect(liveClasses({ ...cohort, lengthWeeks: 1 }, '2026-10-25', 7)).toEqual([]);
+  });
+});
+
+describe('pastClassDates', () => {
+  const cohort = {
+    startDate: '2026-10-04',
+    lengthWeeks: 24,
+    schedule: { days: ['sun' as const, 'wed' as const], from: '18:00', to: '21:00' },
+  };
+
+  it('lists the class days so far, newest first, never before the start', () => {
+    expect(pastClassDates(cohort, '2026-10-21', 10)).toEqual([
+      '2026-10-21',
+      '2026-10-18',
+      '2026-10-14',
+      '2026-10-11',
+      '2026-10-07',
+      '2026-10-04',
+    ]);
+    expect(pastClassDates(cohort, '2026-10-21', 2)).toEqual(['2026-10-21', '2026-10-18']);
+    expect(pastClassDates(cohort, '2026-10-01', 10)).toEqual([]);
   });
 });

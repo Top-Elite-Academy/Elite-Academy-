@@ -77,7 +77,7 @@ export async function createTestApp(): Promise<TestApp> {
       // Triggers are skipped only here, so the append-only audit table can be emptied between tests.
       await prisma.$transaction([
         prisma.$executeRaw`SET LOCAL session_replication_role = replica`,
-        prisma.$executeRaw`TRUNCATE audit_logs, mentor_time_off, notifications, announcements, enrollments, payment_events, bookings, package_credits, orders, availability_slots, packages, program_modules, tasks, activities, leads, success_stories, faqs, cohorts, programs, mentor_profiles, consents, auth_tokens, sessions, user_roles, users CASCADE`,
+        prisma.$executeRaw`TRUNCATE audit_logs, student_notes, attendance, mentor_time_off, notifications, announcements, enrollments, payment_events, bookings, package_credits, orders, availability_slots, packages, program_modules, tasks, activities, leads, success_stories, faqs, cohorts, programs, mentor_profiles, consents, auth_tokens, sessions, user_roles, users CASCADE`,
       ]);
     },
     close: () => app.close(),

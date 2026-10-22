@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import type { Prisma } from '@eta/db';
+import type { AttendanceStatus, Prisma } from '@eta/db';
 import {
   addDays,
   type CohortStudent,
+  progressStatus,
   type TeachCohort,
   type TeachScheduleItem,
   type TeachToday,
@@ -16,6 +17,7 @@ import {
   ANNOUNCEMENT_INCLUDE,
   COHORT_INCLUDE,
   type CohortRecord,
+  summarise,
   toAnnouncementView,
   toTeachCohort,
 } from './teaching.mapper';
@@ -80,8 +82,14 @@ export class TeachingService {
     await this.cohortRecord(user, cohortId);
     const enrollments = await this.prisma.enrollment.findMany({
       where: { cohortId, status: { in: ['pending', 'confirmed'] } },
-      include: { user: { select: { id: true, firstName: true, lastName: true } } },
+      include: {
+        user: { select: { id: true, firstName: true, lastName: true, lastLoginAt: true } },
+      },
       orderBy: [{ status: 'asc' }, { user: { firstName: 'asc' } }],
+    });
+    const marks = await this.prisma.attendance.findMany({
+      where: { cohortId },
+      select: { userId: true, status: true },
     });
     return enrollments.map((enrollment) => ({
       enrollmentId: enrollment.id,
@@ -91,6 +99,8 @@ export class TeachingService {
       status: enrollment.status,
       requestedAt: enrollment.createdAt.toISOString(),
       confirmedAt: enrollment.confirmedAt?.toISOString() ?? null,
+      ...withProgress(marks.filter((mark) => mark.userId === enrollment.user.id)),
+      lastActiveAt: enrollment.user.lastLoginAt?.toISOString() ?? null,
     }));
   }
 
@@ -175,4 +185,10 @@ export class TeachingService {
       .filter((item) => Date.parse(item.endAt) > now.getTime())
       .sort((a, b) => a.startAt.localeCompare(b.startAt));
   }
+}
+
+/** Attendance totals and the status they give. */
+function withProgress(marks: { status: AttendanceStatus }[]) {
+  const attendance = summarise(marks);
+  return { attendance, progress: progressStatus(attendance.attended, attendance.marked) };
 }
