@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
-export type BadgeTone = 'gold' | 'neutral' | 'sage' | 'slate';
+export type BadgeTone = 'gold' | 'neutral' | 'sage' | 'slate' | 'danger';
 
 const TONES: Record<BadgeTone, string> = {
   gold: 'bg-gold-100 text-gold-700',
   neutral: 'bg-sand text-ink',
   sage: 'bg-sage-100 text-sage-700',
   slate: 'bg-slate-100 text-slate-700',
+  danger: 'bg-crimson-50 text-crimson-700',
 };
 
 /** Small label chip, optionally with an icon (e.g. "Program", "Beginner"). */

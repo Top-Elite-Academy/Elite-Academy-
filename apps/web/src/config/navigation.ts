@@ -187,3 +187,7 @@ export const ADMIN_ROUTES = {
   home: '/admin',
   enrollments: '/admin/enrollments',
 } as const;
+
+/** A student's progress page inside one of the instructor's cohorts (design "Instructor 3"). */
+export const teachStudentPath = (cohortId: string, userId: string) =>
+  `${teachCohortPath(cohortId)}/students/${encodeURIComponent(userId)}`;

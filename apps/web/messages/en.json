@@ -263,6 +263,14 @@
     },
     "date": {
       "invalid": "Choose a date."
+    },
+    "attendance": {
+      "notAClass": "Choose a day with a class.",
+      "notInCohort": "Some students are not in this cohort."
+    },
+    "note": {
+      "required": "Write the note.",
+      "tooLong": "Use at most 1,000 characters."
     }
   },
   "Levels": {
@@ -1080,7 +1088,8 @@
     "cohortLabel": "Cohort",
     "join": "Ask to join",
     "joined": "Request sent. We’ll confirm your place soon.",
-    "noCohorts": "No cohorts are open right now."
+    "noCohorts": "No cohorts are open right now.",
+    "attendance": "Attendance: {attended} of {marked} classes"
   },
   "AdminEnrollments": {
     "metaTitle": "Students waiting for confirmation",
@@ -1192,5 +1201,87 @@
     "session_cancelled_student": "{name} cancelled your session on {when}. It was returned to you — please pick a new time.",
     "session_rescheduled": "{name} moved the session to {when}.",
     "session_notes": "{name} added notes to your session on {when}."
+  },
+  "TeachProgress": {
+    "tabs": {
+      "label": "Cohort sections",
+      "students": "Students",
+      "attendance": "Attendance",
+      "schedule": "Class schedule"
+    },
+    "takeAttendance": "Take attendance",
+    "table": {
+      "attendance": "Attendance",
+      "lastActive": "Last active",
+      "progress": "Status",
+      "view": "View",
+      "viewLabel": "View {name}"
+    },
+    "statuses": {
+      "on_track": "On track",
+      "behind": "Behind",
+      "at_risk": "At risk",
+      "none": "Too early to tell"
+    },
+    "never": "Never",
+    "statusNote": "Status is based on attendance for now; lesson progress and late work are added when lessons and grading are ready.",
+    "attendance": {
+      "classLabel": "Class",
+      "noClasses": "No classes have taken place yet.",
+      "markAll": "Mark all present",
+      "present": "Present",
+      "late": "Late",
+      "absent": "Absent",
+      "save": "Save attendance",
+      "saved": "Attendance saved.",
+      "studentGroup": "Attendance of {name}",
+      "noStudents": "No confirmed students yet.",
+      "short": {
+        "present": "P",
+        "late": "L",
+        "absent": "A",
+        "none": "–"
+      },
+      "legend": "P present · L late · A absent · – not marked"
+    },
+    "schedule": {
+      "when": "{days} · {time} (Jerusalem time)",
+      "length": "{total} weeks",
+      "next": "Next classes",
+      "none": "No schedule set yet.",
+      "finished": "No more classes in this cohort."
+    },
+    "student": {
+      "joined": "Joined {date}",
+      "privacy": "Phone and payment details are visible to admissions and admin only.",
+      "stats": {
+        "attendance": "Attendance",
+        "lastActive": "Last active",
+        "status": "Status"
+      },
+      "attendedOf": "{attended} of {marked} classes",
+      "recentTitle": "Attendance · last {count} classes",
+      "plan": {
+        "title": "Mentoring plan",
+        "used": "Sessions used",
+        "usedValue": "{used} of {total}",
+        "lastSession": "Last session {date}",
+        "noSession": "No session held yet."
+      },
+      "notes": {
+        "title": "Instructor notes",
+        "staffOnly": "Staff only",
+        "empty": "No notes yet.",
+        "add": "Add a note",
+        "placeholder": "What did you notice? What did you agree with the student?",
+        "share": "Also share with admissions (for students who may drop out)",
+        "save": "Save note",
+        "hint": "Notes are never shown to the student. Write facts, not opinions about health or personal life.",
+        "by": "{name} · {date}",
+        "shared": "Shared with admissions"
+      },
+      "laterTitle": "Progress and grades",
+      "later": "Lesson progress, submissions and grades appear here once lessons and grading are added."
+    }
   }
 }

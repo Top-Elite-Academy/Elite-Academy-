@@ -44,6 +44,14 @@ export function EnrollmentCard({
         </p>
       )}
       {!confirmed && <p className="mt-3 text-sm text-ink">{t('pendingNote')}</p>}
+      {confirmed && enrollment.attendance && enrollment.attendance.marked > 0 && (
+        <p className="mt-2 text-sm font-semibold text-ink">
+          {t('attendance', {
+            attended: enrollment.attendance.attended,
+            marked: enrollment.attendance.marked,
+          })}
+        </p>
+      )}
       {confirmed && !compact && (
         <section className="mt-4 border-t border-border pt-4">
           <h4 className="mb-3 text-sm font-semibold text-ink">{t('announcements')}</h4>

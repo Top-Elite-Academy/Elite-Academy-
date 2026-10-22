@@ -1,14 +1,19 @@
-import type { AnnouncementView, CohortStudent, TeachCohort } from '@eta/shared';
+import type { AnnouncementView, CohortAttendance, CohortStudent, TeachCohort } from '@eta/shared';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { AnnouncementList } from '@/components/announcements/AnnouncementList';
 import { DashboardCard } from '@/components/student/DashboardCard';
 import { AnnouncementDialog } from '@/components/teach/AnnouncementDialog';
-import { AnnouncementList } from '@/components/announcements/AnnouncementList';
 import { CohortHeader } from '@/components/teach/CohortHeader';
 import { CohortStudents } from '@/components/teach/CohortStudents';
+import { AttendanceTab } from '@/components/teach/progress/AttendanceTab';
+import { CohortTabs, type CohortTab } from '@/components/teach/progress/CohortTabs';
+import { ScheduleTab } from '@/components/teach/progress/ScheduleTab';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { TEACH_ROUTES } from '@/config/navigation';
+import { ButtonLink } from '@/components/ui/Button';
+import { CheckIcon } from '@/components/ui/icons';
+import { TEACH_ROUTES, teachCohortPath } from '@/config/navigation';
 import { getAsUser } from '@/lib/api/server';
 import { isBookingId } from '@/lib/booking/booking-state';
 
@@ -17,15 +22,27 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('title') };
 }
 
-/** One cohort (design "Instructor 2"): students and announcements. */
-export default async function TeachCohortPage({ params }: { params: Promise<{ id: string }> }) {
+const TABS: CohortTab[] = ['students', 'attendance', 'schedule'];
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** One cohort (design "Instructor 2"): Students, Attendance and Class schedule tabs. */
+export default async function TeachCohortPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { id } = await params;
   if (!isBookingId(id)) notFound();
-  const [cohort, students, announcements, t] = await Promise.all([
+  const query = await searchParams;
+  const tab = TABS.find((value) => value === query['tab']) ?? 'students';
+  const date = typeof query['date'] === 'string' && DATE.test(query['date']) ? query['date'] : null;
+
+  const [cohort, t, tProgress] = await Promise.all([
     getAsUser<TeachCohort>(`/api/teach/cohorts/${id}`).catch(() => null),
-    getAsUser<CohortStudent[]>(`/api/teach/cohorts/${id}/students`).catch(() => []),
-    getAsUser<AnnouncementView[]>(`/api/teach/cohorts/${id}/announcements`).catch(() => []),
     getTranslations('Teach'),
+    getTranslations('TeachProgress'),
   ]);
   // Not one of this instructor's cohorts: same answer as a missing one.
   if (!cohort) notFound();
@@ -39,19 +56,65 @@ export default async function TeachCohortPage({ params }: { params: Promise<{ id
           { label: cohort.name },
         ]}
       />
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <CohortHeader cohort={cohort} />
-        <AnnouncementDialog
-          cohorts={[{ id: cohort.id, label: `${cohort.name} · ${cohort.program.title}` }]}
-          defaultCohortId={cohort.id}
-        />
+        <div className="flex flex-wrap items-start gap-3">
+          <AnnouncementDialog
+            cohorts={[{ id: cohort.id, label: `${cohort.name} · ${cohort.program.title}` }]}
+            defaultCohortId={cohort.id}
+          />
+          <ButtonLink href={`${teachCohortPath(cohort.id)}?tab=attendance`} variant="secondary">
+            <CheckIcon className="size-4" />
+            {tProgress('takeAttendance')}
+          </ButtonLink>
+        </div>
       </div>
+
+      <CohortTabs cohortId={cohort.id} current={tab} />
+      <TabContent cohort={cohort} tab={tab} date={date} />
+    </div>
+  );
+}
+
+async function TabContent({
+  cohort,
+  tab,
+  date,
+}: {
+  cohort: TeachCohort;
+  tab: CohortTab;
+  date: string | null;
+}) {
+  const t = await getTranslations('Teach');
+  if (tab === 'attendance') {
+    const attendance = await getAsUser<CohortAttendance>(
+      `/api/teach/cohorts/${cohort.id}/attendance${date ? `?date=${date}` : ''}`,
+    );
+    return (
       <DashboardCard title={t('cohort.studentsTitle')}>
-        <CohortStudents students={students} />
+        {/* key: a different class day starts with that day's saved marks. */}
+        <AttendanceTab
+          key={attendance.date ?? 'none'}
+          cohortId={cohort.id}
+          attendance={attendance}
+        />
+      </DashboardCard>
+    );
+  }
+  if (tab === 'schedule') return <ScheduleTab cohort={cohort} />;
+
+  const [students, announcements] = await Promise.all([
+    getAsUser<CohortStudent[]>(`/api/teach/cohorts/${cohort.id}/students`),
+    getAsUser<AnnouncementView[]>(`/api/teach/cohorts/${cohort.id}/announcements`),
+  ]);
+  return (
+    <>
+      <DashboardCard title={t('cohort.studentsTitle')}>
+        <CohortStudents cohortId={cohort.id} students={students} />
       </DashboardCard>
       <DashboardCard title={t('cohort.announcementsTitle')}>
         <AnnouncementList items={announcements} emptyText={t('announcements.empty')} />
       </DashboardCard>
-    </div>
+    </>
   );
 }

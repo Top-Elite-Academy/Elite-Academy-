@@ -1,31 +1,48 @@
 'use client';
 
-import type { CohortStudent, EnrollmentStatus } from '@eta/shared';
-import { useTranslations } from 'next-intl';
+import type { CohortStudent } from '@eta/shared';
+import { useFormatter, useTranslations } from 'next-intl';
 import { useId, useState } from 'react';
 import { MentorAvatar } from '@/components/mentoring/MentorAvatar';
 import { Badge } from '@/components/ui/Badge';
 import { SearchIcon } from '@/components/ui/icons';
-import { useCohortFormat } from '@/lib/format/use-cohort-format';
+import { teachStudentPath } from '@/config/navigation';
+import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/cn';
+import { ProgressBadge } from './ProgressBadge';
 
-type Filter = 'all' | Exclude<EnrollmentStatus, 'withdrawn'>;
-const FILTERS: Filter[] = ['all', 'confirmed', 'pending'];
+type Filter = 'all' | 'on_track' | 'behind' | 'at_risk' | 'pending';
+const FILTERS: Filter[] = ['all', 'on_track', 'behind', 'at_risk', 'pending'];
+
+const matches = (student: CohortStudent, filter: Filter) =>
+  filter === 'all' ||
+  (filter === 'pending' ? student.status === 'pending' : student.progress === filter);
 
 /** Students of a cohort with status filters and search (design "Instructor 2"). */
-export function CohortStudents({ students }: { students: CohortStudent[] }) {
+export function CohortStudents({
+  cohortId,
+  students,
+}: {
+  cohortId: string;
+  students: CohortStudent[];
+}) {
   const t = useTranslations('Teach.cohort');
-  const dates = useCohortFormat();
+  const tProgress = useTranslations('TeachProgress');
+  const format = useFormatter();
   const [filter, setFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
   const searchId = useId();
 
-  const count = (value: Filter) =>
-    value === 'all' ? students.length : students.filter((s) => s.status === value).length;
+  const label = (value: Filter) =>
+    value === 'all'
+      ? t('filters.all')
+      : value === 'pending'
+        ? t('filters.pending')
+        : tProgress(`statuses.${value}`);
   const needle = query.trim().toLocaleLowerCase();
   const visible = students.filter(
     (student) =>
-      (filter === 'all' || student.status === filter) &&
+      matches(student, filter) &&
       `${student.firstName} ${student.lastName}`.toLocaleLowerCase().includes(needle),
   );
 
@@ -50,9 +67,9 @@ export function CohortStudents({ students }: { students: CohortStudent[] }) {
                   : 'border-ink/25 bg-white text-ink hover:border-ink/50',
               )}
             >
-              {t(`filters.${value}`)}
+              {label(value)}
               <span className={filter === value ? 'text-white/80' : 'text-ink-muted'}>
-                {count(value)}
+                {students.filter((student) => matches(student, value)).length}
               </span>
             </button>
           ))}
@@ -75,7 +92,9 @@ export function CohortStudents({ students }: { students: CohortStudent[] }) {
         </div>
       </div>
 
-      {count('pending') > 0 && <p className="mt-3 text-sm text-ink-muted">{t('pendingNote')}</p>}
+      {students.some((student) => student.status === 'pending') && (
+        <p className="mt-3 text-sm text-ink-muted">{t('pendingNote')}</p>
+      )}
 
       {visible.length === 0 ? (
         <p role="status" className="mt-6 text-ink-muted">
@@ -90,13 +109,16 @@ export function CohortStudents({ students }: { students: CohortStudent[] }) {
                   {t('student')}
                 </th>
                 <th scope="col" className="py-2 pe-4 text-start font-medium">
-                  {t('status')}
+                  {tProgress('table.attendance')}
                 </th>
-                <th scope="col" className="hidden py-2 pe-4 text-start font-medium sm:table-cell">
-                  {t('requested')}
+                <th scope="col" className="hidden py-2 pe-4 text-start font-medium md:table-cell">
+                  {tProgress('table.lastActive')}
                 </th>
-                <th scope="col" className="hidden py-2 text-start font-medium sm:table-cell">
-                  {t('confirmedOn')}
+                <th scope="col" className="py-2 pe-4 text-start font-medium">
+                  {tProgress('table.progress')}
+                </th>
+                <th scope="col" className="py-2 text-start font-medium">
+                  <span className="sr-only">{tProgress('table.view')}</span>
                 </th>
               </tr>
             </thead>
@@ -111,16 +133,29 @@ export function CohortStudents({ students }: { students: CohortStudent[] }) {
                         {name}
                       </span>
                     </th>
+                    <td className="py-3 pe-4 text-ink">
+                      {student.attendance.rate === null ? '—' : `${student.attendance.rate}%`}
+                    </td>
+                    <td className="hidden py-3 pe-4 text-ink-muted md:table-cell">
+                      {student.lastActiveAt
+                        ? format.relativeTime(new Date(student.lastActiveAt))
+                        : tProgress('never')}
+                    </td>
                     <td className="py-3 pe-4">
-                      <Badge tone={student.status === 'confirmed' ? 'sage' : 'gold'}>
-                        {t(`statuses.${student.status}`)}
-                      </Badge>
+                      {student.status === 'pending' ? (
+                        <Badge tone="gold">{t('statuses.pending')}</Badge>
+                      ) : (
+                        <ProgressBadge progress={student.progress} />
+                      )}
                     </td>
-                    <td className="hidden py-3 pe-4 text-ink-muted sm:table-cell">
-                      {dates.dayMonth(student.requestedAt.slice(0, 10))}
-                    </td>
-                    <td className="hidden py-3 text-ink-muted sm:table-cell">
-                      {student.confirmedAt ? dates.dayMonth(student.confirmedAt.slice(0, 10)) : '—'}
+                    <td className="py-3">
+                      <Link
+                        href={teachStudentPath(cohortId, student.userId)}
+                        className="rounded-sm font-semibold text-crimson-700 underline"
+                      >
+                        {tProgress('table.view')}
+                        <span className="sr-only">{`: ${name}`}</span>
+                      </Link>
                     </td>
                   </tr>
                 );
@@ -129,6 +164,7 @@ export function CohortStudents({ students }: { students: CohortStudent[] }) {
           </table>
         </div>
       )}
+      <p className="mt-4 text-xs text-ink-muted">{tProgress('statusNote')}</p>
     </div>
   );
 }

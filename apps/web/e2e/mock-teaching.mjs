@@ -40,20 +40,30 @@ const announcement = {
   createdAt: inMinutes(-90),
 };
 
+// [first, last, enrollment, attended of 10, status]
 const students = [
-  ['Sara', 'Mansour', 'confirmed'],
-  ['Lina', 'Hamdan', 'confirmed'],
-  ['Ahmad', 'Zeidan', 'confirmed'],
-  ['Nour', 'Abbas', 'pending'],
-].map(([firstName, lastName, status], index) => ({
+  ['Sara', 'Mansour', 'confirmed', 10, 'on_track'],
+  ['Lina', 'Hamdan', 'confirmed', 8, 'behind'],
+  ['Ahmad', 'Zeidan', 'confirmed', 5, 'at_risk'],
+  ['Nour', 'Abbas', 'pending', null, null],
+].map(([firstName, lastName, status, attended, progress], index) => ({
   enrollmentId: `e000000${index}-0000-4000-8000-000000000000`,
-  userId: `u000000${index}-0000-4000-8000-000000000000`,
+  userId: `a000000${index}-0000-4000-8000-000000000000`,
   firstName,
   lastName,
   status,
   requestedAt: '2030-01-02T10:00:00.000Z',
   confirmedAt: status === 'confirmed' ? '2030-01-03T10:00:00.000Z' : null,
+  attendance:
+    attended === null
+      ? { attended: 0, marked: 0, rate: null }
+      : { attended, marked: 10, rate: attended * 10 },
+  progress,
+  lastActiveAt: status === 'confirmed' ? inMinutes(-60 * 24 * (index + 1)) : null,
 }));
+
+const classDays = Array.from({ length: 10 }, (_, i) => day(-1 - i * 3));
+const ahmad = students[2];
 
 export const instructor = {
   id: '88888888-8888-4888-8888-888888888888',
@@ -88,6 +98,7 @@ export const teachingRoutes = {
       cohort: cohortRef(FSA03, 'FSA-03', day(-77)),
       instructorName: 'Dania Hih',
       announcements: [announcement],
+      attendance: { attended: 8, marked: 10, rate: 80 },
     },
   ],
   '/api/me/available-cohorts': () => [cohortRef(FSA04, 'FSA-04', '2030-11-09')],
@@ -132,6 +143,49 @@ export const teachingRoutes = {
   [`/api/teach/cohorts/${FSA03}`]: () => running,
   [`/api/teach/cohorts/${FSA03}/students`]: () => students,
   [`/api/teach/cohorts/${FSA03}/announcements`]: () => [announcement],
+  [`/api/teach/cohorts/${FSA03}/attendance`]: () => ({
+    classes: classDays,
+    date: classDays[0],
+    students: students
+      .filter((student) => student.status === 'confirmed')
+      .map(({ userId, firstName, lastName }, index) => ({
+        userId,
+        firstName,
+        lastName,
+        status: index === 0 ? 'present' : null,
+      })),
+  }),
+  [`/api/teach/cohorts/${FSA03}/students/${ahmad.userId}`]: () => ({
+    student: { userId: ahmad.userId, firstName: 'Ahmad', lastName: 'Zeidan' },
+    cohort: cohortRef(FSA03, 'FSA-03', day(-77)),
+    enrollment: {
+      status: 'confirmed',
+      requestedAt: '2030-01-02T10:00:00.000Z',
+      confirmedAt: '2030-01-03T10:00:00.000Z',
+    },
+    attendance: {
+      attended: 5,
+      marked: 10,
+      rate: 50,
+      recent: classDays.map((date, index) => ({ date, status: index % 2 ? 'absent' : 'present' })),
+    },
+    status: 'at_risk',
+    lastActiveAt: inMinutes(-60 * 24 * 6),
+    mentoringPlan: {
+      total: 8,
+      used: 2,
+      lastSession: { startAt: inMinutes(-60 * 24 * 20), notes: 'Planning the Module 3 API.' },
+    },
+    notes: [
+      {
+        id: 'n1',
+        body: 'Missed 2 classes because of a new work shift.',
+        authorName: 'Dania Hih',
+        sharedWithAdmissions: false,
+        createdAt: inMinutes(-60 * 24 * 9),
+      },
+    ],
+  }),
   '/api/teach/availability': () => ({
     windows: [
       { weekday: 1, startTime: '16:00', endTime: '18:00' },
