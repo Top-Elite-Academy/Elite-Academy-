@@ -64,7 +64,7 @@ export class S3FileStorage extends FileStorage implements OnModuleInit {
     body: Readable | Buffer,
     options: { size: number; contentType: string },
   ): Promise<void> {
-    await this.client.send(
+    const upload = this.client.send(
       new PutObjectCommand({
         Bucket: this.bucket,
         Key: key,
@@ -73,6 +73,16 @@ export class S3FileStorage extends FileStorage implements OnModuleInit {
         ContentType: options.contentType,
       }),
     );
+    if (Buffer.isBuffer(body)) {
+      await upload;
+      return;
+    }
+    // The SDK does not pass on errors of the source stream: without this a
+    // failing read (e.g. a file the OS antivirus locked) would hang the request.
+    const failed = new Promise<never>((_, reject) => {
+      body.once('error', reject);
+    });
+    await Promise.race([upload, failed]);
   }
 
   async read(key: string): Promise<Readable> {

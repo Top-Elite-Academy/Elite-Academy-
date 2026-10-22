@@ -1,5 +1,4 @@
-import { createReadStream } from 'node:fs';
-import { unlink } from 'node:fs/promises';
+import { open, unlink } from 'node:fs/promises';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import {
@@ -81,10 +80,18 @@ export class LessonFilesService {
           storageKey: 'pending',
         },
       });
-      await this.storage.put(quarantineKey(row.id), createReadStream(file.path), {
-        size: file.size,
-        contentType,
-      });
+      // A file the server cannot read (e.g. locked by the machine's own antivirus) is refused.
+      try {
+        const handle = await open(file.path);
+        await this.storage.put(quarantineKey(row.id), handle.createReadStream(), {
+          size: file.size,
+          contentType,
+        });
+      } catch {
+        await this.prisma.lessonFile.delete({ where: { id: row.id } });
+        await this.storage.delete(quarantineKey(row.id)).catch(() => undefined);
+        throw ApiException.badRequest('file.rejected');
+      }
       const saved = await this.prisma.lessonFile.update({
         where: { id: row.id },
         data: { storageKey: quarantineKey(row.id) },
