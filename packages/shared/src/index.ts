@@ -9,3 +9,4 @@ export * from './schemas/lead';
 export * from './schemas/booking';
 export * from './time-zone';
 export * from './schemas/student';
+export * from './schemas/teaching';

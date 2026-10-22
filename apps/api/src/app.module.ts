@@ -20,7 +20,9 @@ import { HealthController } from './modules/health/health.controller';
 import { InvitationsModule } from './modules/invitations/invitations.module';
 import { LeadsModule } from './modules/leads/leads.module';
 import { MailModule } from './modules/mail/mail.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 import { StudentModule } from './modules/student/student.module';
+import { TeachingModule } from './modules/teaching/teaching.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -44,6 +46,8 @@ import { UsersModule } from './modules/users/users.module';
     LeadsModule,
     BookingModule,
     StudentModule,
+    NotificationsModule,
+    TeachingModule,
   ],
   controllers: [HealthController],
   providers: [

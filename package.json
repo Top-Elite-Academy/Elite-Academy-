@@ -19,7 +19,8 @@
     "db:down": "docker compose down",
     "db:migrate": "pnpm --filter @eta/db migrate:dev",
     "db:seed": "pnpm --filter @eta/api build && pnpm --filter @eta/api seed",
-    "test:integration": "turbo run test:integration"
+    "test:integration": "turbo run test:integration",
+    "db:seed:dev": "pnpm --filter @eta/api build && pnpm --filter @eta/api seed:dev"
   },
   "devDependencies": {
     "prettier": "^3.9.10",

@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:integration": "vitest run -c vitest.integration.config.mts",
-    "seed": "node dist/scripts/seed-admin.js && node dist/scripts/seed-content.js"
+    "seed": "node dist/scripts/seed-admin.js && node dist/scripts/seed-content.js",
+    "seed:dev": "node dist/scripts/seed-dev.js"
   },
   "devDependencies": {
     "@eta/eslint-config": "workspace:*",

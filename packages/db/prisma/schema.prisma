@@ -81,6 +81,9 @@ model User {
   credits       PackageCredit[]
   activities    Activity[]
   tasks         Task[]
+  enrollments   Enrollment[]
+  announcements Announcement[]  @relation("AnnouncementAuthor")
+  notifications Notification[]
 
   @@map("users")
 }
@@ -268,8 +271,10 @@ model Cohort {
   createdAt    DateTime     @default(now()) @map("created_at")
   updatedAt    DateTime     @updatedAt @map("updated_at")
 
-  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
-  leads   Lead[]
+  program       Program        @relation(fields: [programId], references: [id], onDelete: Cascade)
+  leads         Lead[]
+  enrollments   Enrollment[]
+  announcements Announcement[]
 
   @@index([programId, startDate])
   @@map("cohorts")
@@ -649,4 +654,70 @@ model PaymentEvent {
 
   @@unique([provider, eventId])
   @@map("payment_events")
+}
+
+// ── Teaching: enrollments, announcements, notifications (instructor milestone 1) ──
+
+enum EnrollmentStatus {
+  /// Chosen by the student; waiting for admin or sales to confirm (payment arranged)
+  pending
+  confirmed
+  withdrawn
+}
+
+/// A student in a cohort. Lessons, materials and announcements are visible only when confirmed.
+model Enrollment {
+  id            String           @id @default(uuid()) @db.Uuid
+  userId        String           @map("user_id") @db.Uuid
+  cohortId      String           @map("cohort_id") @db.Uuid
+  status        EnrollmentStatus @default(pending)
+  confirmedAt   DateTime?        @map("confirmed_at")
+  /// Staff user who confirmed (admin or sales)
+  confirmedById String?          @map("confirmed_by_id") @db.Uuid
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cohort Cohort @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, cohortId])
+  @@index([cohortId, status])
+  @@map("enrollments")
+}
+
+/// Posted by the cohort's instructor; every confirmed student is notified.
+model Announcement {
+  id        String   @id @default(uuid()) @db.Uuid
+  cohortId  String   @map("cohort_id") @db.Uuid
+  authorId  String   @map("author_id") @db.Uuid
+  title     String
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  cohort Cohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  author User   @relation("AnnouncementAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([cohortId, createdAt])
+  @@map("announcements")
+}
+
+enum NotificationType {
+  announcement
+  enrollment_confirmed
+}
+
+/// In-app notification (bell). "data" holds ids and names; the web app writes the sentence
+/// in the reader's language.
+model Notification {
+  id        String           @id @default(uuid()) @db.Uuid
+  userId    String           @map("user_id") @db.Uuid
+  type      NotificationType
+  data      Json
+  readAt    DateTime?        @map("read_at")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("notifications")
 }
