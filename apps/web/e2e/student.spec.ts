@@ -38,7 +38,7 @@ test.describe('student area (spec §4)', () => {
     await expect(plan).toContainText('1 of 8 meetings used');
     await expect(plan.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
     await expect(page.getByRole('region', { name: 'My courses' })).toContainText(
-      'not enrolled in a program yet',
+      'Full Stack Advanced with AI · FSA-03',
     );
   });
 

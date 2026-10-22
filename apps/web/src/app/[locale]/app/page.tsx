@@ -1,7 +1,8 @@
-import type { StudentOverview } from '@eta/shared';
+import type { StudentEnrollment, StudentOverview } from '@eta/shared';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { DashboardCard, EmptyState } from '@/components/student/DashboardCard';
+import { EnrollmentCard } from '@/components/student/EnrollmentCard';
 import { PackageCard } from '@/components/student/PackageCard';
 import { SessionItem } from '@/components/student/SessionItem';
 import { ButtonLink } from '@/components/ui/Button';
@@ -17,9 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Overview (spec §4.3): welcome, next sessions, mentoring plan, courses. */
 export default async function StudentOverviewPage() {
-  const [user, overview, t] = await Promise.all([
+  const [user, overview, enrollments, t] = await Promise.all([
     requireUser(ROUTES.account, ['student']),
     getAsUser<StudentOverview>('/api/me/overview'),
+    getAsUser<StudentEnrollment[]>('/api/me/enrollments'),
     getTranslations('Student.overview'),
   ]);
 
@@ -65,12 +67,32 @@ export default async function StudentOverviewPage() {
         {overview.packages.map((pkg) => (
           <PackageCard key={pkg.id} pkg={pkg} />
         ))}
-        <DashboardCard title={t('coursesTitle')}>
-          <EmptyState text={t('noCourses')}>
-            <ButtonLink href={ROUTES.courses} variant="secondary">
-              {t('browseCourses')}
-            </ButtonLink>
-          </EmptyState>
+        <DashboardCard
+          title={t('coursesTitle')}
+          action={
+            <Link
+              href={STUDENT_ROUTES.courses}
+              className="text-sm font-semibold text-crimson-700 underline"
+            >
+              {t('viewCourses')}
+            </Link>
+          }
+        >
+          {enrollments.length === 0 ? (
+            <EmptyState text={t('noCourses')}>
+              <ButtonLink href={STUDENT_ROUTES.courses} variant="secondary">
+                {t('joinCohort')}
+              </ButtonLink>
+            </EmptyState>
+          ) : (
+            <ul className="flex flex-col gap-3">
+              {enrollments.map((enrollment) => (
+                <li key={enrollment.id}>
+                  <EnrollmentCard enrollment={enrollment} compact />
+                </li>
+              ))}
+            </ul>
+          )}
         </DashboardCard>
       </div>
     </div>

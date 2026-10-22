@@ -4,6 +4,8 @@ import { SignOutButton } from '@/components/account/SignOutButtons';
 import { Logo } from '@/components/brand/Logo';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { MAIN_CONTENT_ID, SkipLink } from '@/components/layout/SkipLink';
+import { AreaNavLink } from '@/components/layout/AreaNavLink';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
 import {
   BookIcon,
   CalendarIcon,
@@ -12,9 +14,14 @@ import {
   MessageIcon,
   UserIcon,
 } from '@/components/ui/icons';
-import { ROUTES, STUDENT_SIDEBAR, STUDENT_TABS, type StudentNavIcon } from '@/config/navigation';
+import {
+  ROUTES,
+  STUDENT_ROUTES,
+  STUDENT_SIDEBAR,
+  STUDENT_TABS,
+  type StudentNavIcon,
+} from '@/config/navigation';
 import { Link } from '@/i18n/navigation';
-import { StudentNavLink } from './StudentNavLink';
 
 const ICONS: Record<StudentNavIcon, typeof HomeIcon> = {
   home: HomeIcon,
@@ -46,10 +53,14 @@ export function StudentShell({ name, children }: { name: string; children: React
                 const Icon = ICONS[item.icon];
                 return (
                   <li key={item.href}>
-                    <StudentNavLink href={item.href} variant="sidebar">
+                    <AreaNavLink
+                      href={item.href}
+                      variant="sidebar"
+                      exact={item.href === STUDENT_ROUTES.overview}
+                    >
                       <Icon className="size-5" />
                       {t(`nav.${item.label}` as 'nav.overview')}
-                    </StudentNavLink>
+                    </AreaNavLink>
                   </li>
                 );
               })}
@@ -72,8 +83,12 @@ export function StudentShell({ name, children }: { name: string; children: React
               <span className="hidden text-sm text-ink-muted md:inline">
                 {t('account.signedInAs', { name })}
               </span>
+              <NotificationBell />
               <LanguageSwitcher saveToProfile />
-              <SignOutButton scope="current" />
+              {/* On phones, Sign out is on the Account page (bottom tab bar). */}
+              <div className="hidden sm:block">
+                <SignOutButton scope="current" />
+              </div>
             </div>
           </header>
           <main
@@ -96,10 +111,14 @@ export function StudentShell({ name, children }: { name: string; children: React
             const Icon = ICONS[item.icon];
             return (
               <li key={item.label}>
-                <StudentNavLink href={item.href} variant="tab">
+                <AreaNavLink
+                  href={item.href}
+                  variant="tab"
+                  exact={item.href === STUDENT_ROUTES.overview}
+                >
                   <Icon className="size-5" />
                   {t(`nav.${item.label}` as 'nav.home')}
-                </StudentNavLink>
+                </AreaNavLink>
               </li>
             );
           })}

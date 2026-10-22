@@ -40,7 +40,8 @@ export default async function StudentProfilePage() {
         </DashboardCard>
         <DashboardCard title={t('security')} className="lg:col-span-2">
           <p className="text-ink-muted">{t('signOutAllNote')}</p>
-          <div className="mt-4">
+          <div className="mt-4 flex flex-wrap gap-3">
+            <SignOutButton scope="current" />
             <SignOutButton scope="all" />
           </div>
         </DashboardCard>

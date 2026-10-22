@@ -153,3 +153,27 @@ export const STUDENT_TABS: StudentNavItem[] = [
   { label: 'messages', href: STUDENT_ROUTES.messages, icon: 'messages' },
   { label: 'account', href: STUDENT_ROUTES.profile, icon: 'profile' },
 ];
+
+/** Instructor area pages (designs "Instructor 1–6"); more are added as they are built. */
+export const TEACH_ROUTES = {
+  today: '/teach',
+  cohorts: '/teach/cohorts',
+} as const;
+
+/** One cohort's page in the instructor area. */
+export const teachCohortPath = (cohortId: string) =>
+  `${TEACH_ROUTES.cohorts}/${encodeURIComponent(cohortId)}`;
+
+export type TeachNavIcon = 'today' | 'cohorts';
+
+/** Instructor sidebar. Labels are keys under "Teach.nav". */
+export const TEACH_NAV: { label: string; href: string; icon: TeachNavIcon; exact?: boolean }[] = [
+  { label: 'today', href: TEACH_ROUTES.today, icon: 'today', exact: true },
+  { label: 'cohorts', href: TEACH_ROUTES.cohorts, icon: 'cohorts' },
+];
+
+/** Admin pages built so far. */
+export const ADMIN_ROUTES = {
+  home: '/admin',
+  enrollments: '/admin/enrollments',
+} as const;

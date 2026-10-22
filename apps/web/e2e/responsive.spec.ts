@@ -36,6 +36,8 @@ async function expectAboveBottomBar(page: Page) {
 
 for (const size of SIZES) {
   test(`every page fits a ${size.name} screen (${size.width}px)`, async ({ page }) => {
+    // Ten page loads in one test: allow the longer "slow test" time under parallel load.
+    test.slow();
     await page.setViewportSize({ width: size.width, height: size.height });
     for (const path of PAGES) {
       await page.goto(path);

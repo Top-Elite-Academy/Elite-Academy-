@@ -1,6 +1,7 @@
 // Minimal stand-in for the NestJS public content endpoints, so browser tests
 // run without a database. Started by playwright.config.ts on MOCK_API_PORT.
 import { createServer } from 'node:http';
+import { instructor, notificationStream, teachingRoutes } from './mock-teaching.mjs';
 
 const PORT = Number(process.env.MOCK_API_PORT ?? 4100);
 
@@ -274,10 +275,22 @@ createServer((request, response) => {
     response.end(JSON.stringify(studentRoute()));
     return;
   }
+  // mock_session=1 signs in the student, mock_session=instructor the instructor.
+  const session = /mock_session=([a-z0-9]+)/.exec(request.headers.cookie ?? '')?.[1];
   if (pathname === '/api/users/me') {
-    const signedIn = (request.headers.cookie ?? '').includes('mock_session=');
-    response.writeHead(signedIn ? 200 : 401, { 'content-type': 'application/json' });
-    response.end(JSON.stringify(signedIn ? student : { statusCode: 401, code: 'auth.required' }));
+    const user = session === 'instructor' ? instructor : session ? student : null;
+    response.writeHead(user ? 200 : 401, { 'content-type': 'application/json' });
+    response.end(JSON.stringify(user ?? { statusCode: 401, code: 'auth.required' }));
+    return;
+  }
+  if (pathname === '/api/notifications/stream') {
+    notificationStream(response);
+    return;
+  }
+  const teachingRoute = teachingRoutes[pathname];
+  if (teachingRoute && request.method === 'GET') {
+    response.writeHead(200, { 'content-type': 'application/json' });
+    response.end(JSON.stringify(teachingRoute()));
     return;
   }
   const body = isTop

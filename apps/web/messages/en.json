@@ -227,6 +227,16 @@
     },
     "terms": {
       "required": "Please agree to the cancellation policy and terms."
+    },
+    "cohort": {
+      "invalid": "This cohort is not open for enrollment.",
+      "full": "This cohort is full."
+    },
+    "announcement": {
+      "titleRequired": "Write a title.",
+      "titleTooLong": "Use at most 140 characters.",
+      "bodyRequired": "Write the message.",
+      "bodyTooLong": "Use at most 4,000 characters."
     }
   },
   "Levels": {
@@ -852,7 +862,8 @@
       "packageMentor": "With {name}",
       "coursesTitle": "My courses",
       "noCourses": "You are not enrolled in a program yet. After you enroll, your program and lessons appear here.",
-      "browseCourses": "Browse courses"
+      "viewCourses": "Open my courses",
+      "joinCohort": "Join a cohort"
     },
     "sessions": {
       "metaTitle": "Sessions",
@@ -925,5 +936,133 @@
       "security": "Security",
       "signOutAllNote": "Signed in on another computer or phone you no longer use? Sign out everywhere."
     }
+  },
+  "Teach": {
+    "nav": {
+      "label": "Teaching",
+      "area": "Teaching · Instructor",
+      "today": "Today",
+      "cohorts": "My cohorts",
+      "myCohorts": "My cohorts",
+      "publicSite": "Public site",
+      "role": "Instructor",
+      "weekShort": "Week {current} of {total}",
+      "startsShort": "Starts {date}",
+      "students": "{count, plural, one {# student} other {# students}}"
+    },
+    "greeting": {
+      "morning": "Good morning, {name}",
+      "afternoon": "Good afternoon, {name}",
+      "evening": "Good evening, {name}"
+    },
+    "weekLine": "{cohort} is in week {current} of {total}",
+    "postAnnouncement": "Post announcement",
+    "stats": {
+      "students": "My students",
+      "pending": "{count, plural, =0 {No one waiting} one {# waiting for confirmation} other {# waiting for confirmation}}",
+      "sessions": "Sessions this week",
+      "cohorts": "Active cohorts",
+      "cohortsNote": "{count, plural, =0 {None running yet} one {# running now} other {# running now}}"
+    },
+    "schedule": {
+      "title": "Today’s schedule",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "empty": "Nothing scheduled for today or tomorrow.",
+      "liveClass": "Live class",
+      "mentoring": "Mentoring",
+      "career": "Career advice",
+      "until": "to {time}",
+      "openCohort": "Open cohort"
+    },
+    "announcements": {
+      "title": "Latest announcements",
+      "empty": "No announcements yet.",
+      "by": "{name} · {date}",
+      "dialogTitle": "Post an announcement",
+      "cohort": "Cohort",
+      "subject": "Title",
+      "message": "Message",
+      "messageHint": "Confirmed students in the cohort see it right away in their notifications.",
+      "send": "Post announcement",
+      "cancel": "Cancel",
+      "sent": "Announcement posted.",
+      "noCohorts": "You need a cohort before you can post an announcement."
+    },
+    "cohorts": {
+      "metaTitle": "My cohorts",
+      "title": "My cohorts",
+      "empty": "You have no cohorts yet. Admin assigns programs to instructors.",
+      "startsOn": "Starts {date}",
+      "startedOn": "Started {date}",
+      "confirmed": "{count, plural, one {# student} other {# students}}",
+      "pending": "{count} pending",
+      "view": "View cohort",
+      "status": {
+        "open": "Open for enrollment",
+        "full": "Full",
+        "running": "Running",
+        "finished": "Finished"
+      }
+    },
+    "cohort": {
+      "crumb": "My cohorts",
+      "studentsTitle": "Students",
+      "announcementsTitle": "Announcements",
+      "filtersLabel": "Show students",
+      "filters": {
+        "all": "All",
+        "confirmed": "Confirmed",
+        "pending": "Pending"
+      },
+      "search": "Search students",
+      "student": "Student",
+      "status": "Status",
+      "requested": "Asked to join",
+      "confirmedOn": "Confirmed",
+      "statuses": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "withdrawn": "Withdrawn"
+      },
+      "pendingNote": "Pending students see the class only after admin or sales confirm them.",
+      "noStudents": "No students yet.",
+      "noMatch": "No students match."
+    }
+  },
+  "Notifications": {
+    "label": "Notifications",
+    "unread": "{count, plural, =0 {No unread notifications} one {# unread notification} other {# unread notifications}}",
+    "empty": "No notifications yet.",
+    "markAll": "Mark all as read",
+    "announcement": "{cohortName}: {title}",
+    "enrollmentConfirmed": "You’re confirmed in {programTitle} ({cohortName}). Your class is now open.",
+    "live": "New notification: {text}"
+  },
+  "StudentCourses": {
+    "pendingBadge": "Waiting for confirmation",
+    "pendingNote": "An advisor will confirm your place after arranging payment. Your class opens then.",
+    "confirmedBadge": "Confirmed",
+    "instructor": "Instructor: {name}",
+    "startsOn": "Starts {date}",
+    "announcements": "Announcements",
+    "noAnnouncements": "No announcements yet.",
+    "joinTitle": "Join a cohort",
+    "joinIntro": "Choose the group you want to study with. An advisor confirms your place.",
+    "cohortLabel": "Cohort",
+    "join": "Ask to join",
+    "joined": "Request sent. We’ll confirm your place soon.",
+    "noCohorts": "No cohorts are open right now."
+  },
+  "AdminEnrollments": {
+    "metaTitle": "Students waiting for confirmation",
+    "title": "Students waiting for confirmation",
+    "intro": "Confirm a student once payment is arranged. This takes a seat and opens the class for them.",
+    "empty": "No one is waiting.",
+    "confirm": "Confirm",
+    "confirmStudent": "Confirm {name}",
+    "confirmed": "Confirmed",
+    "requested": "Asked on {date}",
+    "link": "Students waiting for confirmation"
   }
 }

@@ -227,6 +227,16 @@
     },
     "terms": {
       "required": "يرجى الموافقة على سياسة الإلغاء والشروط."
+    },
+    "cohort": {
+      "invalid": "هذه المجموعة غير مفتوحة للتسجيل.",
+      "full": "هذه المجموعة مكتملة."
+    },
+    "announcement": {
+      "titleRequired": "اكتب عنوانًا.",
+      "titleTooLong": "استخدم 140 حرفًا على الأكثر.",
+      "bodyRequired": "اكتب الرسالة.",
+      "bodyTooLong": "استخدم 4,000 حرف على الأكثر."
     }
   },
   "Levels": {
@@ -852,7 +862,8 @@
       "packageMentor": "مع {name}",
       "coursesTitle": "دوراتي",
       "noCourses": "لست مسجّلًا في برنامج بعد. بعد التسجيل، سيظهر برنامجك ودروسك هنا.",
-      "browseCourses": "تصفّح الدورات"
+      "viewCourses": "فتح دوراتي",
+      "joinCohort": "انضم إلى مجموعة"
     },
     "sessions": {
       "metaTitle": "الجلسات",
@@ -925,5 +936,133 @@
       "security": "الأمان",
       "signOutAllNote": "هل سجّلت الدخول على حاسوب أو هاتف لم تعد تستخدمه؟ سجّل الخروج من كل الأجهزة."
     }
+  },
+  "Teach": {
+    "nav": {
+      "label": "التدريس",
+      "area": "التدريس · مدرّس",
+      "today": "اليوم",
+      "cohorts": "مجموعاتي",
+      "myCohorts": "مجموعاتي",
+      "publicSite": "الموقع العام",
+      "role": "مدرّس",
+      "weekShort": "الأسبوع {current} من {total}",
+      "startsShort": "تبدأ في {date}",
+      "students": "{count, plural, zero {لا طلاب} one {طالب واحد} two {طالبان} few {# طلاب} many {# طالبًا} other {# طالب}}"
+    },
+    "greeting": {
+      "morning": "صباح الخير، {name}",
+      "afternoon": "مساء الخير، {name}",
+      "evening": "مساء الخير، {name}"
+    },
+    "weekLine": "{cohort} في الأسبوع {current} من {total}",
+    "postAnnouncement": "نشر إعلان",
+    "stats": {
+      "students": "طلابي",
+      "pending": "{count, plural, zero {لا أحد بانتظار التأكيد} one {طالب واحد بانتظار التأكيد} two {طالبان بانتظار التأكيد} few {# طلاب بانتظار التأكيد} many {# طالبًا بانتظار التأكيد} other {# طالب بانتظار التأكيد}}",
+      "sessions": "جلسات هذا الأسبوع",
+      "cohorts": "المجموعات النشطة",
+      "cohortsNote": "{count, plural, zero {لا توجد مجموعات جارية بعد} one {مجموعة جارية الآن} two {مجموعتان جاريتان الآن} few {# مجموعات جارية الآن} many {# مجموعة جارية الآن} other {# مجموعة جارية الآن}}"
+    },
+    "schedule": {
+      "title": "جدول اليوم",
+      "today": "اليوم",
+      "tomorrow": "غدًا",
+      "empty": "لا شيء مجدول اليوم أو غدًا.",
+      "liveClass": "درس مباشر",
+      "mentoring": "إرشاد",
+      "career": "استشارة مهنية",
+      "until": "حتى {time}",
+      "openCohort": "فتح المجموعة"
+    },
+    "announcements": {
+      "title": "أحدث الإعلانات",
+      "empty": "لا توجد إعلانات بعد.",
+      "by": "{name} · {date}",
+      "dialogTitle": "نشر إعلان",
+      "cohort": "المجموعة",
+      "subject": "العنوان",
+      "message": "الرسالة",
+      "messageHint": "يراه الطلاب المؤكَّدون في المجموعة فورًا في إشعاراتهم.",
+      "send": "نشر الإعلان",
+      "cancel": "إلغاء",
+      "sent": "تم نشر الإعلان.",
+      "noCohorts": "تحتاج إلى مجموعة قبل أن تنشر إعلانًا."
+    },
+    "cohorts": {
+      "metaTitle": "مجموعاتي",
+      "title": "مجموعاتي",
+      "empty": "ليست لديك مجموعات بعد. تقوم الإدارة بتعيين البرامج للمدرّسين.",
+      "startsOn": "تبدأ في {date}",
+      "startedOn": "بدأت في {date}",
+      "confirmed": "{count, plural, zero {لا طلاب} one {طالب واحد} two {طالبان} few {# طلاب} many {# طالبًا} other {# طالب}}",
+      "pending": "{count} بانتظار التأكيد",
+      "view": "عرض المجموعة",
+      "status": {
+        "open": "مفتوحة للتسجيل",
+        "full": "مكتملة",
+        "running": "جارية",
+        "finished": "انتهت"
+      }
+    },
+    "cohort": {
+      "crumb": "مجموعاتي",
+      "studentsTitle": "الطلاب",
+      "announcementsTitle": "الإعلانات",
+      "filtersLabel": "عرض الطلاب",
+      "filters": {
+        "all": "الكل",
+        "confirmed": "مؤكَّد",
+        "pending": "بانتظار التأكيد"
+      },
+      "search": "ابحث عن طالب",
+      "student": "الطالب",
+      "status": "الحالة",
+      "requested": "طلب الانضمام",
+      "confirmedOn": "تأكّد",
+      "statuses": {
+        "pending": "بانتظار التأكيد",
+        "confirmed": "مؤكَّد",
+        "withdrawn": "منسحب"
+      },
+      "pendingNote": "لا يرى الطلاب بانتظار التأكيد المجموعة إلا بعد أن تؤكّدهم الإدارة أو المبيعات.",
+      "noStudents": "لا يوجد طلاب بعد.",
+      "noMatch": "لا يوجد طلاب مطابقون."
+    }
+  },
+  "Notifications": {
+    "label": "الإشعارات",
+    "unread": "{count, plural, zero {لا إشعارات غير مقروءة} one {إشعار واحد غير مقروء} two {إشعاران غير مقروءين} few {# إشعارات غير مقروءة} many {# إشعارًا غير مقروء} other {# إشعار غير مقروء}}",
+    "empty": "لا توجد إشعارات بعد.",
+    "markAll": "تحديد الكل كمقروء",
+    "announcement": "{cohortName}: {title}",
+    "enrollmentConfirmed": "تم تأكيد تسجيلك في {programTitle} ({cohortName}). مجموعتك مفتوحة الآن.",
+    "live": "إشعار جديد: {text}"
+  },
+  "StudentCourses": {
+    "pendingBadge": "بانتظار التأكيد",
+    "pendingNote": "سيؤكّد مستشار مكانك بعد ترتيب الدفع، وعندها تُفتح مجموعتك.",
+    "confirmedBadge": "مؤكَّد",
+    "instructor": "المدرّس: {name}",
+    "startsOn": "تبدأ في {date}",
+    "announcements": "الإعلانات",
+    "noAnnouncements": "لا توجد إعلانات بعد.",
+    "joinTitle": "انضم إلى مجموعة",
+    "joinIntro": "اختر المجموعة التي تريد الدراسة معها. سيؤكّد مستشار مكانك.",
+    "cohortLabel": "المجموعة",
+    "join": "اطلب الانضمام",
+    "joined": "تم إرسال الطلب. سنؤكّد مكانك قريبًا.",
+    "noCohorts": "لا توجد مجموعات مفتوحة حاليًا."
+  },
+  "AdminEnrollments": {
+    "metaTitle": "طلاب بانتظار التأكيد",
+    "title": "طلاب بانتظار التأكيد",
+    "intro": "أكّد الطالب بعد ترتيب الدفع. يحجز ذلك مقعدًا ويفتح المجموعة له.",
+    "empty": "لا أحد بالانتظار.",
+    "confirm": "تأكيد",
+    "confirmStudent": "تأكيد {name}",
+    "confirmed": "تم التأكيد",
+    "requested": "طلب في {date}",
+    "link": "طلاب بانتظار التأكيد"
   }
 }

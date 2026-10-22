@@ -227,6 +227,16 @@
     },
     "terms": {
       "required": "יש לאשר את מדיניות הביטולים והתנאים."
+    },
+    "cohort": {
+      "invalid": "המחזור הזה אינו פתוח להרשמה.",
+      "full": "המחזור הזה מלא."
+    },
+    "announcement": {
+      "titleRequired": "נא לכתוב כותרת.",
+      "titleTooLong": "עד 140 תווים.",
+      "bodyRequired": "נא לכתוב את ההודעה.",
+      "bodyTooLong": "עד 4,000 תווים."
     }
   },
   "Levels": {
@@ -852,7 +862,8 @@
       "packageMentor": "עם {name}",
       "coursesTitle": "הקורסים שלי",
       "noCourses": "עדיין לא נרשמת לתוכנית. אחרי ההרשמה, התוכנית והשיעורים יופיעו כאן.",
-      "browseCourses": "לקורסים"
+      "viewCourses": "לקורסים שלי",
+      "joinCohort": "הצטרפות למחזור"
     },
     "sessions": {
       "metaTitle": "פגישות",
@@ -925,5 +936,133 @@
       "security": "אבטחה",
       "signOutAllNote": "התחברת במחשב או בטלפון שכבר אינם בשימושך? אפשר להתנתק מכל המכשירים."
     }
+  },
+  "Teach": {
+    "nav": {
+      "label": "הוראה",
+      "area": "הוראה · מרצה",
+      "today": "היום",
+      "cohorts": "המחזורים שלי",
+      "myCohorts": "המחזורים שלי",
+      "publicSite": "האתר הציבורי",
+      "role": "מרצה",
+      "weekShort": "שבוע {current} מתוך {total}",
+      "startsShort": "נפתח ב-{date}",
+      "students": "{count, plural, one {סטודנט/ית אחד/ת} other {# סטודנטים}}"
+    },
+    "greeting": {
+      "morning": "בוקר טוב, {name}",
+      "afternoon": "צהריים טובים, {name}",
+      "evening": "ערב טוב, {name}"
+    },
+    "weekLine": "{cohort} בשבוע {current} מתוך {total}",
+    "postAnnouncement": "פרסום הודעה",
+    "stats": {
+      "students": "הסטודנטים שלי",
+      "pending": "{count, plural, =0 {אין ממתינים} one {ממתין/ה אחד/ת לאישור} other {# ממתינים לאישור}}",
+      "sessions": "פגישות השבוע",
+      "cohorts": "מחזורים פעילים",
+      "cohortsNote": "{count, plural, =0 {עדיין אין מחזור פעיל} one {מחזור אחד פעיל עכשיו} other {# מחזורים פעילים עכשיו}}"
+    },
+    "schedule": {
+      "title": "הלו״ז להיום",
+      "today": "היום",
+      "tomorrow": "מחר",
+      "empty": "אין שום דבר בלו״ז להיום או למחר.",
+      "liveClass": "שיעור חי",
+      "mentoring": "ליווי",
+      "career": "ייעוץ קריירה",
+      "until": "עד {time}",
+      "openCohort": "לפתיחת המחזור"
+    },
+    "announcements": {
+      "title": "הודעות אחרונות",
+      "empty": "עדיין אין הודעות.",
+      "by": "{name} · {date}",
+      "dialogTitle": "פרסום הודעה",
+      "cohort": "מחזור",
+      "subject": "כותרת",
+      "message": "הודעה",
+      "messageHint": "הסטודנטים המאושרים במחזור רואים אותה מיד בהתראות.",
+      "send": "פרסום ההודעה",
+      "cancel": "ביטול",
+      "sent": "ההודעה פורסמה.",
+      "noCohorts": "צריך מחזור כדי לפרסם הודעה."
+    },
+    "cohorts": {
+      "metaTitle": "המחזורים שלי",
+      "title": "המחזורים שלי",
+      "empty": "עדיין אין לך מחזורים. ההנהלה משייכת תוכניות למרצים.",
+      "startsOn": "נפתח ב-{date}",
+      "startedOn": "התחיל ב-{date}",
+      "confirmed": "{count, plural, one {סטודנט/ית אחד/ת} other {# סטודנטים}}",
+      "pending": "{count} ממתינים",
+      "view": "לצפייה במחזור",
+      "status": {
+        "open": "פתוח להרשמה",
+        "full": "מלא",
+        "running": "פעיל",
+        "finished": "הסתיים"
+      }
+    },
+    "cohort": {
+      "crumb": "המחזורים שלי",
+      "studentsTitle": "סטודנטים",
+      "announcementsTitle": "הודעות",
+      "filtersLabel": "הצגת סטודנטים",
+      "filters": {
+        "all": "הכול",
+        "confirmed": "מאושרים",
+        "pending": "ממתינים"
+      },
+      "search": "חיפוש סטודנטים",
+      "student": "סטודנט/ית",
+      "status": "סטטוס",
+      "requested": "ביקש/ה להצטרף",
+      "confirmedOn": "אושר/ה",
+      "statuses": {
+        "pending": "ממתין/ה",
+        "confirmed": "מאושר/ת",
+        "withdrawn": "פרש/ה"
+      },
+      "pendingNote": "סטודנטים ממתינים רואים את המחזור רק אחרי שההנהלה או המכירות מאשרים אותם.",
+      "noStudents": "עדיין אין סטודנטים.",
+      "noMatch": "אין סטודנטים מתאימים."
+    }
+  },
+  "Notifications": {
+    "label": "התראות",
+    "unread": "{count, plural, =0 {אין התראות שלא נקראו} one {התראה אחת שלא נקראה} other {# התראות שלא נקראו}}",
+    "empty": "עדיין אין התראות.",
+    "markAll": "סימון הכול כנקרא",
+    "announcement": "{cohortName}: {title}",
+    "enrollmentConfirmed": "ההרשמה שלך ל-{programTitle} ({cohortName}) אושרה. המחזור פתוח עכשיו.",
+    "live": "התראה חדשה: {text}"
+  },
+  "StudentCourses": {
+    "pendingBadge": "ממתין/ה לאישור",
+    "pendingNote": "יועץ/ת יאשרו את מקומך אחרי הסדרת התשלום, ואז המחזור ייפתח.",
+    "confirmedBadge": "מאושר/ת",
+    "instructor": "מרצה: {name}",
+    "startsOn": "נפתח ב-{date}",
+    "announcements": "הודעות",
+    "noAnnouncements": "עדיין אין הודעות.",
+    "joinTitle": "הצטרפות למחזור",
+    "joinIntro": "בוחרים את הקבוצה שאיתה רוצים ללמוד. יועץ/ת מאשרים את המקום.",
+    "cohortLabel": "מחזור",
+    "join": "בקשת הצטרפות",
+    "joined": "הבקשה נשלחה. נאשר את מקומך בקרוב.",
+    "noCohorts": "אין כרגע מחזורים פתוחים."
+  },
+  "AdminEnrollments": {
+    "metaTitle": "סטודנטים שממתינים לאישור",
+    "title": "סטודנטים שממתינים לאישור",
+    "intro": "מאשרים סטודנט/ית אחרי הסדרת התשלום. זה תופס מקום ופותח עבורם את המחזור.",
+    "empty": "אף אחד לא ממתין.",
+    "confirm": "אישור",
+    "confirmStudent": "אישור {name}",
+    "confirmed": "אושר",
+    "requested": "ביקש/ה ב-{date}",
+    "link": "סטודנטים שממתינים לאישור"
   }
 }

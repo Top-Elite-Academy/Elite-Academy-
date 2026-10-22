@@ -142,6 +142,11 @@ export const CardIcon = icon(
   </>,
 );
 
+export const BellIcon = icon(
+  <path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15L6 16ZM10 20.5a2 2 0 0 0 4 0" />,
+);
+export const MegaphoneIcon = icon(<path d="M4 10v4h3l7 4V6L7 10H4ZM17 9a4 4 0 0 1 0 6" />);
+
 /** Paper plane (send). */
 export const SendIcon = icon(<path d="M21 3 10 14M21 3l-6.5 18-4.5-7-7-4.5L21 3Z" />);
 export const LockIcon = icon(
