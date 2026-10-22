@@ -23,6 +23,13 @@ export function applyTestEnv(): void {
     SHOW_EXAMPLE_CONTENT: 'false',
     PAYMENT_PROVIDER: 'test',
     PAYMENT_TEST_SECRET: 'test-secret-for-integration-tests-0123456789',
+    // Tests replace storage and the virus scanner with in-memory fakes (helpers/test-app.ts).
+    STORAGE_BUCKET: 'test-bucket',
+    STORAGE_ACCESS_KEY_ID: 'test-key',
+    STORAGE_SECRET_ACCESS_KEY: 'test-secret-key',
+    STORAGE_ENDPOINT: 'http://127.0.0.1:1',
+    STORAGE_CREATE_BUCKET: 'false',
+    VIDEO_PROVIDER: 'local',
   });
 }
 

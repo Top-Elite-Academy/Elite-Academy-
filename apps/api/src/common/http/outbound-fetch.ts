@@ -3,7 +3,12 @@
  * this allow-list, requests use HTTPS and time out. Add hosts as integrations
  * arrive (payments, video, Zoom, WhatsApp…).
  */
-const ALLOWED_HOSTS = new Set(['challenges.cloudflare.com', 'api.pwnedpasswords.com']);
+const ALLOWED_HOSTS = new Set([
+  'challenges.cloudflare.com',
+  'api.pwnedpasswords.com',
+  // Cloudflare Stream (lesson videos)
+  'api.cloudflare.com',
+]);
 const TIMEOUT_MS = 5_000;
 
 export async function outboundFetch(url: string, init: RequestInit = {}): Promise<Response> {

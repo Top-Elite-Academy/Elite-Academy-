@@ -5,6 +5,7 @@ import { Redis } from 'ioredis';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { RolesGuard } from './common/authz/roles.guard';
 import { CommonModule } from './common/common.module';
+import { FilesModule } from './common/files/files.module';
 import { AllExceptionsFilter } from './common/errors/all-exceptions.filter';
 import { CsrfGuard } from './common/security/csrf.guard';
 import { IpRateLimitGuard, UserRateLimitGuard } from './common/security/rate-limit.guards';
@@ -29,6 +30,7 @@ import { UsersModule } from './modules/users/users.module';
   imports: [
     AppConfigModule,
     CommonModule,
+    FilesModule,
     BullModule.forRootAsync({
       inject: [AppConfig],
       useFactory: (config: AppConfig) => ({

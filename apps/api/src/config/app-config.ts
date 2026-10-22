@@ -85,6 +85,34 @@ export class AppConfig {
     };
   }
 
+  get storage() {
+    return {
+      endpoint: this.env.STORAGE_ENDPOINT,
+      publicEndpoint: this.env.STORAGE_PUBLIC_ENDPOINT ?? this.env.STORAGE_ENDPOINT,
+      region: this.env.STORAGE_REGION,
+      bucket: this.env.STORAGE_BUCKET,
+      accessKeyId: this.env.STORAGE_ACCESS_KEY_ID,
+      secretAccessKey: this.env.STORAGE_SECRET_ACCESS_KEY,
+      forcePathStyle: this.env.STORAGE_FORCE_PATH_STYLE,
+      createBucket: this.env.STORAGE_CREATE_BUCKET,
+    };
+  }
+
+  get clamav() {
+    return { host: this.env.CLAMAV_HOST, port: this.env.CLAMAV_PORT };
+  }
+
+  get video() {
+    return {
+      provider: this.env.VIDEO_PROVIDER,
+      cloudflare: {
+        accountId: this.env.CLOUDFLARE_ACCOUNT_ID ?? '',
+        apiToken: this.env.CLOUDFLARE_STREAM_API_TOKEN ?? '',
+        customerCode: this.env.CLOUDFLARE_STREAM_CUSTOMER_CODE ?? '',
+      },
+    };
+  }
+
   get mail() {
     return {
       host: this.env.SMTP_HOST,

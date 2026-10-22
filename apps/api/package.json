@@ -21,6 +21,7 @@
     "@swc/core": "^1.16.18",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
+    "@types/multer": "^2.3.0",
     "@types/node": "^22.20.5",
     "@types/nodemailer": "^8.0.2",
     "@types/qrcode": "^1.5.6",
@@ -32,6 +33,8 @@
     "vitest": "^4.1.11"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1152.0",
+    "@aws-sdk/s3-request-presigner": "^3.1152.0",
     "@eta/db": "workspace:*",
     "@eta/shared": "workspace:*",
     "@nestjs/bullmq": "^11.0.5",

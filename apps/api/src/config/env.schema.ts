@@ -59,6 +59,25 @@ export const envSchema = z
       .transform((name): string => name),
     /** HMAC secret of the built-in test provider (signs its webhooks). */
     PAYMENT_TEST_SECRET: z.string().min(32).optional(),
+
+    /** S3-compatible storage for lesson files and local videos. Endpoint omitted for AWS S3. */
+    STORAGE_ENDPOINT: z.url().optional(),
+    /** The address browsers use for signed links (defaults to STORAGE_ENDPOINT). */
+    STORAGE_PUBLIC_ENDPOINT: z.url().optional(),
+    STORAGE_REGION: z.string().min(1).default('us-east-1'),
+    STORAGE_BUCKET: z.string().min(3),
+    STORAGE_ACCESS_KEY_ID: z.string().min(3),
+    STORAGE_SECRET_ACCESS_KEY: z.string().min(8),
+    STORAGE_FORCE_PATH_STYLE: bool.default(false),
+    STORAGE_CREATE_BUCKET: bool.default(false),
+
+    CLAMAV_HOST: z.string().min(1).default('127.0.0.1'),
+    CLAMAV_PORT: positiveInt.default(3310),
+
+    VIDEO_PROVIDER: z.enum(['local', 'cloudflare']).default('local'),
+    CLOUDFLARE_ACCOUNT_ID: z.string().optional(),
+    CLOUDFLARE_STREAM_API_TOKEN: z.string().optional(),
+    CLOUDFLARE_STREAM_CUSTOMER_CODE: z.string().optional(),
   })
   .refine((env) => env.NODE_ENV !== 'production' || env.WEB_ORIGIN.startsWith('https://'), {
     message: 'must use https:// in production',
@@ -75,7 +94,29 @@ export const envSchema = z
   .refine((env) => env.NODE_ENV !== 'production' || !env.SHOW_EXAMPLE_CONTENT, {
     message: 'illustrative example content must never be shown in production',
     path: ['SHOW_EXAMPLE_CONTENT'],
-  });
+  })
+  .refine((env) => env.NODE_ENV !== 'production' || !env.STORAGE_CREATE_BUCKET, {
+    message: 'create the production bucket yourself (private, with lifecycle rules)',
+    path: ['STORAGE_CREATE_BUCKET'],
+  })
+  .refine((env) => env.NODE_ENV !== 'production' || env.VIDEO_PROVIDER !== 'local', {
+    message: 'local videos are for development; use cloudflare in production',
+    path: ['VIDEO_PROVIDER'],
+  })
+  .refine(
+    (env) =>
+      env.VIDEO_PROVIDER !== 'cloudflare' ||
+      Boolean(
+        env.CLOUDFLARE_ACCOUNT_ID &&
+        env.CLOUDFLARE_STREAM_API_TOKEN &&
+        env.CLOUDFLARE_STREAM_CUSTOMER_CODE,
+      ),
+    {
+      message:
+        'set CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_STREAM_API_TOKEN and CLOUDFLARE_STREAM_CUSTOMER_CODE',
+      path: ['VIDEO_PROVIDER'],
+    },
+  );
 
 export type Env = z.infer<typeof envSchema>;
 

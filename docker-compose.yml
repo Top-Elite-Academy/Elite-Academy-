@@ -42,6 +42,41 @@ services:
       - '127.0.0.1:${SMTP_PORT:-1025}:1025'
       - '127.0.0.1:${MAILPIT_UI_PORT:-8025}:8025'
 
+  # S3-compatible file storage for lesson materials and local videos (Versity S3 Gateway,
+  # files kept in a Docker volume). Production: Cloudflare R2 or AWS S3.
+  storage:
+    image: versity/versitygw:v1.8.0
+    restart: unless-stopped
+    command:
+      - --access
+      - ${STORAGE_ACCESS_KEY_ID:?set STORAGE_ACCESS_KEY_ID in .env}
+      - --secret
+      - ${STORAGE_SECRET_ACCESS_KEY:?set STORAGE_SECRET_ACCESS_KEY in .env}
+      - --port
+      - ':9000'
+      - posix
+      - /data
+    ports:
+      - '127.0.0.1:${STORAGE_PORT:-9000}:9000'
+    volumes:
+      - storage-data:/data
+
+  # Virus scanner (spec §9): every uploaded file is scanned before students can download it.
+  # The first start downloads the virus database and takes a few minutes.
+  clamav:
+    image: clamav/clamav:1.4
+    restart: unless-stopped
+    environment:
+      # Uploads are limited to 100 MB; ClamAV's default stream limit is 25 MB.
+      CLAMD_CONF_StreamMaxLength: 110M
+      CLAMD_CONF_MaxFileSize: 110M
+    ports:
+      - '127.0.0.1:${CLAMAV_PORT:-3310}:3310'
+    volumes:
+      - clamav-data:/var/lib/clamav
+
 volumes:
   postgres-data:
   redis-data:
+  storage-data:
+  clamav-data:
