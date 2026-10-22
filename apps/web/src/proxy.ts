@@ -15,6 +15,7 @@ export function proxy(request: NextRequest) {
   const csp = buildCsp(nonce, {
     isDev: process.env.NODE_ENV === 'development',
     upgradeInsecureRequests: process.env['WEB_ORIGIN']?.startsWith('https://') ?? false,
+    mediaOrigins: (process.env['MEDIA_ORIGINS'] ?? '').split(/\s+/).filter(Boolean),
   });
 
   const headers = new Headers(request.headers);

@@ -8,7 +8,7 @@ import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { MAIN_CONTENT_ID, SkipLink } from '@/components/layout/SkipLink';
 import { MentorAvatar } from '@/components/mentoring/MentorAvatar';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
-import { CalendarIcon, HomeIcon, UsersIcon } from '@/components/ui/icons';
+import { CalendarIcon, HomeIcon, PlayIcon, UsersIcon } from '@/components/ui/icons';
 import { ROUTES, TEACH_NAV, type TeachNavIcon, teachCohortPath } from '@/config/navigation';
 import { Link } from '@/i18n/navigation';
 import { useCohortFormat } from '@/lib/format/use-cohort-format';
@@ -17,6 +17,7 @@ const ICONS: Record<TeachNavIcon, typeof HomeIcon> = {
   today: HomeIcon,
   cohorts: UsersIcon,
   sessions: CalendarIcon,
+  content: PlayIcon,
 };
 
 /**

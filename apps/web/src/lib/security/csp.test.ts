@@ -27,3 +27,23 @@ describe('createNonce', () => {
     expect(createNonce()).not.toBe(createNonce());
   });
 });
+
+describe('media origins', () => {
+  it('lets lesson videos play and upload from the configured hosts only', () => {
+    const csp = buildCsp('n', {
+      isDev: false,
+      upgradeInsecureRequests: true,
+      mediaOrigins: ['https://*.cloudflarestream.com'],
+    });
+    expect(csp).toContain("media-src 'self' blob: https://*.cloudflarestream.com");
+    expect(csp).toContain(
+      'frame-src https://challenges.cloudflare.com https://*.cloudflarestream.com',
+    );
+    expect(csp).toContain(
+      "connect-src 'self' https://challenges.cloudflare.com https://*.cloudflarestream.com",
+    );
+    expect(buildCsp('n', { isDev: false, upgradeInsecureRequests: false })).toContain(
+      "media-src 'self' blob:",
+    );
+  });
+});

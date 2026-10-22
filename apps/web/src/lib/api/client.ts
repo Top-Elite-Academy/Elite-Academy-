@@ -6,7 +6,7 @@ import { ApiError } from './api-error';
 let csrfToken: Promise<string> | null = null;
 
 /** The API's CSRF token, fetched once per page load (double-submit cookie pattern). */
-function getCsrfToken(): Promise<string> {
+export function getCsrfToken(): Promise<string> {
   csrfToken ??= fetch('/api/auth/csrf', { credentials: 'same-origin' })
     .then((response) => response.json() as Promise<{ csrfToken: string }>)
     .then((body) => body.csrfToken)
@@ -44,6 +44,26 @@ export async function apiRequest<T>(
   }
 
   if (response.status === 204 || response.status === 202) return undefined as T;
+  const data = (await response.json().catch(() => ({}))) as unknown;
+  if (!response.ok) {
+    throw new ApiError({ ...(data as Partial<ApiErrorBody>), statusCode: response.status });
+  }
+  return data as T;
+}
+
+/** A multipart upload (files plus text fields), with the CSRF token. */
+export async function apiUpload<T>(path: `/api/${string}`, form: FormData): Promise<T> {
+  let response: Response;
+  try {
+    response = await fetch(path, {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'X-CSRF-Token': await getCsrfToken() },
+      credentials: 'same-origin',
+      body: form,
+    });
+  } catch {
+    throw ApiError.network();
+  }
   const data = (await response.json().catch(() => ({}))) as unknown;
   if (!response.ok) {
     throw new ApiError({ ...(data as Partial<ApiErrorBody>), statusCode: response.status });

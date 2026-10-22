@@ -167,19 +167,26 @@ export const TEACH_ROUTES = {
   today: '/teach',
   cohorts: '/teach/cohorts',
   sessions: '/teach/sessions',
+  content: '/teach/content',
 } as const;
+
+/** Course content of a program, optionally with one lesson open (design "Instructor 6"). */
+export const teachContentPath = (programId: string, lessonId?: string) =>
+  `${TEACH_ROUTES.content}?program=${encodeURIComponent(programId)}` +
+  (lessonId ? `&lesson=${encodeURIComponent(lessonId)}` : '');
 
 /** One cohort's page in the instructor area. */
 export const teachCohortPath = (cohortId: string) =>
   `${TEACH_ROUTES.cohorts}/${encodeURIComponent(cohortId)}`;
 
-export type TeachNavIcon = 'today' | 'cohorts' | 'sessions';
+export type TeachNavIcon = 'today' | 'cohorts' | 'sessions' | 'content';
 
 /** Instructor sidebar. Labels are keys under "Teach.nav". */
 export const TEACH_NAV: { label: string; href: string; icon: TeachNavIcon; exact?: boolean }[] = [
   { label: 'today', href: TEACH_ROUTES.today, icon: 'today', exact: true },
   { label: 'cohorts', href: TEACH_ROUTES.cohorts, icon: 'cohorts' },
   { label: 'sessions', href: TEACH_ROUTES.sessions, icon: 'sessions' },
+  { label: 'content', href: TEACH_ROUTES.content, icon: 'content' },
 ];
 
 /** Admin pages built so far. */

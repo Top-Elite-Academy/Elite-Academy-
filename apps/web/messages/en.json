@@ -271,6 +271,26 @@
     "note": {
       "required": "Write the note.",
       "tooLong": "Use at most 1,000 characters."
+    },
+    "lesson": {
+      "titleRequired": "Write a title.",
+      "titleTooLong": "Use at most 200 characters.",
+      "aboutTooLong": "Use at most 5,000 characters.",
+      "notReady": "Wait until every video is ready and every file has been scanned.",
+      "published": "Move the lesson back to draft before deleting it.",
+      "moduleInvalid": "Choose a module of this program."
+    },
+    "video": {
+      "type": "Choose an MP4, MOV, M4V or WebM video.",
+      "tooLarge": "The video is too large.",
+      "sizeMismatch": "The upload was incomplete. Please try again.",
+      "notUploading": "This video was already uploaded."
+    },
+    "file": {
+      "type": "This file type is not allowed.",
+      "tooLarge": "Files can be at most 100 MB.",
+      "required": "Choose a file.",
+      "rejected": "This file was refused (it may contain a virus)."
     }
   },
   "Levels": {
@@ -984,7 +1004,8 @@
       "weekShort": "Week {current} of {total}",
       "startsShort": "Starts {date}",
       "students": "{count, plural, one {# student} other {# students}}",
-      "sessions": "Sessions & availability"
+      "sessions": "Sessions & availability",
+      "content": "Course content"
     },
     "greeting": {
       "morning": "Good morning, {name}",
@@ -1282,6 +1303,94 @@
       },
       "laterTitle": "Progress and grades",
       "later": "Lesson progress, submissions and grades appear here once lessons and grading are added."
+    }
+  },
+  "TeachContent": {
+    "metaTitle": "Course content",
+    "title": "Course content",
+    "subtitle": "{program} · shared by all cohorts of this program · changes go live when you publish",
+    "program": "Program",
+    "noPrograms": "You don’t teach a program yet. Admin assigns programs to instructors.",
+    "lessonsLabel": "Lessons",
+    "noLessons": "No lessons yet. Add the first one.",
+    "other": "Other lessons",
+    "module": "Module {number} · {title}",
+    "status": {
+      "published": "Published",
+      "draft": "Draft",
+      "processing": "Processing"
+    },
+    "add": {
+      "button": "Add lesson",
+      "title": "Add a lesson",
+      "lessonTitle": "Lesson title",
+      "module": "Module",
+      "noModule": "No module",
+      "create": "Add lesson",
+      "cancel": "Cancel"
+    },
+    "editor": {
+      "heading": "Lesson {number}",
+      "lessonTitle": "Lesson title",
+      "about": "About this lesson",
+      "week": "Students can open it from",
+      "weekAny": "As soon as it is published",
+      "weekValue": "Week {week}",
+      "module": "Module",
+      "saveDraft": "Save draft",
+      "saved": "Saved.",
+      "publish": "Publish lesson",
+      "unpublish": "Move back to draft",
+      "published": "Published — students can open it.",
+      "notReady": "You can publish when every video is ready and every file has been scanned.",
+      "lastSaved": "Last saved {time}",
+      "delete": "Delete lesson",
+      "deleteTitle": "Delete this lesson?",
+      "deleteBody": "Its videos and files are deleted too. This cannot be undone.",
+      "keep": "Keep it",
+      "confirmDelete": "Delete lesson",
+      "publishedNoDelete": "Move a published lesson back to draft before deleting it."
+    },
+    "video": {
+      "title": "Video",
+      "drop": "Drag a video here or",
+      "choose": "choose a file",
+      "hint": "MP4 or MOV up to 20 GB. The file uploads straight to secure video storage and resumes if your connection drops; you can stay on this page while it uploads.",
+      "hintLocal": "MP4 or MOV up to 2 GB in this development setup (Cloudflare Stream is used in production).",
+      "sent": "{sent} sent · {percent}%",
+      "pause": "Pause",
+      "resume": "Resume",
+      "cancel": "Cancel upload",
+      "remove": "Remove video",
+      "removeLabel": "Remove video {name}",
+      "uploadFailed": "The upload failed. Please try again.",
+      "status": {
+        "uploading": "Uploading",
+        "processing": "Processing",
+        "ready": "Ready",
+        "failed": "Failed"
+      },
+      "duration": "{minutes} min"
+    },
+    "files": {
+      "title": "Downloads for students",
+      "add": "Add files",
+      "kind": "Type",
+      "kinds": {
+        "material": "Material",
+        "exercise": "Exercise"
+      },
+      "allowed": "Allowed: PDF, images, CSV, IPYNB, ZIP of code and text files · max 100 MB per file · every file is checked for viruses.",
+      "empty": "No files yet.",
+      "remove": "Remove {name}",
+      "uploading": "Uploading {name}…",
+      "scan": {
+        "scanning": "Scanning…",
+        "clean": "Scanned · safe",
+        "infected": "Virus found · removed",
+        "failed": "Scan failed"
+      },
+      "scanningNote": "Students can download it after the scan."
     }
   }
 }

@@ -3,6 +3,11 @@
 
 const FSA03 = 'c0000000-0000-4000-8000-000000000003';
 const FSA04 = 'c0000000-0000-4000-8000-000000000004';
+const PROGRAM = 'b0000000-0000-4000-8000-000000000001';
+const MODULE3 = 'b0000000-0000-4000-8000-000000000003';
+const LESSON_DONE = 'd0000000-0000-4000-8000-000000000011';
+const LESSON_EDIT = 'd0000000-0000-4000-8000-000000000012';
+const LESSON_READY = 'd0000000-0000-4000-8000-000000000013';
 const day = (offset) => new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
 const inMinutes = (n) => new Date(Date.now() + n * 60_000).toISOString();
 
@@ -186,6 +191,86 @@ export const teachingRoutes = {
       },
     ],
   }),
+  '/api/teach/programs': () => [
+    { id: PROGRAM, slug: 'full-stack-advanced-ai', title: program.title, lessonCount: 3 },
+  ],
+  [`/api/teach/programs/${PROGRAM}/lessons`]: () => ({
+    program: { id: PROGRAM, slug: 'full-stack-advanced-ai', title: program.title, lengthWeeks: 24 },
+    videoProvider: 'local',
+    modules: [{ id: MODULE3, title: 'Back end & data', weekFrom: 10, weekTo: 14 }],
+    lessons: [
+      {
+        id: LESSON_DONE,
+        position: 11,
+        title: 'Prisma schema and seed',
+        status: 'published',
+        moduleId: MODULE3,
+        processing: false,
+      },
+      {
+        id: LESSON_EDIT,
+        position: 12,
+        title: 'Authentication and sessions',
+        status: 'draft',
+        moduleId: MODULE3,
+        processing: true,
+      },
+      {
+        id: LESSON_READY,
+        position: 13,
+        title: 'Calling AI models',
+        status: 'draft',
+        moduleId: null,
+        processing: false,
+      },
+    ],
+  }),
+  [`/api/teach/lessons/${LESSON_EDIT}`]: () =>
+    teachLesson(LESSON_EDIT, 12, 'Authentication and sessions', {
+      videos: [
+        {
+          id: 'v1',
+          fileName: 'auth-sessions-part1.mp4',
+          sizeBytes: 1.6 * 1024 ** 3,
+          durationSec: 3130,
+          status: 'ready',
+        },
+        {
+          id: 'v2',
+          fileName: 'auth-sessions-part2.mov',
+          sizeBytes: 2.4 * 1024 ** 3,
+          durationSec: null,
+          status: 'uploading',
+        },
+      ],
+      files: [
+        {
+          id: 'f1',
+          kind: 'material',
+          fileName: 'lesson-12-slides.pdf',
+          sizeBytes: 3.2 * 1024 ** 2,
+          scanStatus: 'clean',
+        },
+        {
+          id: 'f2',
+          kind: 'exercise',
+          fileName: 'starter-repo.zip',
+          sizeBytes: 14 * 1024 ** 2,
+          scanStatus: 'scanning',
+        },
+      ],
+      canPublish: false,
+    }),
+  [`/api/teach/lessons/${LESSON_DONE}`]: () =>
+    teachLesson(LESSON_DONE, 11, 'Prisma schema and seed', {
+      status: 'published',
+      publishedAt: inMinutes(-60 * 24 * 7),
+    }),
+  [`/api/teach/lessons/${LESSON_READY}`]: () =>
+    teachLesson(LESSON_READY, 13, 'Calling AI models', {
+      moduleId: null,
+      canPublish: true,
+    }),
   '/api/teach/availability': () => ({
     windows: [
       { weekday: 1, startTime: '16:00', endTime: '18:00' },
@@ -255,3 +340,22 @@ export function notificationStream(response) {
 }
 
 export const MOCK_COHORT_ID = FSA03;
+
+function teachLesson(id, position, title, extra) {
+  return {
+    id,
+    programId: PROGRAM,
+    position,
+    title,
+    about: 'In this lesson you add sign-in to the Module 3 API.',
+    moduleId: MODULE3,
+    availableFromWeek: 12,
+    status: 'draft',
+    publishedAt: null,
+    updatedAt: inMinutes(-2),
+    videos: [],
+    files: [],
+    canPublish: true,
+    ...extra,
+  };
+}

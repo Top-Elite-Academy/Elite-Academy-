@@ -9,9 +9,14 @@ export interface CspOptions {
   isDev: boolean;
   /** Only on HTTPS sites; on plain-http localhost it would break every asset. */
   upgradeInsecureRequests: boolean;
+  /** Lesson video and upload hosts (MEDIA_ORIGINS), e.g. the storage service or Cloudflare Stream. */
+  mediaOrigins?: string[];
 }
 
-export function buildCsp(nonce: string, { isDev, upgradeInsecureRequests }: CspOptions): string {
+export function buildCsp(
+  nonce: string,
+  { isDev, upgradeInsecureRequests, mediaOrigins = [] }: CspOptions,
+): string {
   const directives: Record<string, string[]> = {
     'default-src': ["'self'"],
     // 'unsafe-eval' only in development: React uses eval for debugging stacks.
@@ -26,10 +31,14 @@ export function buildCsp(nonce: string, { isDev, upgradeInsecureRequests }: CspO
     // Style ATTRIBUTES only (set by next/image for layout). They cannot run scripts;
     // <style> and <script> elements still need the nonce.
     'style-src-attr': ["'unsafe-inline'"],
-    'img-src': ["'self'", 'data:', 'blob:'],
+    'img-src': ["'self'", 'data:', 'blob:', ...mediaOrigins],
+    // Lesson videos are played from signed links on the media host.
+    'media-src': ["'self'", 'blob:', ...mediaOrigins],
     'font-src': ["'self'"],
-    'connect-src': ["'self'", TURNSTILE, ...(isDev ? ['ws:'] : [])],
-    'frame-src': [TURNSTILE],
+    // Resumable video uploads go straight to the media host (Cloudflare Stream).
+    'connect-src': ["'self'", TURNSTILE, ...mediaOrigins, ...(isDev ? ['ws:'] : [])],
+    // The Cloudflare Stream player is an iframe.
+    'frame-src': [TURNSTILE, ...mediaOrigins],
     'object-src': ["'none'"],
     'base-uri': ["'self'"],
     'form-action': ["'self'"],
