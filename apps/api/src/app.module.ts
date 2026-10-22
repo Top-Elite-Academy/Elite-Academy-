@@ -21,6 +21,7 @@ import { HealthController } from './modules/health/health.controller';
 import { InvitationsModule } from './modules/invitations/invitations.module';
 import { LeadsModule } from './modules/leads/leads.module';
 import { MailModule } from './modules/mail/mail.module';
+import { LessonsModule } from './modules/lessons/lessons.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { StudentModule } from './modules/student/student.module';
 import { TeachingModule } from './modules/teaching/teaching.module';
@@ -50,6 +51,7 @@ import { UsersModule } from './modules/users/users.module';
     StudentModule,
     NotificationsModule,
     TeachingModule,
+    LessonsModule,
   ],
   controllers: [HealthController],
   providers: [

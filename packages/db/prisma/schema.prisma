@@ -69,24 +69,25 @@ model User {
   updatedAt     DateTime   @updatedAt @map("updated_at")
   deletedAt     DateTime?  @map("deleted_at")
 
-  roles         UserRole[]
-  sessions      Session[]
-  authTokens    AuthToken[]
-  consents      Consent[]
-  auditLogs     AuditLog[]
-  mentorProfile MentorProfile?
-  ownedLeads    Lead[]          @relation("LeadOwner")
-  bookings      Booking[]
-  orders        Order[]
-  credits       PackageCredit[]
-  activities    Activity[]
-  tasks         Task[]
-  enrollments   Enrollment[]
-  announcements Announcement[]  @relation("AnnouncementAuthor")
-  notifications Notification[]
-  attendance    Attendance[]    @relation("AttendanceStudent")
-  notesAbout    StudentNote[]   @relation("NoteStudent")
-  notesWritten  StudentNote[]   @relation("NoteAuthor")
+  roles          UserRole[]
+  sessions       Session[]
+  authTokens     AuthToken[]
+  consents       Consent[]
+  auditLogs      AuditLog[]
+  mentorProfile  MentorProfile?
+  ownedLeads     Lead[]           @relation("LeadOwner")
+  bookings       Booking[]
+  orders         Order[]
+  credits        PackageCredit[]
+  activities     Activity[]
+  tasks          Task[]
+  enrollments    Enrollment[]
+  announcements  Announcement[]   @relation("AnnouncementAuthor")
+  notifications  Notification[]
+  attendance     Attendance[]     @relation("AttendanceStudent")
+  notesAbout     StudentNote[]    @relation("NoteStudent")
+  notesWritten   StudentNote[]    @relation("NoteAuthor")
+  lessonProgress LessonProgress[]
 
   @@map("users")
 }
@@ -253,6 +254,7 @@ model Program {
   instructor MentorProfile?  @relation(fields: [instructorId], references: [id], onDelete: SetNull)
   cohorts    Cohort[]
   modules    ProgramModule[]
+  lessons    Lesson[]
   leads      Lead[]
   faqs       Faq[]
   stories    SuccessStory[]
@@ -511,7 +513,8 @@ model ProgramModule {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+  program Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  lessons Lesson[]
 
   @@unique([programId, sortOrder])
   @@map("program_modules")
@@ -806,4 +809,113 @@ model StudentNote {
 
   @@index([cohortId, studentId, createdAt])
   @@map("student_notes")
+}
+
+// ── Course content (design "Instructor 6", spec §4.8) ──
+
+enum LessonStatus {
+  draft
+  published
+}
+
+/// A lesson of a program, shared by every cohort of that program.
+model Lesson {
+  id                String       @id @default(uuid()) @db.Uuid
+  programId         String       @map("program_id") @db.Uuid
+  moduleId          String?      @map("module_id") @db.Uuid
+  /// Order within the program (1, 2, 3…)
+  position          Int
+  title             String
+  about             String       @default("")
+  status            LessonStatus @default(draft)
+  /// Students can open it from this week of their cohort (null: as soon as published)
+  availableFromWeek Int?         @map("available_from_week")
+  publishedAt       DateTime?    @map("published_at")
+  createdById       String       @map("created_by_id") @db.Uuid
+  createdAt         DateTime     @default(now()) @map("created_at")
+  updatedAt         DateTime     @updatedAt @map("updated_at")
+
+  program  Program          @relation(fields: [programId], references: [id], onDelete: Cascade)
+  module   ProgramModule?   @relation(fields: [moduleId], references: [id], onDelete: SetNull)
+  videos   LessonVideo[]
+  files    LessonFile[]
+  progress LessonProgress[]
+
+  @@index([programId, position])
+  @@map("lessons")
+}
+
+enum VideoStatus {
+  uploading
+  processing
+  ready
+  failed
+}
+
+model LessonVideo {
+  id              String      @id @default(uuid()) @db.Uuid
+  lessonId        String      @map("lesson_id") @db.Uuid
+  /// "local" or "cloudflare"
+  provider        String
+  /// Storage key (local) or Cloudflare Stream video id
+  providerVideoId String      @map("provider_video_id")
+  fileName        String      @map("file_name")
+  sizeBytes       BigInt      @map("size_bytes")
+  durationSec     Int?        @map("duration_sec")
+  status          VideoStatus @default(uploading)
+  position        Int
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId, position])
+  @@map("lesson_videos")
+}
+
+enum LessonFileKind {
+  material
+  exercise
+}
+
+enum ScanStatus {
+  scanning
+  clean
+  infected
+  failed
+}
+
+/// A download for students. Only downloadable once the virus scan says clean.
+model LessonFile {
+  id            String         @id @default(uuid()) @db.Uuid
+  lessonId      String         @map("lesson_id") @db.Uuid
+  kind          LessonFileKind
+  fileName      String         @map("file_name")
+  contentType   String         @map("content_type")
+  sizeBytes     Int            @map("size_bytes")
+  storageKey    String         @map("storage_key")
+  scanStatus    ScanStatus     @default(scanning) @map("scan_status")
+  scanSignature String?        @map("scan_signature")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId])
+  @@map("lesson_files")
+}
+
+/// A student's place in a lesson: where the video was left, and whether it is complete.
+model LessonProgress {
+  userId      String    @map("user_id") @db.Uuid
+  lessonId    String    @map("lesson_id") @db.Uuid
+  positionSec Int       @default(0) @map("position_sec")
+  completedAt DateTime? @map("completed_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@id([userId, lessonId])
+  @@map("lesson_progress")
 }

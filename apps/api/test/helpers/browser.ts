@@ -44,6 +44,30 @@ export class Browser {
       .send(body);
   }
 
+  /** A multipart upload: one file plus text fields. */
+  upload(
+    path: string,
+    file: { name: string; content: Buffer | string },
+    fields: Record<string, string> = {},
+  ) {
+    let request = this.agent
+      .post(path)
+      .set('Origin', WEB_ORIGIN)
+      .set('X-CSRF-Token', this.csrfToken);
+    for (const [name, value] of Object.entries(fields)) request = request.field(name, value);
+    return request.attach('file', Buffer.from(file.content), file.name);
+  }
+
+  /** A raw body (e.g. a video file) sent with PUT. */
+  putRaw(path: string, body: Buffer, contentType: string) {
+    return this.agent
+      .put(path)
+      .set('Origin', WEB_ORIGIN)
+      .set('X-CSRF-Token', this.csrfToken)
+      .set('Content-Type', contentType)
+      .send(body);
+  }
+
   delete(path: string) {
     return this.agent.delete(path).set('Origin', WEB_ORIGIN).set('X-CSRF-Token', this.csrfToken);
   }
