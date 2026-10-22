@@ -13,7 +13,7 @@ import { Link } from '@/i18n/navigation';
  * <dialog>: focus is trapped inside, Escape closes it, and focus returns to
  * the menu button — accessible without extra JavaScript.
  */
-export function MobileMenu() {
+export function MobileMenu({ account }: { account: { href: string; label: string } }) {
   const t = useTranslations();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const close = () => dialogRef.current?.close();
@@ -64,6 +64,15 @@ export function MobileMenu() {
             </ul>
           </nav>
 
+          <ButtonLink
+            href={account.href}
+            onClick={close}
+            variant="secondary"
+            size="lg"
+            className="mb-3 w-full"
+          >
+            {account.label}
+          </ButtonLink>
           <ButtonLink href={ROUTES.courses} onClick={close} size="lg" className="mb-4 w-full">
             {t('Nav.exploreCourses')}
           </ButtonLink>

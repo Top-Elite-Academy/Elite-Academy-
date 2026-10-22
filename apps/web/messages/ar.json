@@ -27,7 +27,9 @@
     "exploreCourses": "استكشف الدورات",
     "openMenu": "افتح القائمة",
     "closeMenu": "أغلق القائمة",
-    "mobileMenu": "القائمة"
+    "mobileMenu": "القائمة",
+    "login": "تسجيل الدخول",
+    "myArea": "منطقتي"
   },
   "LanguageSwitcher": {
     "label": "اللغة",

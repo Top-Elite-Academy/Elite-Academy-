@@ -29,8 +29,11 @@ test.describe('public layout', () => {
     await expect(
       page.getByRole('banner').getByRole('link', { name: 'Elite Tech Academy — home' }),
     ).toHaveAttribute('href', '/en');
-    // Log in is hidden in version 1.
-    await expect(page.getByRole('link', { name: /log in|sign in/i })).toHaveCount(0);
+    // Guests can reach sign-in from the header (added after version 1's site map).
+    await expect(page.getByRole('banner').getByRole('link', { name: 'Log in' })).toHaveAttribute(
+      'href',
+      '/en/login',
+    );
   });
 
   test('footer has every column and safe external links', async ({ page }) => {

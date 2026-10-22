@@ -27,7 +27,9 @@
     "exploreCourses": "Explore courses",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "mobileMenu": "Menu"
+    "mobileMenu": "Menu",
+    "login": "Log in",
+    "myArea": "My area"
   },
   "LanguageSwitcher": {
     "label": "Language",

@@ -27,7 +27,9 @@
     "exploreCourses": "לגלות את הקורסים",
     "openMenu": "פתיחת התפריט",
     "closeMenu": "סגירת התפריט",
-    "mobileMenu": "תפריט"
+    "mobileMenu": "תפריט",
+    "login": "כניסה",
+    "myArea": "האזור שלי"
   },
   "LanguageSwitcher": {
     "label": "שפה",
