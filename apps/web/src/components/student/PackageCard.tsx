@@ -2,6 +2,8 @@ import type { StudentPackage } from '@eta/shared';
 import { useTranslations } from 'next-intl';
 import { useServiceText } from '@/components/booking/use-service-text';
 import { useBookingFormat } from '@/lib/format/use-booking-format';
+import { ButtonLink } from '@/components/ui/Button';
+import { bookFromPlanPath } from '@/config/navigation';
 import { DashboardCard } from './DashboardCard';
 
 /** "3 of 8 meetings used" with a progress bar and the next meeting (spec §4.3). */
@@ -40,6 +42,13 @@ export function PackageCard({ pkg }: { pkg: StudentPackage }) {
           t('packageNoNext')
         )}
       </p>
+      {pkg.canBook && (
+        <div className="mt-4">
+          <ButtonLink href={bookFromPlanPath(pkg.id)} size="sm">
+            {t('bookNext')}
+          </ButtonLink>
+        </div>
+      )}
     </DashboardCard>
   );
 }

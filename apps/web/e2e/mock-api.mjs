@@ -204,6 +204,11 @@ const session = (id, startIn, extra = {}) => ({
   status: 'confirmed',
   joinUrl: null,
   joinOpensAt: inMinutes(startIn - 15),
+  notes: null,
+  // Changes close 24 hours before the start.
+  canChange: startIn >= 24 * 60,
+  refundRequested: false,
+  fromPlan: true,
   ...extra,
 });
 const studentArea = {
@@ -213,12 +218,13 @@ const studentArea = {
     ],
     packages: [
       {
-        id: 'p1',
+        id: 'f0000000-0000-4000-8000-000000000001',
         service: 'mentoring-8',
         mentor: rana,
         total: 8,
         used: 1,
         nextSessionAt: inMinutes(10),
+        canBook: true,
       },
     ],
   }),
@@ -227,7 +233,10 @@ const studentArea = {
     session('s0000000-0000-4000-8000-000000000002', 3 * 24 * 60),
   ],
   '/api/me/sessions?scope=past': () => [
-    session('s0000000-0000-4000-8000-000000000003', -2 * 24 * 60, { status: 'completed' }),
+    session('s0000000-0000-4000-8000-000000000003', -2 * 24 * 60, {
+      status: 'completed',
+      notes: 'Covered protected routes. Next: refresh tokens.',
+    }),
   ],
   '/api/me/orders': () => [
     {

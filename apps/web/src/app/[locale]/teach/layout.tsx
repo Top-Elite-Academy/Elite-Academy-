@@ -10,7 +10,7 @@ export const metadata: Metadata = { robots: { index: false } };
 
 /** Instructor area: instructors (own cohorts) and admin (all). Others get 404. */
 export default async function TeachLayout({ children }: { children: ReactNode }) {
-  const user = await requireUser(TEACH_ROUTES.today, ['instructor', 'admin']);
+  const user = await requireUser(TEACH_ROUTES.today, ['instructor', 'mentor', 'admin']);
   const cohorts = await getAsUser<TeachCohort[]>('/api/teach/cohorts');
   return (
     <TeachShell user={user} cohorts={cohorts}>

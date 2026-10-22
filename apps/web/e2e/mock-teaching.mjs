@@ -132,7 +132,57 @@ export const teachingRoutes = {
   [`/api/teach/cohorts/${FSA03}`]: () => running,
   [`/api/teach/cohorts/${FSA03}/students`]: () => students,
   [`/api/teach/cohorts/${FSA03}/announcements`]: () => [announcement],
+  '/api/teach/availability': () => ({
+    windows: [
+      { weekday: 1, startTime: '16:00', endTime: '18:00' },
+      { weekday: 4, startTime: '16:00', endTime: '18:00' },
+    ],
+    breakMinutes: 15,
+    minNoticeHours: 24,
+    sessionMinutes: 60,
+    timeOff: [
+      {
+        id: 't0000000-0000-4000-8000-000000000001',
+        startDate: '2030-12-29',
+        endDate: '2030-12-31',
+      },
+    ],
+    liveClasses: [
+      { weekday: 0, startTime: '18:00', endTime: '21:00' },
+      { weekday: 3, startTime: '18:00', endTime: '21:00' },
+    ],
+    booked: [],
+  }),
+  '/api/teach/sessions': () => ({
+    upcoming: [
+      mentorSession('m0000000-0000-4000-8000-000000000001', 'Maya', 'Rizk', 60 * 26, {
+        number: 5,
+        total: 8,
+      }),
+    ],
+    needsNotes: [
+      mentorSession('m0000000-0000-4000-8000-000000000002', 'Sara', 'Mansour', -60 * 20, {
+        number: 4,
+        total: 8,
+      }),
+    ],
+  }),
 };
+
+function mentorSession(id, firstName, lastName, startIn, planPosition) {
+  return {
+    id,
+    kind: 'instructor',
+    service: 'mentoring-8',
+    student: { firstName, lastName },
+    startAt: inMinutes(startIn),
+    endAt: inMinutes(startIn + 60),
+    status: 'confirmed',
+    planPosition,
+    joinUrl: null,
+    notes: null,
+  };
+}
 
 /** Sends one live notification shortly after the stream opens, then keeps it open. */
 export function notificationStream(response) {

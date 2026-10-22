@@ -127,6 +127,14 @@ export const STUDENT_ROUTES = {
   messages: '/app/messages',
 } as const;
 
+/** Reschedule one of the student's sessions. */
+export const rescheduleSessionPath = (bookingId: string) =>
+  `${STUDENT_ROUTES.sessions}/${encodeURIComponent(bookingId)}/reschedule`;
+
+/** Book the next meeting of a mentoring plan (no payment). */
+export const bookFromPlanPath = (creditId: string) =>
+  `${STUDENT_ROUTES.sessions}/book?plan=${encodeURIComponent(creditId)}`;
+
 export type StudentNavIcon = 'home' | 'courses' | 'sessions' | 'payments' | 'profile' | 'messages';
 
 export interface StudentNavItem {
@@ -158,18 +166,20 @@ export const STUDENT_TABS: StudentNavItem[] = [
 export const TEACH_ROUTES = {
   today: '/teach',
   cohorts: '/teach/cohorts',
+  sessions: '/teach/sessions',
 } as const;
 
 /** One cohort's page in the instructor area. */
 export const teachCohortPath = (cohortId: string) =>
   `${TEACH_ROUTES.cohorts}/${encodeURIComponent(cohortId)}`;
 
-export type TeachNavIcon = 'today' | 'cohorts';
+export type TeachNavIcon = 'today' | 'cohorts' | 'sessions';
 
 /** Instructor sidebar. Labels are keys under "Teach.nav". */
 export const TEACH_NAV: { label: string; href: string; icon: TeachNavIcon; exact?: boolean }[] = [
   { label: 'today', href: TEACH_ROUTES.today, icon: 'today', exact: true },
   { label: 'cohorts', href: TEACH_ROUTES.cohorts, icon: 'cohorts' },
+  { label: 'sessions', href: TEACH_ROUTES.sessions, icon: 'sessions' },
 ];
 
 /** Admin pages built so far. */

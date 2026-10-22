@@ -223,7 +223,8 @@
       "invalid": "This service is not available."
     },
     "mentor": {
-      "invalid": "This mentor is not available for this service."
+      "invalid": "This mentor is not available for this service.",
+      "notLinked": "Your account is not linked to a mentor profile yet. Please contact admin."
     },
     "terms": {
       "required": "Please agree to the cancellation policy and terms."
@@ -237,6 +238,29 @@
       "titleTooLong": "Use at most 140 characters.",
       "bodyRequired": "Write the message.",
       "bodyTooLong": "Use at most 4,000 characters."
+    },
+    "session": {
+      "tooLate": "Changes are possible until 24 hours before the session.",
+      "notStarted": "You can add notes once the session has started.",
+      "started": "This session has already started."
+    },
+    "credit": {
+      "none": "There are no sessions left in this plan."
+    },
+    "availability": {
+      "invalid": "Choose whole hours between 07:00 and 22:00.",
+      "overlap": "Some hours overlap."
+    },
+    "timeOff": {
+      "range": "The end date must be on or after the start date.",
+      "past": "Time off cannot start in the past."
+    },
+    "notes": {
+      "required": "Write what you covered — the student sees it.",
+      "tooLong": "Use at most 2,000 characters."
+    },
+    "date": {
+      "invalid": "Choose a date."
     }
   },
   "Levels": {
@@ -863,7 +887,8 @@
       "coursesTitle": "My courses",
       "noCourses": "You are not enrolled in a program yet. After you enroll, your program and lessons appear here.",
       "viewCourses": "Open my courses",
-      "joinCohort": "Join a cohort"
+      "joinCohort": "Join a cohort",
+      "bookNext": "Book the next meeting"
     },
     "sessions": {
       "metaTitle": "Sessions",
@@ -948,7 +973,8 @@
       "role": "Instructor",
       "weekShort": "Week {current} of {total}",
       "startsShort": "Starts {date}",
-      "students": "{count, plural, one {# student} other {# students}}"
+      "students": "{count, plural, one {# student} other {# students}}",
+      "sessions": "Sessions & availability"
     },
     "greeting": {
       "morning": "Good morning, {name}",
@@ -1064,5 +1090,105 @@
     "confirmed": "Confirmed",
     "requested": "Asked on {date}",
     "link": "Students waiting for confirmation"
+  },
+  "TeachSessions": {
+    "metaTitle": "Sessions & availability",
+    "title": "Sessions & availability",
+    "intro": "Students book mentoring only in the times you open here. All times are Jerusalem time.",
+    "upcoming": {
+      "title": "Upcoming sessions",
+      "range": "Next 7 days",
+      "empty": "No sessions in the next 7 days.",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "join": "Join",
+      "cancel": "Cancel",
+      "cancelTitle": "Cancel this session?",
+      "cancelBody": "{name} keeps the session (or gets a full refund for a single session) and is asked to pick a new time.",
+      "keep": "Keep it",
+      "confirmCancel": "Cancel session",
+      "plan": "Mentoring {number} of {total}",
+      "single": "Single session",
+      "career": "Career advice",
+      "policyTitle": "Cancelling a session",
+      "policy": "If you cancel, the student keeps the session credit (or gets a full refund for a single session) and is asked to pick a new time."
+    },
+    "notes": {
+      "title": "Notes for past sessions",
+      "missing": "{count} missing",
+      "allDone": "All past sessions have notes.",
+      "outcome": "What happened?",
+      "held": "Session held",
+      "noShow": "Student didn’t come",
+      "covered": "What did you cover? (the student sees this)",
+      "placeholder": "Topics covered, homework, and what to prepare for next time.",
+      "save": "Save session notes",
+      "noShowNote": "“Student didn’t come” uses up the student’s session under the cancellation policy."
+    },
+    "grid": {
+      "title": "My weekly availability",
+      "intro": "Click an hour to open or close it for mentoring bookings. Live classes are locked.",
+      "legendLabel": "Legend",
+      "open": "Open for booking",
+      "booked": "Booked",
+      "liveClass": "Live class",
+      "closed": "Closed",
+      "hour": "Hour",
+      "cellOpen": "Open",
+      "cellClass": "Class",
+      "cell": "{day} {time}: {state}"
+    },
+    "settings": {
+      "sessionLength": "Session length",
+      "sessionLengthValue": "{minutes} minutes (set by the package)",
+      "break": "Break between sessions",
+      "breakValue": "{minutes, plural, =0 {No break} other {# minutes}}",
+      "notice": "Students can book at least",
+      "noticeValue": "{hours} hours ahead",
+      "hoursOpen": "{count, plural, =0 {No hours open} one {# hour open each week} other {# hours open each week}}",
+      "save": "Save availability",
+      "saved": "Availability saved."
+    },
+    "timeOff": {
+      "title": "Time off",
+      "empty": "No time off planned.",
+      "from": "From",
+      "to": "To",
+      "add": "Add time off",
+      "remove": "Remove",
+      "removeLabel": "Remove time off {range}",
+      "noBookings": "no bookings"
+    }
+  },
+  "StudentSessionChanges": {
+    "reschedule": "Reschedule",
+    "cancel": "Cancel",
+    "cancelTitle": "Cancel this session?",
+    "cancelPlan": "The session goes back to your plan, so you can book another time.",
+    "cancelSingle": "You will get a full refund.",
+    "keep": "Keep it",
+    "confirmCancel": "Cancel session",
+    "tooLate": "Changes are possible until 24 hours before the session.",
+    "notes": "Notes from {name}",
+    "refundRequested": "Refund requested",
+    "rescheduleTitle": "Choose a new time",
+    "rescheduleIntro": "Your session with {name} on {when}. Pick a new time below.",
+    "rescheduleSave": "Move my session",
+    "bookTitle": "Book your next meeting",
+    "bookIntro": "With {name}. {left, plural, one {# session left} other {# sessions left}} in your plan. No payment needed.",
+    "bookSave": "Book this time",
+    "chooseTime": "Choose a time first.",
+    "back": "Back to sessions",
+    "done": {
+      "rescheduled": "Your session was moved.",
+      "booked": "Your meeting is booked."
+    }
+  },
+  "SessionNotifications": {
+    "session_booked": "{name} booked a session for {when}.",
+    "session_cancelled_mentor": "{name} cancelled the session on {when}.",
+    "session_cancelled_student": "{name} cancelled your session on {when}. It was returned to you — please pick a new time.",
+    "session_rescheduled": "{name} moved the session to {when}.",
+    "session_notes": "{name} added notes to your session on {when}."
   }
 }

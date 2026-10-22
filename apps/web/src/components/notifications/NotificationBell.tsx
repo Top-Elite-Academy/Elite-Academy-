@@ -4,24 +4,12 @@ import type { NotificationsResponse, NotificationView } from '@eta/shared';
 import { useFormatter, useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, useState } from 'react';
 import { BellIcon } from '@/components/ui/icons';
-import { STUDENT_ROUTES } from '@/config/navigation';
 import { Link } from '@/i18n/navigation';
 import { apiRequest } from '@/lib/api/client';
 import { cn } from '@/lib/cn';
+import { useNotificationText } from './use-notification-text';
 
 const KEEP = 20;
-
-/** The sentence for a notification, in the page language. */
-function useNotificationText() {
-  const t = useTranslations('Notifications');
-  return (item: NotificationView) =>
-    item.type === 'announcement'
-      ? t('announcement', { cohortName: item.data.cohortName, title: item.data.title })
-      : t('enrollmentConfirmed', {
-          programTitle: item.data.programTitle,
-          cohortName: item.data.cohortName,
-        });
-}
 
 /**
  * Notification bell (spec §4.2 top bar). Loads the latest notifications, then
@@ -31,7 +19,7 @@ function useNotificationText() {
 export function NotificationBell() {
   const t = useTranslations('Notifications');
   const format = useFormatter();
-  const text = useNotificationText();
+  const { text, href } = useNotificationText();
   const [data, setData] = useState<NotificationsResponse>({ items: [], unread: 0 });
   const [latest, setLatest] = useState<NotificationView | null>(null);
   const [open, setOpen] = useState(false);
@@ -145,7 +133,7 @@ export function NotificationBell() {
               {data.items.map((item) => (
                 <li key={item.id} className="border-b border-border last:border-b-0">
                   <Link
-                    href={STUDENT_ROUTES.courses}
+                    href={href(item)}
                     onClick={() => {
                       setOpen(false);
                     }}

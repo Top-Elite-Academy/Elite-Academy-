@@ -7,12 +7,17 @@ import { AreaNavLink } from '@/components/layout/AreaNavLink';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { MAIN_CONTENT_ID, SkipLink } from '@/components/layout/SkipLink';
 import { MentorAvatar } from '@/components/mentoring/MentorAvatar';
-import { HomeIcon, UsersIcon } from '@/components/ui/icons';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
+import { CalendarIcon, HomeIcon, UsersIcon } from '@/components/ui/icons';
 import { ROUTES, TEACH_NAV, type TeachNavIcon, teachCohortPath } from '@/config/navigation';
 import { Link } from '@/i18n/navigation';
 import { useCohortFormat } from '@/lib/format/use-cohort-format';
 
-const ICONS: Record<TeachNavIcon, typeof HomeIcon> = { today: HomeIcon, cohorts: UsersIcon };
+const ICONS: Record<TeachNavIcon, typeof HomeIcon> = {
+  today: HomeIcon,
+  cohorts: UsersIcon,
+  sessions: CalendarIcon,
+};
 
 /**
  * Instructor area frame (design "Instructor 1"): maroon sidebar with the
@@ -93,7 +98,8 @@ export function TeachShell({
             </section>
           )}
 
-          <div className="mt-auto border-t border-white/15 px-5 py-4">
+          {/* pb-20: clear of the floating accessibility button. */}
+          <div className="mt-auto border-t border-white/15 px-5 pt-4 pb-20">
             <div className="flex items-center gap-3">
               <MentorAvatar name={name} photoPath={null} size="sm" />
               <div className="min-w-0">
@@ -117,6 +123,7 @@ export function TeachShell({
                 <Logo />
               </div>
               <div className="flex items-center gap-2">
+                <NotificationBell />
                 <LanguageSwitcher saveToProfile />
                 <div className="hidden sm:block">
                   <SignOutButton scope="current" />

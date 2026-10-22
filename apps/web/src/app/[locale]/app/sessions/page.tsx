@@ -1,6 +1,7 @@
 import type { SessionsScope, StudentSession } from '@eta/shared';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { FormAlert } from '@/components/forms/FormAlert';
 import { EmptyState } from '@/components/student/DashboardCard';
 import { SessionItem } from '@/components/student/SessionItem';
 import { ButtonLink } from '@/components/ui/Button';
@@ -25,15 +26,23 @@ export default async function StudentSessionsPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const scope: SessionsScope = (await searchParams)['tab'] === 'past' ? 'past' : 'upcoming';
+  const query = await searchParams;
+  const scope: SessionsScope = query['tab'] === 'past' ? 'past' : 'upcoming';
+  const done = query['done'] === 'rescheduled' || query['done'] === 'booked' ? query['done'] : null;
   const [sessions, t] = await Promise.all([
     getAsUser<StudentSession[]>(`/api/me/sessions?scope=${scope}`),
     getTranslations('Student'),
   ]);
+  const tChange = await getTranslations('StudentSessionChanges');
 
   return (
     <div>
       <h1 className="font-display text-3xl font-semibold text-ink">{t('sessions.title')}</h1>
+      {done && (
+        <div className="mt-4">
+          <FormAlert tone="success">{tChange(`done.${done}`)}</FormAlert>
+        </div>
+      )}
       <nav aria-label={t('sessions.tabsLabel')} className="mt-6 border-b border-border">
         <ul className="flex gap-6">
           {SCOPES.map((item) => (

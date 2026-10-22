@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 /** Instructor "Today" (design "Instructor 1"). */
 export default async function TeachTodayPage() {
   const [user, today, t] = await Promise.all([
-    requireUser(TEACH_ROUTES.today, ['instructor', 'admin']),
+    requireUser(TEACH_ROUTES.today, ['instructor', 'mentor', 'admin']),
     getAsUser<TeachToday>('/api/teach/today'),
     getTranslations('Teach'),
   ]);
