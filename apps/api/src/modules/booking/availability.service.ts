@@ -1,39 +1,81 @@
 import { Injectable } from '@nestjs/common';
-import type { SlotInfo } from '@eta/shared';
+import { cohortScheduleSchema, type SlotInfo } from '@eta/shared';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { jerusalemToday } from '../../common/time/cohort-calendar';
+import { liveClassTimes, timeOffTimes, withBreak } from './busy-times';
 import { generateSlots } from './slot-generator';
 
-/** Spec §3.7: days offered and how soon the earliest session may start. */
+/** Spec §3.7: days offered for booking. */
 export const BOOKING_DAYS = 14;
-const MIN_LEAD_MS = 3 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+const isoDate = (date: Date) => date.toISOString().slice(0, 10);
 
-/** Free sessions of a mentor: weekly availability minus active bookings and live holds. */
+/**
+ * Free sessions of a mentor: weekly availability minus booked sessions (with
+ * the mentor's break), live classes of their cohorts and days off; nothing
+ * sooner than the mentor's minimum notice.
+ */
 @Injectable()
 export class AvailabilityService {
   constructor(private readonly prisma: PrismaService) {}
 
   async freeSlots(mentorId: string, sessionMinutes: number, now = new Date()): Promise<SlotInfo[]> {
-    const windows = await this.prisma.availabilitySlot.findMany({ where: { mentorId } });
-    if (windows.length === 0) return [];
-
-    const until = new Date(now.getTime() + (BOOKING_DAYS + 1) * 24 * 60 * 60 * 1000);
-    const busy = await this.prisma.booking.findMany({
-      where: {
-        mentorId,
-        startAt: { lt: until },
-        endAt: { gt: now },
-        OR: [{ status: 'confirmed' }, { status: 'held', holdExpiresAt: { gt: now } }],
+    const today = jerusalemToday(now);
+    const mentor = await this.prisma.mentorProfile.findUnique({
+      where: { id: mentorId },
+      include: {
+        availability: true,
+        timeOff: { where: { endDate: { gte: new Date(`${today}T00:00:00Z`) } } },
       },
-      select: { startAt: true, endAt: true },
+    });
+    if (!mentor || mentor.availability.length === 0) return [];
+
+    const until = new Date(now.getTime() + (BOOKING_DAYS + 1) * DAY_MS);
+    const [bookings, cohorts] = await Promise.all([
+      this.prisma.booking.findMany({
+        where: {
+          mentorId,
+          startAt: { lt: until },
+          endAt: { gt: now },
+          OR: [{ status: 'confirmed' }, { status: 'held', holdExpiresAt: { gt: now } }],
+        },
+        select: { startAt: true, endAt: true },
+      }),
+      this.prisma.cohort.findMany({
+        where: { program: { instructorId: mentorId }, status: { not: 'finished' } },
+        include: { program: { select: { lengthWeeks: true } } },
+      }),
+    ]);
+
+    const scheduled = cohorts.flatMap((cohort) => {
+      const schedule = cohortScheduleSchema.safeParse(cohort.schedule);
+      return schedule.success
+        ? [
+            {
+              startDate: isoDate(cohort.startDate),
+              lengthWeeks: cohort.program.lengthWeeks,
+              schedule: schedule.data,
+            },
+          ]
+        : [];
     });
 
     return generateSlots({
-      windows,
+      windows: mentor.availability,
       sessionMinutes,
       now,
       days: BOOKING_DAYS,
-      earliest: new Date(now.getTime() + MIN_LEAD_MS),
-      busy,
+      earliest: new Date(now.getTime() + mentor.minNoticeHours * 60 * 60 * 1000),
+      busy: [
+        ...withBreak(bookings, mentor.breakMinutes),
+        ...liveClassTimes(scheduled, today, BOOKING_DAYS + 1, mentor.breakMinutes),
+        ...timeOffTimes(
+          mentor.timeOff.map((range) => ({
+            startDate: isoDate(range.startDate),
+            endDate: isoDate(range.endDate),
+          })),
+        ),
+      ],
     });
   }
 

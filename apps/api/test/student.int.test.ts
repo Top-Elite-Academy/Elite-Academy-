@@ -166,6 +166,7 @@ describe('student area API (spec §4)', () => {
         total: 8,
         used: 3,
         nextSessionAt: next.startAt.toISOString(),
+        canBook: true,
       },
     ]);
     expect(overview.upcoming).toHaveLength(1);

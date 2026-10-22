@@ -12,7 +12,7 @@ import type { ClientInfo } from '../../common/http/client-info';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { AuditService } from '../audit/audit.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { jerusalemToday } from './cohort-calendar';
+import { jerusalemToday } from '../../common/time/cohort-calendar';
 import {
   ANNOUNCEMENT_INCLUDE,
   COHORT_INCLUDE,

@@ -10,3 +10,4 @@ export * from './schemas/booking';
 export * from './time-zone';
 export * from './schemas/student';
 export * from './schemas/teaching';
+export * from './schemas/sessions';

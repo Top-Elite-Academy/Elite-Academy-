@@ -7,7 +7,7 @@ import {
   localize,
   type TeachCohort,
 } from '@eta/shared';
-import { cohortWeek } from './cohort-calendar';
+import { cohortWeek } from '../../common/time/cohort-calendar';
 
 export const COHORT_INCLUDE = {
   program: { include: { instructor: true } },

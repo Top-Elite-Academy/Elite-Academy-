@@ -1,5 +1,5 @@
 import type { Prisma } from '@eta/db';
-import { type BookingView, type Locale, localize } from '@eta/shared';
+import { type BookingView, CHANGE_DEADLINE_HOURS, type Locale, localize } from '@eta/shared';
 
 export const BOOKING_INCLUDE = {
   order: true,
@@ -39,3 +39,8 @@ export function toBookingView(booking: BookingRecord, locale: Locale): BookingVi
     creditsLeft: credit ? credit.total - credit.used : null,
   };
 }
+
+/** Reschedule and cancel are open until 24 hours before the start (spec §4.5). */
+export const canChange = (booking: { status: string; startAt: Date }, now = new Date()) =>
+  booking.status === 'confirmed' &&
+  booking.startAt.getTime() - now.getTime() >= CHANGE_DEADLINE_HOURS * 60 * 60 * 1000;

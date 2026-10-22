@@ -123,7 +123,24 @@ export type NotificationView =
       data: { cohortId: string; cohortName: string; programTitle: string };
       readAt: string | null;
       createdAt: string;
+    }
+  | {
+      id: string;
+      type: 'session_booked' | 'session_cancelled' | 'session_rescheduled' | 'session_notes';
+      data: SessionNotificationData;
+      readAt: string | null;
+      createdAt: string;
     };
+
+/** About one session; "audience" decides whether the link opens the student or mentor page. */
+export interface SessionNotificationData {
+  bookingId: string;
+  audience: 'student' | 'mentor';
+  /** The other person: the student for a mentor, the mentor for a student */
+  name: string;
+  startAt: string;
+  previousStartAt?: string;
+}
 
 export interface NotificationsResponse {
   items: NotificationView[];

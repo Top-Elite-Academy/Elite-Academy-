@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { Notification } from '@eta/db';
+import type { Notification, Prisma } from '@eta/db';
 import type { NotificationsResponse, NotificationView } from '@eta/shared';
 import type { AuthUser } from '../../common/authz/auth-context';
 import { PrismaService } from '../../common/prisma/prisma.service';
@@ -33,7 +33,7 @@ export class NotificationsService {
       data: userIds.map((userId) => ({
         userId,
         type: notification.type,
-        data: notification.data,
+        data: notification.data as unknown as Prisma.InputJsonObject,
       })),
     });
     await Promise.all(

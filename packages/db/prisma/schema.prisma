@@ -298,6 +298,10 @@ model MentorProfile {
   skills         Json?
   photoPath      String?    @map("photo_path")
   sessionMinutes Int        @default(60) @map("session_minutes")
+  /// Free minutes kept before and after each booked session (design "Instructor 5")
+  breakMinutes   Int        @default(15) @map("break_minutes")
+  /// Students can book at least this many hours ahead
+  minNoticeHours Int        @default(24) @map("min_notice_hours")
   /// Shown first in the landing spotlight (spec §3.1: Dania selected on load).
   featured       Boolean    @default(false)
   sortOrder      Int        @default(0) @map("sort_order")
@@ -311,6 +315,7 @@ model MentorProfile {
   programs     Program[]
   availability AvailabilitySlot[]
   bookings     Booking[]
+  timeOff      MentorTimeOff[]
 
   @@map("mentor_profiles")
 }
@@ -580,6 +585,11 @@ model Booking {
   /// A held slot is kept for 10 minutes while paying (spec §3.7)
   holdExpiresAt DateTime?     @map("hold_expires_at")
   zoomLink      String?       @map("zoom_link")
+  /// Mentor's notes after the session; the student sees them (max 2,000 characters)
+  notes         String?
+  notesAt       DateTime?     @map("notes_at")
+  cancelledAt   DateTime?     @map("cancelled_at")
+  cancelledBy   CancelledBy?  @map("cancelled_by")
   creditId      String?       @map("credit_id") @db.Uuid
   orderId       String?       @map("order_id") @db.Uuid
   createdAt     DateTime      @default(now()) @map("created_at")
@@ -598,21 +608,23 @@ model Booking {
 
 /// Money in integer agorot; created before the redirect, changed only by the provider's webhook (spec §7, §9.5).
 model Order {
-  id            String      @id @default(uuid()) @db.Uuid
-  userId        String      @map("user_id") @db.Uuid
+  id                String      @id @default(uuid()) @db.Uuid
+  userId            String      @map("user_id") @db.Uuid
   /// [{packageCode, sessions, priceAgorot}] — snapshot at purchase time
-  items         Json
-  amountAgorot  Int         @map("amount_agorot")
-  currency      String      @default("ILS")
-  status        OrderStatus @default(pending)
-  provider      String
-  providerTxnId String?     @unique @map("provider_txn_id")
-  failureReason String?     @map("failure_reason")
-  installments  Int         @default(1)
-  receiptFileId String?     @map("receipt_file_id") @db.Uuid
-  paidAt        DateTime?   @map("paid_at")
-  createdAt     DateTime    @default(now()) @map("created_at")
-  updatedAt     DateTime    @updatedAt @map("updated_at")
+  items             Json
+  amountAgorot      Int         @map("amount_agorot")
+  currency          String      @default("ILS")
+  status            OrderStatus @default(pending)
+  provider          String
+  providerTxnId     String?     @unique @map("provider_txn_id")
+  failureReason     String?     @map("failure_reason")
+  installments      Int         @default(1)
+  /// Set when a paid single session is cancelled in time; admin completes the refund in the gateway
+  refundRequestedAt DateTime?   @map("refund_requested_at")
+  receiptFileId     String?     @map("receipt_file_id") @db.Uuid
+  paidAt            DateTime?   @map("paid_at")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
 
   user     User            @relation(fields: [userId], references: [id], onDelete: Restrict)
   bookings Booking[]
@@ -704,6 +716,10 @@ model Announcement {
 enum NotificationType {
   announcement
   enrollment_confirmed
+  session_booked
+  session_cancelled
+  session_rescheduled
+  session_notes
 }
 
 /// In-app notification (bell). "data" holds ids and names; the web app writes the sentence
@@ -720,4 +736,23 @@ model Notification {
 
   @@index([userId, createdAt])
   @@map("notifications")
+}
+
+enum CancelledBy {
+  student
+  mentor
+}
+
+/// Days a mentor is away: no sessions can be booked (design "Instructor 5" Time off).
+model MentorTimeOff {
+  id        String   @id @default(uuid()) @db.Uuid
+  mentorId  String   @map("mentor_id") @db.Uuid
+  startDate DateTime @map("start_date") @db.Date
+  endDate   DateTime @map("end_date") @db.Date
+  createdAt DateTime @default(now()) @map("created_at")
+
+  mentor MentorProfile @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+
+  @@index([mentorId, endDate])
+  @@map("mentor_time_off")
 }

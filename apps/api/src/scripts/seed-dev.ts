@@ -8,7 +8,7 @@ import { AppConfigModule } from '../config/app-config.module';
 import { loadEnvFile } from '../config/load-env';
 import { BreachedPasswordService } from '../modules/auth/services/breached-password.service';
 import { PasswordService } from '../modules/auth/services/password.service';
-import { jerusalemToday } from '../modules/teaching/cohort-calendar';
+import { jerusalemToday } from '../common/time/cohort-calendar';
 import { EXAMPLE_STUDENTS, INSTRUCTOR_ACCOUNTS } from './seed-data/dev-accounts';
 
 @Module({

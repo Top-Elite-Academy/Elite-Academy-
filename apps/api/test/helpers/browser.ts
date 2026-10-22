@@ -36,6 +36,18 @@ export class Browser {
       .send(body);
   }
 
+  put(path: string, body: object = {}) {
+    return this.agent
+      .put(path)
+      .set('Origin', WEB_ORIGIN)
+      .set('X-CSRF-Token', this.csrfToken)
+      .send(body);
+  }
+
+  delete(path: string) {
+    return this.agent.delete(path).set('Origin', WEB_ORIGIN).set('X-CSRF-Token', this.csrfToken);
+  }
+
   patch(path: string, body: object = {}) {
     return this.agent
       .patch(path)

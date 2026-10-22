@@ -12,7 +12,7 @@ const uuid = new ParseUUIDPipe({ version: '4' });
 
 /** Instructor area (designs "Instructor 1–2"). Admin may look at every cohort. */
 @ApiTags('teaching')
-@Roles('instructor', 'admin')
+@Roles('instructor', 'mentor', 'admin')
 @Controller('teach')
 export class TeachingController {
   constructor(

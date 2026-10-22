@@ -72,6 +72,7 @@ export class StudentService {
         total: credit.total,
         used: credit.used,
         nextSessionAt: credit.bookings[0]?.startAt.toISOString() ?? null,
+        canBook: credit.used < credit.total && credit.mentorId !== null,
       };
     });
   }

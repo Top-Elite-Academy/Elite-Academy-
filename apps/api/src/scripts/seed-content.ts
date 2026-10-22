@@ -20,14 +20,12 @@ import { seedProgramDetails } from './seed-program-details';
 @Module({ imports: [AppConfigModule, CommonModule] })
 class SeedModule {}
 
-/** Weekly availability is replaced as a whole until mentors manage it in Admin. */
-async function replaceAvailability(prisma: PrismaService, mentorId: string, slug: string) {
-  await prisma.$transaction([
-    prisma.availabilitySlot.deleteMany({ where: { mentorId } }),
-    prisma.availabilitySlot.createMany({
-      data: (AVAILABILITY[slug] ?? []).map((window) => ({ mentorId, ...window })),
-    }),
-  ]);
+/** Starting weekly hours for a mentor who has none. Mentors edit their own afterwards, so existing hours are kept. */
+async function seedAvailability(prisma: PrismaService, mentorId: string, slug: string) {
+  if ((await prisma.availabilitySlot.count({ where: { mentorId } })) > 0) return;
+  await prisma.availabilitySlot.createMany({
+    data: (AVAILABILITY[slug] ?? []).map((window) => ({ mentorId, ...window })),
+  });
 }
 
 /** Returns mentor ids by slug. */
@@ -44,7 +42,7 @@ async function seedMentors(
       create: { slug, ...fields },
       update: fields,
     });
-    await replaceAvailability(prisma, profile.id, slug);
+    await seedAvailability(prisma, profile.id, slug);
     ids.set(slug, profile.id);
   }
   return ids;

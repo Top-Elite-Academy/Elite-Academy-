@@ -11,7 +11,7 @@ import {
 import type { AuthUser } from '../../common/authz/auth-context';
 import { ApiException } from '../../common/errors/api.exception';
 import { PrismaService } from '../../common/prisma/prisma.service';
-import { jerusalemToday, liveClasses, TEACHING_TIME_ZONE } from './cohort-calendar';
+import { jerusalemToday, liveClasses, TEACHING_TIME_ZONE } from '../../common/time/cohort-calendar';
 import {
   ANNOUNCEMENT_INCLUDE,
   COHORT_INCLUDE,

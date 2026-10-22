@@ -26,6 +26,14 @@ export interface StudentSession {
   joinUrl: string | null;
   /** When "Join" opens (ISO). */
   joinOpensAt: string;
+  /** Mentor's notes after the session. */
+  notes: string | null;
+  /** Reschedule and cancel are allowed until 24 hours before the start. */
+  canChange: boolean;
+  /** A paid single session cancelled in time: the refund is on its way. */
+  refundRequested: boolean;
+  /** Booked from a multi-session plan (cancelling gives the session back). */
+  fromPlan: boolean;
 }
 
 /** A multi-session plan, e.g. "3 of 8 meetings used" (spec §4.3 Mentoring package card). */
@@ -36,6 +44,8 @@ export interface StudentPackage {
   total: number;
   used: number;
   nextSessionAt: string | null;
+  /** "Book the next meeting" — sessions left and a mentor to book with. */
+  canBook: boolean;
 }
 
 /** One order (spec §4.6). Never contains card data. */

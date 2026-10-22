@@ -6,9 +6,13 @@ import {
   type StudentOrder,
   type StudentSession,
 } from '@eta/shared';
-import { liveHoldUntil } from '../booking/booking.mapper';
+import { canChange, liveHoldUntil } from '../booking/booking.mapper';
 
-export const SESSION_INCLUDE = { mentor: true, package: true } satisfies Prisma.BookingInclude;
+export const SESSION_INCLUDE = {
+  mentor: true,
+  package: true,
+  order: true,
+} satisfies Prisma.BookingInclude;
 type SessionRecord = Prisma.BookingGetPayload<{ include: typeof SESSION_INCLUDE }>;
 
 export const ORDER_INCLUDE = { bookings: true } satisfies Prisma.OrderInclude;
@@ -37,6 +41,10 @@ export function toStudentSession(
     status: booking.status === 'held' ? 'cancelled' : booking.status,
     joinUrl: joinable ? booking.zoomLink : null,
     joinOpensAt: joinOpensAt.toISOString(),
+    notes: booking.notes,
+    canChange: canChange(booking, now),
+    refundRequested: Boolean(booking.order?.refundRequestedAt),
+    fromPlan: booking.creditId !== null,
   };
 }
 
