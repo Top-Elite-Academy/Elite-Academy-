@@ -45,16 +45,27 @@ const title = z
 
 export const createLessonSchema = z.object({
   title,
-  moduleId: z.uuid().nullable().default(null),
+  // A form's "No module" choice arrives as an empty string.
+  moduleId: z.union([z.uuid(), z.literal('').transform(() => null), z.null()]).default(null),
 });
 export type CreateLessonInput = z.infer<typeof createLessonSchema>;
+
+/** Empty form value → null (a select's "none" choice sends ""). */
+const emptyAsNull = z.literal('').transform(() => null);
+const week = z.number().int().min(1).max(104);
 
 export const updateLessonSchema = z
   .object({
     title,
     about: z.string().trim().max(LESSON_ABOUT_MAX, { error: 'lesson.aboutTooLong' }),
-    moduleId: z.uuid().nullable(),
-    availableFromWeek: z.number().int().min(1).max(104).nullable(),
+    moduleId: z.union([z.uuid(), emptyAsNull, z.null()]),
+    availableFromWeek: z.union([
+      week,
+      // Forms send numbers as text.
+      z.string().regex(/^\d+$/).transform(Number).pipe(week),
+      emptyAsNull,
+      z.null(),
+    ]),
   })
   .partial();
 export type UpdateLessonInput = z.infer<typeof updateLessonSchema>;
@@ -116,7 +127,9 @@ export interface TeachLessonSummary {
 }
 
 export interface TeachLessonList {
-  program: { id: string; slug: string; title: string };
+  program: { id: string; slug: string; title: string; lengthWeeks: number | null };
+  /** Where videos go: the local stand-in (2 GB) or Cloudflare Stream (20 GB, resumable). */
+  videoProvider: 'local' | 'cloudflare';
   modules: TeachModule[];
   lessons: TeachLessonSummary[];
 }

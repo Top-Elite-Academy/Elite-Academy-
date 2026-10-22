@@ -14,6 +14,7 @@ import type { ClientInfo } from '../../common/http/client-info';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { AuditService } from '../audit/audit.service';
 import { canPublish, LESSON_INCLUDE, type LessonRecord, toTeachLesson } from './lessons.mapper';
+import { VideoProvider } from './video/video-provider';
 
 /**
  * Course content for instructors (design "Instructor 6"). Lessons belong to a
@@ -25,6 +26,7 @@ export class TeachLessonsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
+    private readonly video: VideoProvider,
   ) {}
 
   private programScope(user: AuthUser): Prisma.ProgramWhereInput {
@@ -74,7 +76,13 @@ export class TeachLessonsService {
       }),
     ]);
     return {
-      program: { id: program.id, slug: program.slug, title: localize(program.title, user.locale) },
+      program: {
+        id: program.id,
+        slug: program.slug,
+        title: localize(program.title, user.locale),
+        lengthWeeks: program.lengthWeeks,
+      },
+      videoProvider: this.video.name,
       modules: modules.map((module) => ({
         id: module.id,
         title: localize(module.title, user.locale),
