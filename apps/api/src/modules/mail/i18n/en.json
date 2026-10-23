@@ -14,5 +14,9 @@
   "feedbackReturned": {
     "subject": "Your exercise was graded: {title}",
     "body": "Hello {firstName},\n\nYour instructor returned your work on \"{title}\" with a grade of {score}/100 and feedback.\nRead it here:\n\n{link}\n\nElite Tech Academy · Scientia et Innovatio"
+  },
+  "unreadMessage": {
+    "subject": "New message from {from}",
+    "body": "Hello {firstName},\n\n{from} sent you a message at Elite Tech Academy that you haven't read yet.\nRead and reply here:\n\n{link}\n\nElite Tech Academy · Scientia et Innovatio"
   }
 }

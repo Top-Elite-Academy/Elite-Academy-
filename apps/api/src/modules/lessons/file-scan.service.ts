@@ -5,9 +5,19 @@ import { PrismaService } from '../../common/prisma/prisma.service';
 import { AuditService } from '../audit/audit.service';
 import { approvedKey, type FileScanJob, type ScanTarget } from './lesson-files.service';
 
+/** Where a clean message attachment lives. */
+export const messageFileKey = (messageId: string, fileId: string) =>
+  `messages/${messageId}/${fileId}`;
+
 /** Where a clean submission file lives. */
 export const submissionFileKey = (submissionId: string, fileId: string) =>
   `submissions/${submissionId}/${fileId}`;
+
+const AUDIT_ENTITY: Record<ScanTarget, string> = {
+  lesson: 'lessonFile',
+  submission: 'submissionFile',
+  message: 'messageAttachment',
+};
 
 interface Scannable {
   id: string;
@@ -36,6 +46,16 @@ export class FileScanService {
   ) {}
 
   private async find(target: ScanTarget, fileId: string): Promise<Scannable | null> {
+    if (target === 'message') {
+      const file = await this.prisma.messageAttachment.findUnique({ where: { id: fileId } });
+      return (
+        file && {
+          ...file,
+          approvedKey: messageFileKey(file.messageId, file.id),
+          owner: { messageId: file.messageId },
+        }
+      );
+    }
     if (target === 'submission') {
       const file = await this.prisma.submissionFile.findUnique({ where: { id: fileId } });
       return (
@@ -61,7 +81,9 @@ export class FileScanService {
     fileId: string,
     data: { scanStatus: 'clean' | 'infected'; storageKey?: string; scanSignature?: string },
   ) {
-    if (target === 'submission')
+    if (target === 'message')
+      await this.prisma.messageAttachment.update({ where: { id: fileId }, data });
+    else if (target === 'submission')
       await this.prisma.submissionFile.update({ where: { id: fileId }, data });
     else await this.prisma.lessonFile.update({ where: { id: fileId }, data });
   }
@@ -82,8 +104,8 @@ export class FileScanService {
     await this.update(target, file.id, { scanStatus: 'infected', scanSignature: result.signature });
     await this.audit.record({
       actorId: null,
-      action: target === 'submission' ? 'submissionFile.infected' : 'lessonFile.infected',
-      entity: target === 'submission' ? 'submissionFile' : 'lessonFile',
+      action: `${AUDIT_ENTITY[target]}.infected`,
+      entity: AUDIT_ENTITY[target],
       entityId: file.id,
       after: { ...file.owner, signature: result.signature },
     });
@@ -94,7 +116,8 @@ export class FileScanService {
   async markFailed({ fileId, target = 'lesson' }: FileScanJob): Promise<void> {
     const where = { id: fileId, scanStatus: 'scanning' as const };
     const data = { scanStatus: 'failed' as const };
-    if (target === 'submission') await this.prisma.submissionFile.updateMany({ where, data });
+    if (target === 'message') await this.prisma.messageAttachment.updateMany({ where, data });
+    else if (target === 'submission') await this.prisma.submissionFile.updateMany({ where, data });
     else await this.prisma.lessonFile.updateMany({ where, data });
   }
 }

@@ -14,3 +14,4 @@ export * from './schemas/sessions';
 export * from './schemas/progress';
 export * from './schemas/lessons';
 export * from './schemas/assignments';
+export * from './schemas/messages';

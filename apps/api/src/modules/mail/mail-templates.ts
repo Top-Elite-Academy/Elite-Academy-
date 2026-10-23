@@ -17,6 +17,7 @@ export interface MailParams {
     link: string;
   };
   feedbackReturned: { firstName: string; title: string; score: number; link: string };
+  unreadMessage: { firstName: string; from: string; link: string };
 }
 
 export interface MailMessage<T extends MailTemplate = MailTemplate> {

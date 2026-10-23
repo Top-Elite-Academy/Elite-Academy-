@@ -14,5 +14,9 @@
   "feedbackReturned": {
     "subject": "تم تقييم تمرينك: {title}",
     "body": "مرحبًا {firstName}،\n\nأعاد المدرّس عملك في \"{title}\" بعلامة {score}/100 مع ملاحظات.\nاقرأها هنا:\n\n{link}\n\nأكاديمية إيليت تك · Scientia et Innovatio"
+  },
+  "unreadMessage": {
+    "subject": "رسالة جديدة من {from}",
+    "body": "مرحبًا {firstName}،\n\nأرسل لك {from} رسالة في أكاديمية إيليت تك لم تقرأها بعد.\nاقرأها ورُدّ هنا:\n\n{link}\n\nأكاديمية إيليت تك · Scientia et Innovatio"
   }
 }

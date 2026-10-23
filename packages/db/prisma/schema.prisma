@@ -75,21 +75,25 @@ model User {
   consents       Consent[]
   auditLogs      AuditLog[]
   mentorProfile  MentorProfile?
-  ownedLeads     Lead[]           @relation("LeadOwner")
+  ownedLeads     Lead[]             @relation("LeadOwner")
   bookings       Booking[]
   orders         Order[]
   credits        PackageCredit[]
   activities     Activity[]
   tasks          Task[]
   enrollments    Enrollment[]
-  announcements  Announcement[]   @relation("AnnouncementAuthor")
+  announcements  Announcement[]     @relation("AnnouncementAuthor")
   notifications  Notification[]
-  attendance     Attendance[]     @relation("AttendanceStudent")
-  notesAbout     StudentNote[]    @relation("NoteStudent")
-  notesWritten   StudentNote[]    @relation("NoteAuthor")
+  attendance     Attendance[]       @relation("AttendanceStudent")
+  notesAbout     StudentNote[]      @relation("NoteStudent")
+  notesWritten   StudentNote[]      @relation("NoteAuthor")
   lessonProgress LessonProgress[]
-  submissions    Submission[]     @relation("SubmissionStudent")
-  graded         Submission[]     @relation("SubmissionGrader")
+  submissions    Submission[]       @relation("SubmissionStudent")
+  graded         Submission[]       @relation("SubmissionGrader")
+  studentThreads Conversation[]     @relation("ConversationStudent")
+  staffThreads   Conversation[]     @relation("ConversationStaff")
+  messagesSent   Message[]
+  threadReads    ConversationRead[]
 
   @@map("users")
 }
@@ -839,9 +843,9 @@ model Lesson {
   createdAt         DateTime     @default(now()) @map("created_at")
   updatedAt         DateTime     @updatedAt @map("updated_at")
 
-  program  Program          @relation(fields: [programId], references: [id], onDelete: Cascade)
-  module   ProgramModule?   @relation(fields: [moduleId], references: [id], onDelete: SetNull)
-  videos   LessonVideo[]
+  program    Program          @relation(fields: [programId], references: [id], onDelete: Cascade)
+  module     ProgramModule?   @relation(fields: [moduleId], references: [id], onDelete: SetNull)
+  videos     LessonVideo[]
   files      LessonFile[]
   progress   LessonProgress[]
   assignment Assignment?
@@ -1000,4 +1004,82 @@ model SubmissionFile {
 
   @@index([submissionId])
   @@map("submission_files")
+}
+
+enum ConversationKind {
+  /// The student and one instructor or mentor
+  direct
+  /// The student and the Support team (admins)
+  support
+  /// The student and the Payments team (admins and sales)
+  payments
+}
+
+/// A thread in Messages & support (spec §4.9). Always has a student: students
+/// never message other students, and staff talk to students only.
+model Conversation {
+  id            String           @id @default(uuid()) @db.Uuid
+  kind          ConversationKind
+  studentId     String           @map("student_id") @db.Uuid
+  /// The instructor or mentor of a direct thread; null for team threads
+  staffId       String?          @map("staff_id") @db.Uuid
+  subject       String           @default("")
+  lastMessageAt DateTime         @default(now()) @map("last_message_at")
+  createdAt     DateTime         @default(now()) @map("created_at")
+
+  student  User               @relation("ConversationStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  staff    User?              @relation("ConversationStaff", fields: [staffId], references: [id], onDelete: Cascade)
+  messages Message[]
+  reads    ConversationRead[]
+
+  @@unique([studentId, kind, staffId])
+  @@index([staffId, lastMessageAt])
+  @@index([kind, lastMessageAt])
+  @@map("conversations")
+}
+
+model Message {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @map("conversation_id") @db.Uuid
+  senderId       String   @map("sender_id") @db.Uuid
+  body           String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  conversation Conversation        @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User                @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  attachments  MessageAttachment[]
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
+
+/// A file sent with a message; downloadable only once the virus scan says clean.
+model MessageAttachment {
+  id            String     @id @default(uuid()) @db.Uuid
+  messageId     String     @map("message_id") @db.Uuid
+  fileName      String     @map("file_name")
+  contentType   String     @map("content_type")
+  sizeBytes     Int        @map("size_bytes")
+  storageKey    String     @map("storage_key")
+  scanStatus    ScanStatus @default(scanning) @map("scan_status")
+  scanSignature String?    @map("scan_signature")
+  createdAt     DateTime   @default(now()) @map("created_at")
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+  @@map("message_attachments")
+}
+
+/// Up to when a participant has read a thread (unread = newer messages from others).
+model ConversationRead {
+  conversationId String   @map("conversation_id") @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  lastReadAt     DateTime @map("last_read_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, userId])
+  @@map("conversation_reads")
 }

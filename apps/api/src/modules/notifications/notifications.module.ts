@@ -8,6 +8,6 @@ import { RealtimeService } from './realtime.service';
 @Module({
   controllers: [NotificationsController],
   providers: [NotificationsService, RealtimeService],
-  exports: [NotificationsService],
+  exports: [NotificationsService, RealtimeService],
 })
 export class NotificationsModule {}

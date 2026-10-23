@@ -14,5 +14,9 @@
   "feedbackReturned": {
     "subject": "התרגיל שלך נבדק: {title}",
     "body": "שלום {firstName},\n\nהמרצה החזיר/ה את העבודה שלך ב\"{title}\" עם ציון {score}/100 ומשוב.\nאפשר לקרוא כאן:\n\n{link}\n\nאקדמיית אליט טק · Scientia et Innovatio"
+  },
+  "unreadMessage": {
+    "subject": "הודעה חדשה מ{from}",
+    "body": "שלום {firstName},\n\n{from} שלח/ה לך הודעה באקדמיית אליט טק שעדיין לא נקראה.\nאפשר לקרוא ולהשיב כאן:\n\n{link}\n\nאקדמיית אליט טק · Scientia et Innovatio"
   }
 }
