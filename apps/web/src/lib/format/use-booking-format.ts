@@ -25,5 +25,7 @@ export function useBookingFormat() {
     shortDay: dates.shortDate,
     /** "Monday, 9 November" for a session start. */
     longDay: (iso: string) => dates.longDate(day(iso)),
+    /** "Mon, 9 Nov 18:00" — e.g. when work was handed in, or a deadline. */
+    dayTime: (iso: string) => `${dates.shortDate(day(iso))} ${time(iso)}`,
   };
 }

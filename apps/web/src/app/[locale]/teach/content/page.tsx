@@ -1,18 +1,26 @@
-import type { TeachLesson, TeachLessonList, TeachProgram } from '@eta/shared';
+import type { AssignmentView, TeachLesson, TeachLessonList, TeachProgram } from '@eta/shared';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { EmptyState } from '@/components/student/DashboardCard';
 import { AddLessonDialog } from '@/components/teach/content/AddLessonDialog';
 import { LessonEditor } from '@/components/teach/content/LessonEditor';
 import { LessonList } from '@/components/teach/content/LessonList';
+import { PillNav } from '@/components/ui/PillNav';
 import { teachContentPath } from '@/config/navigation';
-import { Link } from '@/i18n/navigation';
 import { getAsUser } from '@/lib/api/server';
-import { cn } from '@/lib/cn';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('TeachContent');
   return { title: t('metaTitle') };
+}
+
+/** The lesson in the editor with its exercise. */
+async function loadLesson(lessonId: string) {
+  const [lesson, exercise] = await Promise.all([
+    getAsUser<TeachLesson>(`/api/teach/lessons/${lessonId}`),
+    getAsUser<{ assignment: AssignmentView | null }>(`/api/teach/lessons/${lessonId}/assignment`),
+  ]);
+  return { lesson, assignment: exercise.assignment };
 }
 
 const single = (value: string | string[] | undefined) => (typeof value === 'string' ? value : null);
@@ -45,7 +53,7 @@ export default async function TeachContentPage({
   const list = await getAsUser<TeachLessonList>(`/api/teach/programs/${program.id}/lessons`);
   const lessonId =
     list.lessons.find((lesson) => lesson.id === single(query['lesson']))?.id ?? list.lessons[0]?.id;
-  const lesson = lessonId ? await getAsUser<TeachLesson>(`/api/teach/lessons/${lessonId}`) : null;
+  const opened = lessonId ? await loadLesson(lessonId) : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -58,33 +66,30 @@ export default async function TeachContentPage({
       </div>
 
       {programs.length > 1 && (
-        <nav aria-label={t('program')} className="flex flex-wrap gap-2">
-          {programs.map((item) => (
-            <Link
-              key={item.id}
-              href={teachContentPath(item.id)}
-              aria-current={item.id === program.id ? 'page' : undefined}
-              className={cn(
-                'rounded-full border px-4 py-2 text-sm font-semibold',
-                item.id === program.id
-                  ? 'border-ink bg-ink text-white'
-                  : 'border-ink/25 bg-white text-ink hover:border-ink/50',
-              )}
-            >
-              {item.title}
-            </Link>
-          ))}
-        </nav>
+        <PillNav
+          label={t('program')}
+          items={programs.map((item) => ({
+            key: item.id,
+            href: teachContentPath(item.id),
+            label: item.title,
+            current: item.id === program.id,
+          }))}
+        />
       )}
 
       <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-border bg-white shadow-sm">
-          <LessonList list={list} selectedId={lesson?.id ?? null} />
+          <LessonList list={list} selectedId={opened?.lesson.id ?? null} />
         </div>
-        {lesson && (
+        {opened && (
           <div className="rounded-[var(--radius-card)] border border-border bg-white p-5 shadow-sm sm:p-6">
             {/* key: switching lessons starts the form from that lesson's saved values. */}
-            <LessonEditor key={`${lesson.id}-${lesson.updatedAt}`} lesson={lesson} list={list} />
+            <LessonEditor
+              key={`${opened.lesson.id}-${opened.lesson.updatedAt}`}
+              lesson={opened.lesson}
+              list={list}
+              assignment={opened.assignment}
+            />
           </div>
         )}
       </div>

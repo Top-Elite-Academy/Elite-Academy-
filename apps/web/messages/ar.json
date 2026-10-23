@@ -291,6 +291,32 @@
       "tooLarge": "الحد الأقصى للملف 100 ميغابايت.",
       "required": "اختر ملفًا.",
       "rejected": "تم رفض هذا الملف (قد يحتوي على فيروس)."
+    },
+    "assignment": {
+      "titleRequired": "اكتب عنوانًا للتمرين.",
+      "titleTooLong": "العنوان طويل جدًا.",
+      "instructionsTooLong": "التعليمات طويلة جدًا.",
+      "criterionRequired": "أعطِ كل معيار اسمًا.",
+      "criterionTooLong": "اسم أحد المعايير طويل جدًا.",
+      "rubricRequired": "أضف معيارًا واحدًا على الأقل.",
+      "rubricTooLong": "يمكن أن يحتوي سلّم التقييم على 10 معايير كحد أقصى.",
+      "rubricTotal": "يجب أن يكون مجموع النقاط 100.",
+      "hasSubmissions": "سلّم الطلاب هذا التمرين، لذلك لا يمكن حذفه."
+    },
+    "submission": {
+      "repoUrl": "استخدم رابط مستودع GitHub، مثل https://github.com/you/project.",
+      "noteTooLong": "الملاحظة طويلة جدًا.",
+      "empty": "أضف رابط GitHub أو ملفًا واحدًا على الأقل.",
+      "tooManyFiles": "يمكنك تسليم 5 ملفات كحد أقصى.",
+      "returned": "تم تقييم هذا العمل ولا يمكن تغييره."
+    },
+    "grade": {
+      "commentTooLong": "أحد التعليقات طويل جدًا.",
+      "feedbackTooLong": "الملاحظات طويلة جدًا.",
+      "unknownCriterion": "تغيّر سلّم التقييم. أعد تحميل الصفحة.",
+      "tooManyPoints": "لا يمكن أن تزيد النقاط عن الحد الأقصى للمعيار.",
+      "incomplete": "أعطِ نقاطًا لكل معيار أولًا.",
+      "alreadyReturned": "تمت إعادة هذا العمل مسبقًا."
     }
   },
   "Levels": {
@@ -1005,7 +1031,8 @@
       "startsShort": "تبدأ في {date}",
       "students": "{count, plural, zero {لا طلاب} one {طالب واحد} two {طالبان} few {# طلاب} many {# طالبًا} other {# طالب}}",
       "sessions": "الجلسات والأوقات المتاحة",
-      "content": "محتوى الدورة"
+      "content": "محتوى الدورة",
+      "grading": "التقييم"
     },
     "greeting": {
       "morning": "صباح الخير، {name}",
@@ -1094,7 +1121,8 @@
     "markAll": "تحديد الكل كمقروء",
     "announcement": "{cohortName}: {title}",
     "enrollmentConfirmed": "تم تأكيد تسجيلك في {programTitle} ({cohortName}). مجموعتك مفتوحة الآن.",
-    "live": "إشعار جديد: {text}"
+    "live": "إشعار جديد: {text}",
+    "submissionReturned": "تم تقييم تمرينك «{title}»: {score}/100."
   },
   "StudentCourses": {
     "pendingBadge": "بانتظار التأكيد",
@@ -1392,6 +1420,30 @@
         "failed": "فشل الفحص"
       },
       "scanningNote": "يمكن للطلاب تنزيله بعد الفحص."
+    },
+    "exercise": {
+      "title": "تمرين للتسليم",
+      "none": "لا يوجد تمرين للتسليم في هذا الدرس.",
+      "add": "أضف تمرينًا",
+      "name": "عنوان التمرين",
+      "instructions": "التعليمات",
+      "dueWeek": "موعد التسليم",
+      "dueWeekHint": "في نهاية هذا الأسبوع من كل فوج (السبت 23:59). يُقبل العمل المتأخر ويُعلَّم كمتأخر.",
+      "weekValue": "نهاية الأسبوع {week}",
+      "rubric": "سلّم التقييم (مجموع النقاط 100)",
+      "criterion": "المعيار {number}",
+      "points": "نقاط المعيار {number}",
+      "removeCriterion": "احذف المعيار {number}",
+      "addCriterion": "أضف معيارًا",
+      "total": "المجموع: {total} / {max}",
+      "save": "احفظ التمرين",
+      "saved": "تم حفظ التمرين.",
+      "handedIn": "{count, plural, =0 {لم يسلّمه أحد بعد.} one {سلّمه طالب واحد.} other {سلّمه # طلاب.}}",
+      "delete": "احذف التمرين",
+      "deleteTitle": "هل تريد حذف هذا التمرين؟",
+      "deleteBody": "لن يراه الطلاب بعد الآن. لم يسلّمه أحد بعد.",
+      "keep": "أبقِه",
+      "confirmDelete": "احذف"
     }
   },
   "StudentLesson": {
@@ -1425,5 +1477,75 @@
     "lessonNav": "الدروس",
     "previous": "الدرس السابق",
     "next": "الدرس التالي"
+  },
+  "Grading": {
+    "late": "{days, plural, one {متأخر · يوم واحد} two {متأخر · يومان} few {متأخر · # أيام} many {متأخر · # يومًا} other {متأخر · # يوم}}",
+    "onTime": "في الموعد",
+    "scan": {
+      "scanning": "جارٍ الفحص…",
+      "clean": "تم الفحص · آمن",
+      "infected": "محظور: فيروس",
+      "failed": "تعذّر الفحص"
+    }
+  },
+  "TeachGrading": {
+    "title": "التقييم",
+    "subtitle": "التسليمات من أفواجك. الأقدم أولًا حتى لا ينتظر أحد طويلًا.",
+    "noCohorts": "ليس لديك أفواج بعد.",
+    "cohort": "الفوج",
+    "filterLabel": "عرض",
+    "filters": {
+      "toGrade": "للتقييم ({count})",
+      "returned": "أُعيدت ({count})",
+      "all": "الكل"
+    },
+    "listLabel": "التسليمات",
+    "empty": "لا يوجد شيء هنا الآن.",
+    "pick": "اختر تسليمًا من القائمة لتقييمه.",
+    "assignmentLine": "الدرس {number} · {title}",
+    "submittedAt": "سُلّم {when}",
+    "draft": "تم حفظ مسودة التقييم",
+    "returnedScore": "أُعيد · {score}/100",
+    "handedIn": "سُلّم {when} · الموعد {due}",
+    "repo": "GitHub:",
+    "download": "نزّل {name}",
+    "downloadShort": "تنزيل",
+    "rubric": "سلّم التقييم",
+    "criterionTitle": "{title} (حتى {max} نقطة)",
+    "points": "النقاط",
+    "comment": "تعليق",
+    "total": "المجموع: {total} / {max}",
+    "feedback": "ملاحظات للطالب",
+    "saveDraft": "احفظ المسودة",
+    "draftSaved": "تم حفظ المسودة. لا يراها الطالب بعد.",
+    "scoreAll": "أعطِ نقاطًا لكل معيار لإعادة العمل.",
+    "return": "أعِد للطالب",
+    "returnTitle": "هل تريد إعادة العلامة إلى {name}؟",
+    "returnBody": "سيرى {total}/100 وملاحظاتك ويصله إشعار. لا يمكنك تغييرها بعد ذلك.",
+    "keepEditing": "تابع التعديل",
+    "confirmReturn": "أعِد",
+    "returnedNote": "أُعيد إلى {name}."
+  },
+  "StudentExercise": {
+    "label": "تمرين",
+    "due": "موعد التسليم {when} (بتوقيت القدس). يُقبل العمل المتأخر ويُعلَّم كمتأخر.",
+    "rubric": "كيف يُقيَّم",
+    "criterion": "{title} — حتى {max} نقطة",
+    "handedIn": "سلّمته {when}",
+    "repoUrl": "رابط مستودع GitHub",
+    "repoHint": "مثلًا https://github.com/you/auth-api. تأكد أن المدرّس يستطيع فتحه.",
+    "files": "الملفات",
+    "filesHint": "{count, plural, one {يمكنك إضافة ملف واحد آخر} other {يمكنك إضافة حتى # ملفات أخرى}}: PDF، صور، CSV، IPYNB، ZIP للكود (حتى 100 ميغابايت لكل ملف). تُفحص الملفات من الفيروسات.",
+    "removeFile": "احذف {name}",
+    "note": "ملاحظة للمدرّس",
+    "optional": "(اختياري)",
+    "submit": "سلّم",
+    "update": "حدّث التسليم",
+    "sent": "تم التسليم. سيقيّمه المدرّس.",
+    "updated": "تم تحديث تسليمك.",
+    "grade": "علامتك: {score}/{max}",
+    "points": "{points}/{max} نقاط",
+    "feedback": "ملاحظات المدرّس",
+    "repoPlaceholder": "https://github.com/…"
   }
 }

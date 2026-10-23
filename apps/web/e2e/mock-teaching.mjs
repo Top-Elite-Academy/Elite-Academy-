@@ -8,6 +8,12 @@ const MODULE3 = 'b0000000-0000-4000-8000-000000000003';
 const LESSON_DONE = 'd0000000-0000-4000-8000-000000000011';
 const LESSON_EDIT = 'd0000000-0000-4000-8000-000000000012';
 const LESSON_READY = 'd0000000-0000-4000-8000-000000000013';
+const SUBMISSION = 'f0000000-0000-4000-8000-000000000001';
+const RETURNED = 'f0000000-0000-4000-8000-000000000002';
+const rubric = [
+  { id: 'works', title: 'Works correctly', maxPoints: 60 },
+  { id: 'quality', title: 'Code quality', maxPoints: 40 },
+];
 const day = (offset) => new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
 const inMinutes = (n) => new Date(Date.now() + n * 60_000).toISOString();
 
@@ -307,6 +313,74 @@ export const teachingRoutes = {
       ],
       positionSec: 600,
     }),
+  [`/api/teach/lessons/${LESSON_EDIT}/assignment`]: () => ({
+    assignment: {
+      id: 'a1',
+      lessonId: LESSON_EDIT,
+      title: 'Auth API',
+      instructions: 'Add sign-in and protected routes.',
+      dueWeek: 12,
+      rubric,
+      submissionCount: 2,
+    },
+  }),
+  [`/api/teach/lessons/${LESSON_DONE}/assignment`]: () => ({ assignment: null }),
+  [`/api/teach/lessons/${LESSON_READY}/assignment`]: () => ({ assignment: null }),
+  [`/api/teach/cohorts/${FSA03}/submissions`]: () => ({
+    cohort: { id: FSA03, name: 'FSA-03' },
+    counts: { toGrade: 1, returned: 1 },
+    items: [submissionSummary(SUBMISSION, students[1], 'submitted', null, 2)],
+  }),
+  [`/api/teach/submissions/${SUBMISSION}`]: () => ({
+    ...submissionSummary(SUBMISSION, students[1], 'submitted', null, 2),
+    cohort: { id: FSA03, name: 'FSA-03' },
+    dueAt: inMinutes(-60 * 50),
+    repoUrl: 'https://github.com/lina/auth-api',
+    note: 'Refresh tokens are in the second commit.',
+    files: [{ id: 'sf1', fileName: 'notes.pdf', sizeBytes: 240 * 1024, scanStatus: 'clean' }],
+    rubric,
+    scores: rubric.map((criterion) => ({ criterionId: criterion.id, points: null, comment: '' })),
+    feedback: '',
+    gradedAt: null,
+    returnedAt: null,
+  }),
+  [`/api/me/lessons/${LESSON_EDIT}/assignment`]: () => ({
+    assignment: {
+      id: 'a1',
+      title: 'Auth API',
+      instructions: 'Add sign-in and protected routes.',
+      dueAt: inMinutes(60 * 24 * 3),
+      rubric,
+      submission: null,
+    },
+  }),
+  [`/api/me/lessons/${LESSON_DONE}/assignment`]: () => ({
+    assignment: {
+      id: 'a0',
+      title: 'Seed script',
+      instructions: '',
+      dueAt: inMinutes(-60 * 24 * 7),
+      rubric,
+      submission: {
+        id: RETURNED,
+        repoUrl: 'https://github.com/maya/seed',
+        note: '',
+        submittedAt: inMinutes(-60 * 24 * 6),
+        lateDays: 1,
+        status: 'returned',
+        files: [],
+        grade: {
+          score: 88,
+          scores: [
+            { criterionId: 'works', points: 55, comment: 'Seeds run twice safely.' },
+            { criterionId: 'quality', points: 33, comment: '' },
+          ],
+          feedback: 'Great work.',
+          returnedAt: inMinutes(-60 * 24 * 2),
+        },
+      },
+    },
+  }),
   '/api/teach/availability': () => ({
     windows: [
       { weekday: 1, startTime: '16:00', endTime: '18:00' },
@@ -376,6 +450,18 @@ export function notificationStream(response) {
 }
 
 export const MOCK_COHORT_ID = FSA03;
+
+function submissionSummary(id, student, status, score, lateDays) {
+  return {
+    id,
+    student: { userId: student.userId, firstName: student.firstName, lastName: student.lastName },
+    assignment: { id: 'a1', title: 'Auth API', lessonPosition: 12 },
+    submittedAt: inMinutes(-60 * 3),
+    lateDays,
+    status,
+    score,
+  };
+}
 
 function outlineLesson(id, position, title, completed, lockedUntilWeek = null) {
   return { id, position, title, completed, lockedUntilWeek };

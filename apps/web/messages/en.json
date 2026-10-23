@@ -291,6 +291,32 @@
       "tooLarge": "Files can be at most 100 MB.",
       "required": "Choose a file.",
       "rejected": "This file was refused (it may contain a virus)."
+    },
+    "assignment": {
+      "titleRequired": "Write a title for the exercise.",
+      "titleTooLong": "The title is too long.",
+      "instructionsTooLong": "The instructions are too long.",
+      "criterionRequired": "Give every criterion a name.",
+      "criterionTooLong": "A criterion name is too long.",
+      "rubricRequired": "Add at least one criterion.",
+      "rubricTooLong": "A rubric can have at most 10 criteria.",
+      "rubricTotal": "The points must add up to 100.",
+      "hasSubmissions": "Students have already handed this in, so it can’t be deleted."
+    },
+    "submission": {
+      "repoUrl": "Use a GitHub repository link, like https://github.com/you/project.",
+      "noteTooLong": "The note is too long.",
+      "empty": "Add a GitHub link or at least one file.",
+      "tooManyFiles": "You can hand in at most 5 files.",
+      "returned": "This work was already graded and can’t be changed."
+    },
+    "grade": {
+      "commentTooLong": "A comment is too long.",
+      "feedbackTooLong": "The feedback is too long.",
+      "unknownCriterion": "The rubric changed. Reload the page.",
+      "tooManyPoints": "Points can’t be more than the criterion’s maximum.",
+      "incomplete": "Give points for every criterion first.",
+      "alreadyReturned": "This work was already returned."
     }
   },
   "Levels": {
@@ -1005,7 +1031,8 @@
       "startsShort": "Starts {date}",
       "students": "{count, plural, one {# student} other {# students}}",
       "sessions": "Sessions & availability",
-      "content": "Course content"
+      "content": "Course content",
+      "grading": "Grading"
     },
     "greeting": {
       "morning": "Good morning, {name}",
@@ -1094,7 +1121,8 @@
     "markAll": "Mark all as read",
     "announcement": "{cohortName}: {title}",
     "enrollmentConfirmed": "You’re confirmed in {programTitle} ({cohortName}). Your class is now open.",
-    "live": "New notification: {text}"
+    "live": "New notification: {text}",
+    "submissionReturned": "Your exercise “{title}” was graded: {score}/100."
   },
   "StudentCourses": {
     "pendingBadge": "Waiting for confirmation",
@@ -1392,6 +1420,30 @@
         "failed": "Scan failed"
       },
       "scanningNote": "Students can download it after the scan."
+    },
+    "exercise": {
+      "title": "Exercise to hand in",
+      "none": "This lesson has no exercise to hand in.",
+      "add": "Add exercise",
+      "name": "Exercise title",
+      "instructions": "Instructions",
+      "dueWeek": "Due",
+      "dueWeekHint": "At the end of this week of each cohort (Saturday 23:59). Late work is accepted and marked late.",
+      "weekValue": "End of week {week}",
+      "rubric": "Rubric (points add up to 100)",
+      "criterion": "Criterion {number}",
+      "points": "Points for criterion {number}",
+      "removeCriterion": "Remove criterion {number}",
+      "addCriterion": "Add criterion",
+      "total": "Total: {total} / {max}",
+      "save": "Save exercise",
+      "saved": "Exercise saved.",
+      "handedIn": "{count, plural, =0 {Nobody has handed it in yet.} one {# student handed it in.} other {# students handed it in.}}",
+      "delete": "Delete exercise",
+      "deleteTitle": "Delete this exercise?",
+      "deleteBody": "Students will no longer see it. Nobody has handed it in yet.",
+      "keep": "Keep it",
+      "confirmDelete": "Delete"
     }
   },
   "StudentLesson": {
@@ -1425,5 +1477,75 @@
     "lessonNav": "Lessons",
     "previous": "Previous lesson",
     "next": "Next lesson"
+  },
+  "Grading": {
+    "late": "{days, plural, one {Late · # day} other {Late · # days}}",
+    "onTime": "On time",
+    "scan": {
+      "scanning": "Scanning…",
+      "clean": "Scanned · safe",
+      "infected": "Blocked: virus",
+      "failed": "Could not scan"
+    }
+  },
+  "TeachGrading": {
+    "title": "Grading",
+    "subtitle": "Hand-ins from your cohorts. Oldest first, so nobody waits too long.",
+    "noCohorts": "You have no cohorts yet.",
+    "cohort": "Cohort",
+    "filterLabel": "Show",
+    "filters": {
+      "toGrade": "To grade ({count})",
+      "returned": "Returned ({count})",
+      "all": "All"
+    },
+    "listLabel": "Hand-ins",
+    "empty": "Nothing here right now.",
+    "pick": "Choose a hand-in from the list to grade it.",
+    "assignmentLine": "Lesson {number} · {title}",
+    "submittedAt": "Handed in {when}",
+    "draft": "draft grade saved",
+    "returnedScore": "Returned · {score}/100",
+    "handedIn": "Handed in {when} · due {due}",
+    "repo": "GitHub:",
+    "download": "Download {name}",
+    "downloadShort": "Download",
+    "rubric": "Rubric",
+    "criterionTitle": "{title} (up to {max} points)",
+    "points": "Points",
+    "comment": "Comment",
+    "total": "Total: {total} / {max}",
+    "feedback": "Feedback for the student",
+    "saveDraft": "Save draft",
+    "draftSaved": "Draft saved. The student doesn’t see it yet.",
+    "scoreAll": "Give points for every criterion to return the work.",
+    "return": "Return to student",
+    "returnTitle": "Return the grade to {name}?",
+    "returnBody": "They will see {total}/100 and your feedback, and get a notification. You can’t change it afterwards.",
+    "keepEditing": "Keep editing",
+    "confirmReturn": "Return",
+    "returnedNote": "Returned to {name}."
+  },
+  "StudentExercise": {
+    "label": "Exercise",
+    "due": "Due {when} (Jerusalem time). Late work is accepted and marked late.",
+    "rubric": "How it is graded",
+    "criterion": "{title} — up to {max} points",
+    "handedIn": "Handed in {when}",
+    "repoUrl": "GitHub repository link",
+    "repoHint": "For example https://github.com/you/auth-api. Make sure your instructor can open it.",
+    "files": "Files",
+    "filesHint": "{count, plural, one {You can add # more file} other {You can add up to # more files}}: PDF, images, CSV, IPYNB, ZIP of code (up to 100 MB each). Files are virus-scanned.",
+    "removeFile": "Remove {name}",
+    "note": "Note for your instructor",
+    "optional": "(optional)",
+    "submit": "Hand in",
+    "update": "Update hand-in",
+    "sent": "Handed in. Your instructor will grade it.",
+    "updated": "Your hand-in was updated.",
+    "grade": "Your grade: {score}/{max}",
+    "points": "{points}/{max} points",
+    "feedback": "Feedback from your instructor",
+    "repoPlaceholder": "https://github.com/…"
   }
 }

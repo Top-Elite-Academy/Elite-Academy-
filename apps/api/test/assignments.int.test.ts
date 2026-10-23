@@ -107,6 +107,9 @@ async function scanned(submissionId: string) {
 
 describe('exercises and grading (design "Instructor 4")', () => {
   it('the rubric must add up to 100; criteria keep their ids when edited', async () => {
+    expect((await maya.get(`/api/me/lessons/${lessonId}/assignment`)).body).toEqual({
+      assignment: null,
+    });
     const wrong = await teacher.put(`/api/teach/lessons/${lessonId}/assignment`, {
       title: 'Auth API',
       instructions: '',
@@ -184,7 +187,7 @@ describe('exercises and grading (design "Instructor 4")', () => {
     ).toBe('grade.incomplete');
     // The student does not see a draft.
     expect(
-      (await maya.get(`/api/me/lessons/${lessonId}/assignment`)).body.submission.grade,
+      (await maya.get(`/api/me/lessons/${lessonId}/assignment`)).body.assignment.submission.grade,
     ).toBeNull();
 
     await teacher.put(`/api/teach/submissions/${submissionId}/grade`, {
@@ -198,7 +201,10 @@ describe('exercises and grading (design "Instructor 4")', () => {
     expect(returned.body).toMatchObject({ status: 'returned', score: 90 });
 
     const seen = await maya.get(`/api/me/lessons/${lessonId}/assignment`);
-    expect(seen.body.submission.grade).toMatchObject({ score: 90, feedback: 'Good work.' });
+    expect(seen.body.assignment.submission.grade).toMatchObject({
+      score: 90,
+      feedback: 'Good work.',
+    });
     const notification = await t.prisma.notification.findFirstOrThrow({
       where: { userId: mayaId },
     });
@@ -230,7 +236,7 @@ describe('exercises and grading (design "Instructor 4")', () => {
     expect(handed.body.submission.lateDays).toBeGreaterThan(7);
     await scanned(handed.body.submission.id as string);
     const view = await maya.get(`/api/me/lessons/${lessonId}/assignment`);
-    expect(view.body.submission.files).toEqual([]);
+    expect(view.body.assignment.submission.files).toEqual([]);
   });
 
   it('other instructors and students cannot reach the work', async () => {
@@ -247,6 +253,12 @@ describe('exercises and grading (design "Instructor 4")', () => {
     expect((await rana.get(`/api/teach/submissions/${submissionId}`)).status).toBe(404);
     expect((await rana.get(`/api/teach/cohorts/${cohortId}/submissions`)).status).toBe(404);
     expect((await rana.get(`/api/teach/lessons/${lessonId}/assignment`)).status).toBe(404);
+    expect(
+      (await teacher.get(`/api/teach/lessons/${lessonId}/assignment`)).body.assignment,
+    ).toMatchObject({
+      title: 'Auth API',
+      submissionCount: 1,
+    });
 
     const omar = await signIn(
       t,

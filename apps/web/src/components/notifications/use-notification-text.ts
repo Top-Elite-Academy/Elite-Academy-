@@ -1,6 +1,6 @@
 import type { NotificationView } from '@eta/shared';
 import { useTranslations } from 'next-intl';
-import { STUDENT_ROUTES, TEACH_ROUTES } from '@/config/navigation';
+import { STUDENT_ROUTES, studentLessonPath, TEACH_ROUTES } from '@/config/navigation';
 import { useBookingFormat } from '@/lib/format/use-booking-format';
 
 /** The sentence and the link for a notification, in the page language. */
@@ -20,6 +20,11 @@ export function useNotificationText() {
           programTitle: item.data.programTitle,
           cohortName: item.data.cohortName,
         });
+      case 'submission_returned':
+        return t('Notifications.submissionReturned', {
+          title: item.data.title,
+          score: item.data.score,
+        });
       default: {
         const at = `${when.longDay(item.data.startAt)} ${when.time(item.data.startAt)}`;
         const key =
@@ -34,6 +39,8 @@ export function useNotificationText() {
   const href = (item: NotificationView): string => {
     if (item.type === 'announcement' || item.type === 'enrollment_confirmed')
       return STUDENT_ROUTES.courses;
+    if (item.type === 'submission_returned')
+      return studentLessonPath(item.data.programSlug, item.data.lessonId);
     return item.data.audience === 'mentor' ? TEACH_ROUTES.sessions : STUDENT_ROUTES.sessions;
   };
 

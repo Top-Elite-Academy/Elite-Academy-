@@ -40,9 +40,13 @@ const uuid = new ParseUUIDPipe({ version: '4' });
 export class MySubmissionsController {
   constructor(private readonly submissions: StudentSubmissionsService) {}
 
+  /** The lesson's exercise with the student's hand-in ({ assignment: null } when it has none). */
   @Get('lessons/:id/assignment')
-  get(@CurrentUser() user: AuthUser, @Param('id', uuid) id: string): Promise<StudentAssignment> {
-    return this.submissions.get(user, id);
+  async get(
+    @CurrentUser() user: AuthUser,
+    @Param('id', uuid) id: string,
+  ): Promise<{ assignment: StudentAssignment | null }> {
+    return { assignment: await this.submissions.get(user, id) };
   }
 
   /** Multipart: "repoUrl", "note" and up to five "files". */

@@ -1,13 +1,14 @@
 import type { ComponentProps } from 'react';
 import { ChevronDownIcon } from '@/components/ui/icons';
 import { cn } from '@/lib/cn';
-import { CONTROL_CLASS, FieldError, FieldLabel, useFieldIds } from './FieldParts';
+import { CONTROL_CLASS, FieldError, FieldHint, FieldLabel, useFieldIds } from './FieldParts';
 
 interface SelectFieldProps extends Omit<ComponentProps<'select'>, 'id'> {
   name: string;
   label: string;
   options: { value: string; label: string }[];
   placeholder?: string;
+  hint?: string;
   error?: string;
 }
 
@@ -17,15 +18,17 @@ export function SelectField({
   label,
   options,
   placeholder,
+  hint,
   error,
   required,
   className,
   ...props
 }: SelectFieldProps) {
-  const ids = useFieldIds(undefined, error);
+  const ids = useFieldIds(hint, error);
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
       <FieldLabel htmlFor={ids.id} label={label} required={required} />
+      <FieldHint id={ids.hintId} text={hint} />
       <div className="relative">
         <select
           id={ids.id}

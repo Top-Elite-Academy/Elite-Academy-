@@ -1,8 +1,9 @@
-import type { CourseOutline, StudentLesson } from '@eta/shared';
+import type { CourseOutline, StudentAssignment, StudentLesson } from '@eta/shared';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { CourseOutlineNav } from '@/components/student/course/CourseOutlineNav';
+import { ExerciseCard } from '@/components/student/course/ExerciseCard';
 import { LessonActions } from '@/components/student/course/LessonActions';
 import { LessonTabs } from '@/components/student/course/LessonTabs';
 import { LessonVideo } from '@/components/student/course/LessonVideo';
@@ -28,9 +29,14 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 /** The lesson player (spec §4.8): video, About and Downloads, done, next — with the course outline. */
 export default async function StudentLessonPage({ params }: { params: Params }) {
   const { slug, id } = await params;
-  const [lesson, outline, t, tCourses] = await Promise.all([
+  const [lesson, outline, exercise, t, tCourses] = await Promise.all([
     loadLesson(id),
     getAsUser<CourseOutline>(`/api/me/courses/${encodeURIComponent(slug)}`).catch(() => null),
+    isBookingId(id)
+      ? getAsUser<{ assignment: StudentAssignment | null }>(
+          `/api/me/lessons/${id}/assignment`,
+        ).catch(() => null)
+      : null,
     getTranslations('StudentLesson'),
     getTranslations('Student.courses'),
   ]);
@@ -61,6 +67,9 @@ export default async function StudentLessonPage({ params }: { params: Params }) 
           />
           <LessonActions lesson={lesson} previousId={previousId} nextId={nextId} />
           <LessonTabs lesson={lesson} />
+          {exercise?.assignment && (
+            <ExerciseCard lessonId={lesson.id} assignment={exercise.assignment} />
+          )}
         </div>
         <aside>
           <CourseOutlineNav outline={outline} currentLessonId={lesson.id} />

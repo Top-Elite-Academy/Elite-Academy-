@@ -51,11 +51,18 @@ export class StudentSubmissionsService {
     @InjectQueue(FILE_SCAN_QUEUE) private readonly queue: Queue<FileScanJob>,
   ) {}
 
-  /** The open lesson's exercise and the student's cohort, or 404. */
+  /** The open lesson's exercise and the student's cohort; 404 when the lesson has none. */
   private async context(user: AuthUser, lessonId: string) {
+    const found = await this.maybeContext(user, lessonId);
+    if (!found) throw ApiException.notFound();
+    return found;
+  }
+
+  /** Null when the (open) lesson has no exercise; 404 when the lesson is not open to the student. */
+  private async maybeContext(user: AuthUser, lessonId: string) {
     const lesson = await this.lessons.openLesson(user, lessonId);
     const assignment = await this.prisma.assignment.findUnique({ where: { lessonId: lesson.id } });
-    if (!assignment) throw ApiException.notFound();
+    if (!assignment) return null;
     const { cohort } = await this.lessons.access(user, lesson.programId);
     return {
       assignment,
@@ -64,8 +71,10 @@ export class StudentSubmissionsService {
     };
   }
 
-  async get(user: AuthUser, lessonId: string): Promise<StudentAssignment> {
-    const { assignment, dueAt } = await this.context(user, lessonId);
+  async get(user: AuthUser, lessonId: string): Promise<StudentAssignment | null> {
+    const found = await this.maybeContext(user, lessonId);
+    if (!found) return null;
+    const { assignment, dueAt } = found;
     const submission = await this.prisma.submission.findUnique({
       where: { assignmentId_userId: { assignmentId: assignment.id, userId: user.id } },
       include: { files: { orderBy: { createdAt: 'asc' } } },
@@ -144,7 +153,9 @@ export class StudentSubmissionsService {
         after: { lessonId, files: files.length, repo: Boolean(input.repoUrl) },
         client,
       });
-      return await this.get(user, lessonId);
+      const view = await this.get(user, lessonId);
+      if (!view) throw ApiException.notFound();
+      return view;
     } finally {
       await Promise.all(files.map((file) => unlink(file.path).catch(() => undefined)));
     }

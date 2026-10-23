@@ -48,13 +48,13 @@ export class TeachAssignmentsController {
     private readonly grading: GradingService,
   ) {}
 
-  /** The lesson's exercise, or null when it has none. */
+  /** The lesson's exercise ({ assignment: null } when it has none). */
   @Get('lessons/:id/assignment')
-  get(
+  async get(
     @CurrentUser() user: AuthUser,
     @Param('id', uuid) id: string,
-  ): Promise<AssignmentView | null> {
-    return this.assignments.get(user, id);
+  ): Promise<{ assignment: AssignmentView | null }> {
+    return { assignment: await this.assignments.get(user, id) };
   }
 
   @Put('lessons/:id/assignment')

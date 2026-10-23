@@ -291,6 +291,32 @@
       "tooLarge": "עד 100 MB לקובץ.",
       "required": "נא לבחור קובץ.",
       "rejected": "הקובץ נדחה (ייתכן שהוא מכיל וירוס)."
+    },
+    "assignment": {
+      "titleRequired": "יש לכתוב כותרת לתרגיל.",
+      "titleTooLong": "הכותרת ארוכה מדי.",
+      "instructionsTooLong": "ההנחיות ארוכות מדי.",
+      "criterionRequired": "יש לתת שם לכל קריטריון.",
+      "criterionTooLong": "שם של קריטריון ארוך מדי.",
+      "rubricRequired": "יש להוסיף לפחות קריטריון אחד.",
+      "rubricTooLong": "מחוון יכול לכלול עד 10 קריטריונים.",
+      "rubricTotal": "סכום הנקודות חייב להיות 100.",
+      "hasSubmissions": "סטודנטים כבר הגישו את התרגיל, ולכן אי אפשר למחוק אותו."
+    },
+    "submission": {
+      "repoUrl": "יש להשתמש בקישור למאגר GitHub, למשל https://github.com/you/project.",
+      "noteTooLong": "ההערה ארוכה מדי.",
+      "empty": "יש להוסיף קישור GitHub או לפחות קובץ אחד.",
+      "tooManyFiles": "אפשר להגיש עד 5 קבצים.",
+      "returned": "העבודה כבר נבדקה ואי אפשר לשנות אותה."
+    },
+    "grade": {
+      "commentTooLong": "אחת ההערות ארוכה מדי.",
+      "feedbackTooLong": "המשוב ארוך מדי.",
+      "unknownCriterion": "המחוון השתנה. יש לרענן את הדף.",
+      "tooManyPoints": "הנקודות לא יכולות לעבור את המקסימום של הקריטריון.",
+      "incomplete": "יש לתת נקודות לכל קריטריון קודם.",
+      "alreadyReturned": "העבודה כבר הוחזרה."
     }
   },
   "Levels": {
@@ -1005,7 +1031,8 @@
       "startsShort": "נפתח ב-{date}",
       "students": "{count, plural, one {סטודנט/ית אחד/ת} other {# סטודנטים}}",
       "sessions": "פגישות וזמינות",
-      "content": "תוכן הקורס"
+      "content": "תוכן הקורס",
+      "grading": "בדיקת עבודות"
     },
     "greeting": {
       "morning": "בוקר טוב, {name}",
@@ -1094,7 +1121,8 @@
     "markAll": "סימון הכול כנקרא",
     "announcement": "{cohortName}: {title}",
     "enrollmentConfirmed": "ההרשמה שלך ל-{programTitle} ({cohortName}) אושרה. המחזור פתוח עכשיו.",
-    "live": "התראה חדשה: {text}"
+    "live": "התראה חדשה: {text}",
+    "submissionReturned": "התרגיל שלך „{title}” נבדק: {score}/100."
   },
   "StudentCourses": {
     "pendingBadge": "ממתין/ה לאישור",
@@ -1392,6 +1420,30 @@
         "failed": "הסריקה נכשלה"
       },
       "scanningNote": "סטודנטים יוכלו להוריד אחרי הסריקה."
+    },
+    "exercise": {
+      "title": "תרגיל להגשה",
+      "none": "אין בשיעור הזה תרגיל להגשה.",
+      "add": "להוסיף תרגיל",
+      "name": "כותרת התרגיל",
+      "instructions": "הנחיות",
+      "dueWeek": "מועד הגשה",
+      "dueWeekHint": "בסוף השבוע הזה בכל מחזור (שבת 23:59). עבודה באיחור מתקבלת ומסומנת כמאחרת.",
+      "weekValue": "סוף שבוע {week}",
+      "rubric": "מחוון (סכום הנקודות 100)",
+      "criterion": "קריטריון {number}",
+      "points": "נקודות לקריטריון {number}",
+      "removeCriterion": "להסיר את קריטריון {number}",
+      "addCriterion": "להוסיף קריטריון",
+      "total": "סה״כ: {total} / {max}",
+      "save": "לשמור את התרגיל",
+      "saved": "התרגיל נשמר.",
+      "handedIn": "{count, plural, =0 {עדיין אף אחד לא הגיש.} one {סטודנט/ית אחד/ת הגיש/ה.} other {# סטודנטים הגישו.}}",
+      "delete": "למחוק את התרגיל",
+      "deleteTitle": "למחוק את התרגיל?",
+      "deleteBody": "הסטודנטים לא יראו אותו יותר. עדיין אף אחד לא הגיש.",
+      "keep": "להשאיר",
+      "confirmDelete": "למחוק"
     }
   },
   "StudentLesson": {
@@ -1425,5 +1477,75 @@
     "lessonNav": "שיעורים",
     "previous": "השיעור הקודם",
     "next": "השיעור הבא"
+  },
+  "Grading": {
+    "late": "{days, plural, one {באיחור · יום אחד} two {באיחור · יומיים} other {באיחור · # ימים}}",
+    "onTime": "בזמן",
+    "scan": {
+      "scanning": "בסריקה…",
+      "clean": "נסרק · בטוח",
+      "infected": "נחסם: וירוס",
+      "failed": "לא ניתן לסרוק"
+    }
+  },
+  "TeachGrading": {
+    "title": "בדיקת עבודות",
+    "subtitle": "הגשות מהמחזורים שלך. הוותיקות קודם, כדי שאף אחד לא יחכה יותר מדי.",
+    "noCohorts": "עדיין אין לך מחזורים.",
+    "cohort": "מחזור",
+    "filterLabel": "הצגה",
+    "filters": {
+      "toGrade": "לבדיקה ({count})",
+      "returned": "הוחזרו ({count})",
+      "all": "הכול"
+    },
+    "listLabel": "הגשות",
+    "empty": "אין כאן כלום כרגע.",
+    "pick": "יש לבחור הגשה מהרשימה כדי לבדוק אותה.",
+    "assignmentLine": "שיעור {number} · {title}",
+    "submittedAt": "הוגש {when}",
+    "draft": "טיוטת ציון נשמרה",
+    "returnedScore": "הוחזר · {score}/100",
+    "handedIn": "הוגש {when} · מועד {due}",
+    "repo": "GitHub:",
+    "download": "להוריד את {name}",
+    "downloadShort": "להוריד",
+    "rubric": "מחוון",
+    "criterionTitle": "{title} (עד {max} נקודות)",
+    "points": "נקודות",
+    "comment": "הערה",
+    "total": "סה״כ: {total} / {max}",
+    "feedback": "משוב לסטודנט/ית",
+    "saveDraft": "לשמור טיוטה",
+    "draftSaved": "הטיוטה נשמרה. הסטודנט/ית עדיין לא רואה אותה.",
+    "scoreAll": "יש לתת נקודות לכל קריטריון כדי להחזיר את העבודה.",
+    "return": "להחזיר לסטודנט/ית",
+    "returnTitle": "להחזיר את הציון ל{name}?",
+    "returnBody": "יוצגו {total}/100 והמשוב שלך, ותישלח התראה. אחר כך אי אפשר לשנות.",
+    "keepEditing": "להמשיך לערוך",
+    "confirmReturn": "להחזיר",
+    "returnedNote": "הוחזר ל{name}."
+  },
+  "StudentExercise": {
+    "label": "תרגיל",
+    "due": "להגשה עד {when} (שעון ירושלים). עבודה באיחור מתקבלת ומסומנת כמאחרת.",
+    "rubric": "איך זה נבדק",
+    "criterion": "{title} — עד {max} נקודות",
+    "handedIn": "הוגש {when}",
+    "repoUrl": "קישור למאגר GitHub",
+    "repoHint": "למשל https://github.com/you/auth-api. חשוב לוודא שהמרצה יכול/ה לפתוח אותו.",
+    "files": "קבצים",
+    "filesHint": "{count, plural, one {אפשר להוסיף עוד קובץ אחד} other {אפשר להוסיף עד # קבצים נוספים}}: PDF, תמונות, CSV, IPYNB, ZIP של קוד (עד 100MB לקובץ). הקבצים נסרקים לווירוסים.",
+    "removeFile": "להסיר את {name}",
+    "note": "הערה למרצה",
+    "optional": "(לא חובה)",
+    "submit": "להגיש",
+    "update": "לעדכן את ההגשה",
+    "sent": "הוגש. המרצה יבדוק את העבודה.",
+    "updated": "ההגשה עודכנה.",
+    "grade": "הציון שלך: {score}/{max}",
+    "points": "{points}/{max} נקודות",
+    "feedback": "משוב מהמרצה",
+    "repoPlaceholder": "https://github.com/…"
   }
 }

@@ -180,7 +180,27 @@ export const TEACH_ROUTES = {
   cohorts: '/teach/cohorts',
   sessions: '/teach/sessions',
   content: '/teach/content',
+  grading: '/teach/grading',
 } as const;
+
+/** Grading for one cohort (design "Instructor 4"), optionally filtered and with a submission open. */
+export const teachGradingPath = (
+  cohortId: string,
+  options: { status?: string; submission?: string } = {},
+) => {
+  const query = new URLSearchParams({ cohort: cohortId });
+  if (options.status) query.set('status', options.status);
+  if (options.submission) query.set('submission', options.submission);
+  return `${TEACH_ROUTES.grading}?${query.toString()}`;
+};
+
+/** A file a student handed in (the API answers with a short-lived link). */
+export const submissionFileDownloadPath = (
+  area: 'teach' | 'me',
+  submissionId: string,
+  fileId: string,
+) =>
+  `/api/${area}/submissions/${encodeURIComponent(submissionId)}/files/${encodeURIComponent(fileId)}/download`;
 
 /** Course content of a program, optionally with one lesson open (design "Instructor 6"). */
 export const teachContentPath = (programId: string, lessonId?: string) =>
@@ -191,7 +211,7 @@ export const teachContentPath = (programId: string, lessonId?: string) =>
 export const teachCohortPath = (cohortId: string) =>
   `${TEACH_ROUTES.cohorts}/${encodeURIComponent(cohortId)}`;
 
-export type TeachNavIcon = 'today' | 'cohorts' | 'sessions' | 'content';
+export type TeachNavIcon = 'today' | 'cohorts' | 'sessions' | 'content' | 'grading';
 
 /** Instructor sidebar. Labels are keys under "Teach.nav". */
 export const TEACH_NAV: { label: string; href: string; icon: TeachNavIcon; exact?: boolean }[] = [
@@ -199,6 +219,7 @@ export const TEACH_NAV: { label: string; href: string; icon: TeachNavIcon; exact
   { label: 'cohorts', href: TEACH_ROUTES.cohorts, icon: 'cohorts' },
   { label: 'sessions', href: TEACH_ROUTES.sessions, icon: 'sessions' },
   { label: 'content', href: TEACH_ROUTES.content, icon: 'content' },
+  { label: 'grading', href: TEACH_ROUTES.grading, icon: 'grading' },
 ];
 
 /** Admin pages built so far. */

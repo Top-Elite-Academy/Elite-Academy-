@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  type AssignmentView,
   LESSON_ABOUT_MAX,
   LESSON_TITLE_MAX,
   type TeachLesson,
@@ -17,13 +18,22 @@ import { useApiForm } from '@/components/forms/use-api-form';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from '@/i18n/navigation';
 import { apiRequest } from '@/lib/api/client';
+import { ExerciseSection } from './ExerciseSection';
 import { FilesSection } from './FilesSection';
 import { PublishBar } from './PublishBar';
 import { useProcessingRefresh } from './use-processing-refresh';
 import { VideoSection } from './VideoSection';
 
 /** The lesson editor (design "Instructor 6", right column). */
-export function LessonEditor({ lesson, list }: { lesson: TeachLesson; list: TeachLessonList }) {
+export function LessonEditor({
+  lesson,
+  list,
+  assignment,
+}: {
+  lesson: TeachLesson;
+  list: TeachLessonList;
+  assignment: AssignmentView | null;
+}) {
   const t = useTranslations('TeachContent.editor');
   const format = useFormatter();
   const router = useRouter();
@@ -38,7 +48,8 @@ export function LessonEditor({ lesson, list }: { lesson: TeachLesson; list: Teac
     router.refresh();
   });
 
-  const weeks = Array.from({ length: list.program.lengthWeeks ?? 24 }, (_, index) => index + 1);
+  const weekCount = list.program.lengthWeeks ?? 24;
+  const weeks = Array.from({ length: weekCount }, (_, index) => index + 1);
   const moduleTitle = list.modules.find((module) => module.id === lesson.moduleId)?.title;
 
   return (
@@ -110,6 +121,7 @@ export function LessonEditor({ lesson, list }: { lesson: TeachLesson; list: Teac
 
       <VideoSection lessonId={lesson.id} videos={lesson.videos} provider={list.videoProvider} />
       <FilesSection lessonId={lesson.id} files={lesson.files} />
+      <ExerciseSection lessonId={lesson.id} assignment={assignment} weeks={weekCount} />
       <PublishBar lesson={lesson} />
     </div>
   );
