@@ -271,6 +271,42 @@ export const teachingRoutes = {
       moduleId: null,
       canPublish: true,
     }),
+  '/api/me/courses/full-stack-advanced-ai': () => ({
+    program: { slug: program.slug, title: program.title },
+    cohort: { id: FSA03, name: 'FSA-03', week: 12 },
+    progressPercent: 33,
+    modules: [
+      {
+        id: MODULE3,
+        title: 'Back end & data',
+        lessons: [
+          outlineLesson(LESSON_DONE, 11, 'Prisma schema and seed', true),
+          outlineLesson(LESSON_EDIT, 12, 'Authentication and sessions', false),
+        ],
+      },
+      {
+        id: null,
+        title: null,
+        lessons: [outlineLesson(LESSON_READY, 13, 'Calling AI models', false, 14)],
+      },
+    ],
+  }),
+  [`/api/me/lessons/${LESSON_DONE}`]: () =>
+    studentLesson(LESSON_DONE, 11, 'Prisma schema and seed', { completed: true }),
+  [`/api/me/lessons/${LESSON_EDIT}`]: () =>
+    studentLesson(LESSON_EDIT, 12, 'Authentication and sessions', {
+      videos: [{ id: 'v1', durationSec: 3130, playback: { kind: 'file', url: '/media/demo.mp4' } }],
+      files: [
+        {
+          id: 'f1',
+          kind: 'material',
+          fileName: 'lesson-12-slides.pdf',
+          sizeBytes: 3.2 * 1024 ** 2,
+        },
+        { id: 'f2', kind: 'exercise', fileName: 'starter-repo.zip', sizeBytes: 14 * 1024 ** 2 },
+      ],
+      positionSec: 600,
+    }),
   '/api/teach/availability': () => ({
     windows: [
       { weekday: 1, startTime: '16:00', endTime: '18:00' },
@@ -340,6 +376,27 @@ export function notificationStream(response) {
 }
 
 export const MOCK_COHORT_ID = FSA03;
+
+function outlineLesson(id, position, title, completed, lockedUntilWeek = null) {
+  return { id, position, title, completed, lockedUntilWeek };
+}
+
+function studentLesson(id, position, title, extra) {
+  return {
+    id,
+    position,
+    title,
+    about: 'In this lesson you add sign-in to the Module 3 API.',
+    program: { slug: program.slug, title: program.title },
+    videos: [],
+    files: [],
+    completed: false,
+    positionSec: 0,
+    previousLessonId: null,
+    nextLessonId: null,
+    ...extra,
+  };
+}
 
 function teachLesson(id, position, title, extra) {
   return {

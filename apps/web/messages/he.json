@@ -1110,7 +1110,8 @@
     "join": "בקשת הצטרפות",
     "joined": "הבקשה נשלחה. נאשר את מקומך בקרוב.",
     "noCohorts": "אין כרגע מחזורים פתוחים.",
-    "attendance": "נוכחות: {attended} מתוך {marked} שיעורים"
+    "attendance": "נוכחות: {attended} מתוך {marked} שיעורים",
+    "openCourse": "לפתוח את הקורס"
   },
   "AdminEnrollments": {
     "metaTitle": "סטודנטים שממתינים לאישור",
@@ -1392,5 +1393,37 @@
       },
       "scanningNote": "סטודנטים יוכלו להוריד אחרי הסריקה."
     }
+  },
+  "StudentLesson": {
+    "outlineLabel": "תוכן הקורס",
+    "progress": "{percent}% הושלמו",
+    "cohortWeek": "{cohort} · שבוע {week}",
+    "lessonNumber": "שיעור {number}",
+    "opensInWeek": "נפתח בשבוע {week}",
+    "completedLabel": "(הושלם)",
+    "noLessons": "השיעורים יופיעו כאן כשהמרצה יפרסם אותם.",
+    "continue": "להמשיך ללמוד",
+    "start": "להתחיל את הקורס",
+    "allDone": "סיימת את כל השיעורים עד עכשיו. כל הכבוד!",
+    "noVideo": "אין וידאו לשיעור הזה.",
+    "videoPart": "וידאו השיעור, חלק {number} מתוך {total}",
+    "tabs": {
+      "label": "פרטי השיעור",
+      "about": "על השיעור",
+      "downloads": "קבצים ({count})"
+    },
+    "noAbout": "אין תיאור לשיעור הזה.",
+    "noFiles": "אין קבצים לשיעור הזה.",
+    "kind": {
+      "material": "חומר",
+      "exercise": "תרגיל"
+    },
+    "download": "להוריד את {name}",
+    "downloadShort": "להוריד",
+    "complete": "סימון כהושלם",
+    "completedNote": "השלמת את השיעור הזה.",
+    "lessonNav": "שיעורים",
+    "previous": "השיעור הקודם",
+    "next": "השיעור הבא"
   }
 }

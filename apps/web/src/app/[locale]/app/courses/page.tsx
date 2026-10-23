@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('metaTitle') };
 }
 
-/** My courses (spec §4.4): joined cohorts and joining a new one. Lessons come next. */
+/** My courses (spec §4.4): joined cohorts (with their lessons) and joining a new one. */
 export default async function StudentCoursesPage() {
   const [enrollments, available, t, tCourses] = await Promise.all([
     getAsUser<StudentEnrollment[]>('/api/me/enrollments'),

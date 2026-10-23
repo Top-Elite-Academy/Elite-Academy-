@@ -1110,7 +1110,8 @@
     "join": "Ask to join",
     "joined": "Request sent. We’ll confirm your place soon.",
     "noCohorts": "No cohorts are open right now.",
-    "attendance": "Attendance: {attended} of {marked} classes"
+    "attendance": "Attendance: {attended} of {marked} classes",
+    "openCourse": "Open course"
   },
   "AdminEnrollments": {
     "metaTitle": "Students waiting for confirmation",
@@ -1392,5 +1393,37 @@
       },
       "scanningNote": "Students can download it after the scan."
     }
+  },
+  "StudentLesson": {
+    "outlineLabel": "Course content",
+    "progress": "{percent}% complete",
+    "cohortWeek": "{cohort} · Week {week}",
+    "lessonNumber": "Lesson {number}",
+    "opensInWeek": "Opens in week {week}",
+    "completedLabel": "(completed)",
+    "noLessons": "Lessons appear here when your instructor publishes them.",
+    "continue": "Continue learning",
+    "start": "Start the course",
+    "allDone": "You finished every lesson so far. Well done!",
+    "noVideo": "This lesson has no video.",
+    "videoPart": "Lesson video, part {number} of {total}",
+    "tabs": {
+      "label": "Lesson details",
+      "about": "About",
+      "downloads": "Downloads ({count})"
+    },
+    "noAbout": "No description for this lesson.",
+    "noFiles": "No files for this lesson.",
+    "kind": {
+      "material": "Material",
+      "exercise": "Exercise"
+    },
+    "download": "Download {name}",
+    "downloadShort": "Download",
+    "complete": "Mark as complete",
+    "completedNote": "You completed this lesson.",
+    "lessonNav": "Lessons",
+    "previous": "Previous lesson",
+    "next": "Next lesson"
   }
 }

@@ -1110,7 +1110,8 @@
     "join": "اطلب الانضمام",
     "joined": "تم إرسال الطلب. سنؤكّد مكانك قريبًا.",
     "noCohorts": "لا توجد مجموعات مفتوحة حاليًا.",
-    "attendance": "الحضور: {attended} من {marked} دروس"
+    "attendance": "الحضور: {attended} من {marked} دروس",
+    "openCourse": "افتح الدورة"
   },
   "AdminEnrollments": {
     "metaTitle": "طلاب بانتظار التأكيد",
@@ -1392,5 +1393,37 @@
       },
       "scanningNote": "يمكن للطلاب تنزيله بعد الفحص."
     }
+  },
+  "StudentLesson": {
+    "outlineLabel": "محتوى الدورة",
+    "progress": "أنجزت {percent}%",
+    "cohortWeek": "{cohort} · الأسبوع {week}",
+    "lessonNumber": "الدرس {number}",
+    "opensInWeek": "يُفتح في الأسبوع {week}",
+    "completedLabel": "(مكتمل)",
+    "noLessons": "تظهر الدروس هنا عندما ينشرها المدرّس.",
+    "continue": "تابع التعلّم",
+    "start": "ابدأ الدورة",
+    "allDone": "أنهيت كل الدروس المتاحة حتى الآن. أحسنت!",
+    "noVideo": "لا يوجد فيديو لهذا الدرس.",
+    "videoPart": "فيديو الدرس، الجزء {number} من {total}",
+    "tabs": {
+      "label": "تفاصيل الدرس",
+      "about": "عن الدرس",
+      "downloads": "الملفات ({count})"
+    },
+    "noAbout": "لا يوجد وصف لهذا الدرس.",
+    "noFiles": "لا توجد ملفات لهذا الدرس.",
+    "kind": {
+      "material": "مادة",
+      "exercise": "تمرين"
+    },
+    "download": "تنزيل {name}",
+    "downloadShort": "تنزيل",
+    "complete": "تحديد كمكتمل",
+    "completedNote": "أكملت هذا الدرس.",
+    "lessonNav": "الدروس",
+    "previous": "الدرس السابق",
+    "next": "الدرس التالي"
   }
 }

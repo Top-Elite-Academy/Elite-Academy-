@@ -2,11 +2,13 @@ import type { StudentEnrollment } from '@eta/shared';
 import { useTranslations } from 'next-intl';
 import { AnnouncementList } from '@/components/announcements/AnnouncementList';
 import { Badge } from '@/components/ui/Badge';
+import { ButtonLink } from '@/components/ui/Button';
+import { studentCoursePath } from '@/config/navigation';
 import { useCohortFormat } from '@/lib/format/use-cohort-format';
 
 /**
  * One program the student joined. Pending: what happens next. Confirmed: the
- * cohort's latest announcements (lessons arrive in the next step).
+ * way into the lessons and the cohort's latest announcements.
  */
 export function EnrollmentCard({
   enrollment,
@@ -44,20 +46,39 @@ export function EnrollmentCard({
         </p>
       )}
       {!confirmed && <p className="mt-3 text-sm text-ink">{t('pendingNote')}</p>}
-      {confirmed && enrollment.attendance && enrollment.attendance.marked > 0 && (
+      {confirmed && <ConfirmedDetails enrollment={enrollment} compact={compact} />}
+    </article>
+  );
+}
+
+/** Attendance, the way into the lessons and (full card only) announcements. */
+function ConfirmedDetails({
+  enrollment,
+  compact,
+}: {
+  enrollment: StudentEnrollment;
+  compact: boolean;
+}) {
+  const t = useTranslations('StudentCourses');
+  const { attendance } = enrollment;
+  return (
+    <>
+      {attendance && attendance.marked > 0 && (
         <p className="mt-2 text-sm font-semibold text-ink">
-          {t('attendance', {
-            attended: enrollment.attendance.attended,
-            marked: enrollment.attendance.marked,
-          })}
+          {t('attendance', { attended: attendance.attended, marked: attendance.marked })}
         </p>
       )}
-      {confirmed && !compact && (
+      <div className="mt-4">
+        <ButtonLink href={studentCoursePath(enrollment.cohort.program.slug)} size="sm">
+          {t('openCourse')}
+        </ButtonLink>
+      </div>
+      {!compact && (
         <section className="mt-4 border-t border-border pt-4">
           <h4 className="mb-3 text-sm font-semibold text-ink">{t('announcements')}</h4>
           <AnnouncementList items={enrollment.announcements} emptyText={t('noAnnouncements')} />
         </section>
       )}
-    </article>
+    </>
   );
 }

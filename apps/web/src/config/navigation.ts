@@ -127,6 +127,18 @@ export const STUDENT_ROUTES = {
   messages: '/app/messages',
 } as const;
 
+/** A course the student studies: its content outline. */
+export const studentCoursePath = (slug: string) =>
+  `${STUDENT_ROUTES.courses}/${encodeURIComponent(slug)}`;
+
+/** One lesson in the player. */
+export const studentLessonPath = (slug: string, lessonId: string) =>
+  `${studentCoursePath(slug)}/lessons/${encodeURIComponent(lessonId)}`;
+
+/** Download a scanned lesson file (the API answers with a short-lived link). */
+export const lessonFileDownloadPath = (lessonId: string, fileId: string) =>
+  `/api/me/lessons/${encodeURIComponent(lessonId)}/files/${encodeURIComponent(fileId)}/download`;
+
 /** Reschedule one of the student's sessions. */
 export const rescheduleSessionPath = (bookingId: string) =>
   `${STUDENT_ROUTES.sessions}/${encodeURIComponent(bookingId)}/reschedule`;
