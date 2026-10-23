@@ -92,11 +92,7 @@ export const submitWorkSchema = z.object({
     .default('')
     .refine((value) => value === '' || isGitHubUrl(value), { error: 'submission.repoUrl' })
     .transform((value) => value || null),
-  note: z
-    .string()
-    .trim()
-    .max(SUBMISSION_NOTE_MAX, { error: 'submission.noteTooLong' })
-    .default(''),
+  note: z.string().trim().max(SUBMISSION_NOTE_MAX, { error: 'submission.noteTooLong' }).default(''),
 });
 export type SubmitWorkInput = z.infer<typeof submitWorkSchema>;
 
