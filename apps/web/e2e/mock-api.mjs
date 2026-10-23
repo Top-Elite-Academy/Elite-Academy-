@@ -299,7 +299,7 @@ createServer((request, response) => {
   const teachingRoute = teachingRoutes[pathname];
   if (teachingRoute && request.method === 'GET') {
     response.writeHead(200, { 'content-type': 'application/json' });
-    response.end(JSON.stringify(teachingRoute()));
+    response.end(JSON.stringify(teachingRoute({ session })));
     return;
   }
   const body = isTop

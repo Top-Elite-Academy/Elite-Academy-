@@ -204,6 +204,8 @@ export interface StudentLesson {
   title: string;
   about: string;
   program: { slug: string; title: string };
+  /** "Ask the instructor" opens a thread with them */
+  instructor: { userId: string; firstName: string; lastName: string } | null;
   videos: { id: string; durationSec: number | null; playback: VideoPlayback }[];
   files: { id: string; kind: LessonFileKind; fileName: string; sizeBytes: number }[];
   completed: boolean;

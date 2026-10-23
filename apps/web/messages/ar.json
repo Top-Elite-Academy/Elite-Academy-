@@ -317,6 +317,13 @@
       "tooManyPoints": "لا يمكن أن تزيد النقاط عن الحد الأقصى للمعيار.",
       "incomplete": "أعطِ نقاطًا لكل معيار أولًا.",
       "alreadyReturned": "تمت إعادة هذا العمل مسبقًا."
+    },
+    "message": {
+      "required": "اكتب رسالة.",
+      "tooLong": "يمكن أن تحتوي الرسالة على 2,000 حرف كحد أقصى.",
+      "subjectTooLong": "الموضوع طويل جدًا.",
+      "tooManyFiles": "يمكنك إرفاق 3 ملفات كحد أقصى.",
+      "fileTooLarge": "يمكن أن يكون حجم المرفق 10 ميغابايت كحد أقصى."
     }
   },
   "Levels": {
@@ -1032,7 +1039,8 @@
       "students": "{count, plural, zero {لا طلاب} one {طالب واحد} two {طالبان} few {# طلاب} many {# طالبًا} other {# طالب}}",
       "sessions": "الجلسات والأوقات المتاحة",
       "content": "محتوى الدورة",
-      "grading": "التقييم"
+      "grading": "التقييم",
+      "messages": "الرسائل"
     },
     "greeting": {
       "morning": "صباح الخير، {name}",
@@ -1462,7 +1470,8 @@
     "tabs": {
       "label": "تفاصيل الدرس",
       "about": "عن الدرس",
-      "downloads": "الملفات ({count})"
+      "downloads": "الملفات ({count})",
+      "ask": "اسأل المدرّس"
     },
     "noAbout": "لا يوجد وصف لهذا الدرس.",
     "noFiles": "لا توجد ملفات لهذا الدرس.",
@@ -1476,7 +1485,16 @@
     "completedNote": "أكملت هذا الدرس.",
     "lessonNav": "الدروس",
     "previous": "الدرس السابق",
-    "next": "الدرس التالي"
+    "next": "الدرس التالي",
+    "ask": {
+      "label": "سؤالك إلى {name}",
+      "subject": "الدرس {number}: {title}",
+      "send": "أرسل السؤال",
+      "open": "افتح الرسائل",
+      "sent": "تم الإرسال. سيظهر الرد في الرسائل."
+    },
+    "technicalProblem": "مشكلة تقنية؟",
+    "contactSupport": "تواصل مع الدعم"
   },
   "Grading": {
     "late": "{days, plural, one {متأخر · يوم واحد} two {متأخر · يومان} few {متأخر · # أيام} many {متأخر · # يومًا} other {متأخر · # يوم}}",
@@ -1547,5 +1565,48 @@
     "points": "{points}/{max} نقاط",
     "feedback": "ملاحظات المدرّس",
     "repoPlaceholder": "https://github.com/…"
+  },
+  "Messages": {
+    "title": "الرسائل",
+    "teamTitle": "صندوق الفريق",
+    "studentIntro": "راسل مدرّسيك ومرشديك، أو فريق الدعم، أو فريق المدفوعات.",
+    "staffIntro": "محادثاتك مع طلابك.",
+    "teamIntro": "أسئلة لفريقي الدعم والمدفوعات.",
+    "teams": {
+      "support": "فريق الدعم",
+      "payments": "فريق المدفوعات",
+      "direct": "مباشر"
+    },
+    "filterLabel": "عرض",
+    "filters": {
+      "all": "الكل",
+      "unread": "غير مقروءة ({count})"
+    },
+    "search": "ابحث في الرسائل",
+    "searchPlaceholder": "ابحث في الأسماء والمواضيع والرسائل",
+    "threads": "المحادثات",
+    "noThreads": "لا توجد محادثات هنا.",
+    "pick": "اختر محادثة أو ابدأ واحدة جديدة.",
+    "unread": "{count} جديدة",
+    "unreadBadge": "{count, plural, one {محادثة فيها رسائل جديدة} other {محادثات فيها رسائل جديدة}}",
+    "you": "أنت:",
+    "attachmentOnly": "أرسل ملفًا",
+    "conversationWith": "محادثة مع {name}",
+    "seen": "تمت المشاهدة",
+    "download": "نزّل {name}",
+    "reply": "رسالتك",
+    "attach": "إرفاق ملفات",
+    "attachHint": "حتى {count} ملفات: صور أو PDF أو كود، 10 ميغابايت لكل ملف. تُفحص الملفات من الفيروسات.",
+    "send": "أرسل",
+    "new": {
+      "button": "رسالة جديدة",
+      "title": "رسالة جديدة",
+      "to": "إلى",
+      "subject": "الموضوع",
+      "optional": "(اختياري)",
+      "body": "الرسالة",
+      "cancel": "إلغاء",
+      "send": "أرسل"
+    }
   }
 }

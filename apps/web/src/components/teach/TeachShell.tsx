@@ -7,11 +7,13 @@ import { AreaNavLink } from '@/components/layout/AreaNavLink';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { MAIN_CONTENT_ID, SkipLink } from '@/components/layout/SkipLink';
 import { MentorAvatar } from '@/components/mentoring/MentorAvatar';
+import { UnreadBadge } from '@/components/messages/UnreadBadge';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
 import {
   CalendarIcon,
   CheckCircleIcon,
   HomeIcon,
+  MessageIcon,
   PlayIcon,
   UsersIcon,
 } from '@/components/ui/icons';
@@ -25,6 +27,7 @@ const ICONS: Record<TeachNavIcon, typeof HomeIcon> = {
   sessions: CalendarIcon,
   content: PlayIcon,
   grading: CheckCircleIcon,
+  messages: MessageIcon,
 };
 
 /**
@@ -53,6 +56,7 @@ export function TeachShell({
           <AreaNavLink href={item.href} variant={variant} exact={item.exact}>
             <Icon className="size-5" />
             {t(item.label as 'today')}
+            {item.icon === 'messages' && <UnreadBadge />}
           </AreaNavLink>
         </li>
       );

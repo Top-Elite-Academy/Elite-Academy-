@@ -7,6 +7,7 @@ import { BellIcon } from '@/components/ui/icons';
 import { Link } from '@/i18n/navigation';
 import { apiRequest } from '@/lib/api/client';
 import { cn } from '@/lib/cn';
+import { useLiveEvent } from '@/lib/realtime/live-events';
 import { useNotificationText } from './use-notification-text';
 
 const KEEP = 20;
@@ -34,21 +35,18 @@ export function NotificationBell() {
         if (active) setData(loaded);
       })
       .catch(() => undefined);
-    // The browser reconnects by itself if the connection drops.
-    const source = new EventSource('/api/notifications/stream');
-    source.onmessage = (event: MessageEvent<string>) => {
-      const { notification } = JSON.parse(event.data) as { notification: NotificationView };
-      setData((previous) => ({
-        items: [notification, ...previous.items].slice(0, KEEP),
-        unread: previous.unread + 1,
-      }));
-      setLatest(notification);
-    };
     return () => {
       active = false;
-      source.close();
     };
   }, []);
+
+  useLiveEvent('notification', ({ notification }) => {
+    setData((previous) => ({
+      items: [notification, ...previous.items].slice(0, KEEP),
+      unread: previous.unread + 1,
+    }));
+    setLatest(notification);
+  });
 
   // Close when clicking outside or pressing Escape; focus returns to the bell.
   useEffect(() => {

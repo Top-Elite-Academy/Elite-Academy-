@@ -5,6 +5,7 @@ import { Logo } from '@/components/brand/Logo';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { MAIN_CONTENT_ID, SkipLink } from '@/components/layout/SkipLink';
 import { AreaNavLink } from '@/components/layout/AreaNavLink';
+import { UnreadBadge } from '@/components/messages/UnreadBadge';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
 import {
   BookIcon,
@@ -60,6 +61,7 @@ export function StudentShell({ name, children }: { name: string; children: React
                     >
                       <Icon className="size-5" />
                       {t(`nav.${item.label}` as 'nav.overview')}
+                      {item.icon === 'messages' && <UnreadBadge />}
                     </AreaNavLink>
                   </li>
                 );
@@ -116,7 +118,14 @@ export function StudentShell({ name, children }: { name: string; children: React
                   variant="tab"
                   exact={item.href === STUDENT_ROUTES.overview}
                 >
-                  <Icon className="size-5" />
+                  <span className="relative">
+                    <Icon className="size-5" />
+                    {item.icon === 'messages' && (
+                      <span className="absolute -end-3 -top-2">
+                        <UnreadBadge />
+                      </span>
+                    )}
+                  </span>
                   {t(`nav.${item.label}` as 'nav.home')}
                 </AreaNavLink>
               </li>

@@ -9,6 +9,17 @@ const LESSON_DONE = 'd0000000-0000-4000-8000-000000000011';
 const LESSON_EDIT = 'd0000000-0000-4000-8000-000000000012';
 const LESSON_READY = 'd0000000-0000-4000-8000-000000000013';
 const SUBMISSION = 'f0000000-0000-4000-8000-000000000001';
+const THREAD = 'e1000000-0000-4000-8000-000000000001';
+const MAYA = {
+  userId: '99999999-9999-4999-8999-999999999999',
+  firstName: 'Maya',
+  lastName: 'Rizk',
+};
+const DANIA = {
+  userId: '88888888-8888-4888-8888-888888888888',
+  firstName: 'Dania',
+  lastName: 'Hih',
+};
 const RETURNED = 'f0000000-0000-4000-8000-000000000002';
 const rubric = [
   { id: 'works', title: 'Works correctly', maxPoints: 60 },
@@ -381,6 +392,60 @@ export const teachingRoutes = {
       },
     },
   }),
+  '/api/messages/recipients': ({ session }) =>
+    session === 'instructor'
+      ? [{ kind: 'person', ...MAYA, context: 'FSA-03' }]
+      : [
+          { kind: 'person', ...DANIA, context: 'Full Stack Advanced with AI · FSA-03' },
+          { kind: 'team', team: 'support' },
+          { kind: 'team', team: 'payments' },
+        ],
+  '/api/messages/conversations': ({ session }) => ({
+    items: [
+      {
+        id: THREAD,
+        kind: 'direct',
+        counterpart: counterpart(session),
+        student: MAYA,
+        subject: 'Lesson 12: Authentication and sessions',
+        lastMessage: {
+          body: 'Use a rotating refresh token.',
+          fromMe: session === 'instructor',
+          createdAt: inMinutes(-30),
+        },
+        unread: session === 'instructor' ? 0 : 1,
+      },
+    ],
+    unread: session === 'instructor' ? 0 : 1,
+  }),
+  [`/api/messages/conversations/${THREAD}`]: ({ session }) => ({
+    id: THREAD,
+    kind: 'direct',
+    counterpart: counterpart(session),
+    student: MAYA,
+    subject: 'Lesson 12: Authentication and sessions',
+    readByOthersAt: inMinutes(-5),
+    messages: [
+      threadMessage('m1', MAYA, session !== 'instructor', 'How do refresh tokens rotate?', -90),
+      {
+        ...threadMessage(
+          'm2',
+          DANIA,
+          session === 'instructor',
+          'Use a rotating refresh token.',
+          -30,
+        ),
+        attachments: [
+          {
+            id: 'e2000000-0000-4000-8000-000000000001',
+            fileName: 'diagram.png',
+            sizeBytes: 52_000,
+            scanStatus: 'clean',
+          },
+        ],
+      },
+    ],
+  }),
   '/api/teach/availability': () => ({
     windows: [
       { weekday: 1, startTime: '16:00', endTime: '18:00' },
@@ -451,6 +516,16 @@ export function notificationStream(response) {
 
 export const MOCK_COHORT_ID = FSA03;
 
+function counterpart(session) {
+  return session === 'instructor'
+    ? { kind: 'person', role: 'student', ...MAYA }
+    : { kind: 'person', role: 'staff', ...DANIA };
+}
+
+function threadMessage(id, sender, fromMe, body, minutes) {
+  return { id, sender, fromMe, body, attachments: [], createdAt: inMinutes(minutes) };
+}
+
 function submissionSummary(id, student, status, score, lateDays) {
   return {
     id,
@@ -474,6 +549,7 @@ function studentLesson(id, position, title, extra) {
     title,
     about: 'In this lesson you add sign-in to the Module 3 API.',
     program: { slug: program.slug, title: program.title },
+    instructor: DANIA,
     videos: [],
     files: [],
     completed: false,

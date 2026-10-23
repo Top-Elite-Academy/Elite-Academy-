@@ -317,6 +317,13 @@
       "tooManyPoints": "Points can’t be more than the criterion’s maximum.",
       "incomplete": "Give points for every criterion first.",
       "alreadyReturned": "This work was already returned."
+    },
+    "message": {
+      "required": "Write a message.",
+      "tooLong": "Messages can be at most 2,000 characters.",
+      "subjectTooLong": "The subject is too long.",
+      "tooManyFiles": "You can attach at most 3 files.",
+      "fileTooLarge": "Attachments can be at most 10 MB."
     }
   },
   "Levels": {
@@ -1032,7 +1039,8 @@
       "students": "{count, plural, one {# student} other {# students}}",
       "sessions": "Sessions & availability",
       "content": "Course content",
-      "grading": "Grading"
+      "grading": "Grading",
+      "messages": "Messages"
     },
     "greeting": {
       "morning": "Good morning, {name}",
@@ -1462,7 +1470,8 @@
     "tabs": {
       "label": "Lesson details",
       "about": "About",
-      "downloads": "Downloads ({count})"
+      "downloads": "Downloads ({count})",
+      "ask": "Ask the instructor"
     },
     "noAbout": "No description for this lesson.",
     "noFiles": "No files for this lesson.",
@@ -1476,7 +1485,16 @@
     "completedNote": "You completed this lesson.",
     "lessonNav": "Lessons",
     "previous": "Previous lesson",
-    "next": "Next lesson"
+    "next": "Next lesson",
+    "ask": {
+      "label": "Your question for {name}",
+      "subject": "Lesson {number}: {title}",
+      "send": "Send question",
+      "open": "Open messages",
+      "sent": "Sent. The answer will appear in Messages."
+    },
+    "technicalProblem": "Technical problem?",
+    "contactSupport": "Contact support"
   },
   "Grading": {
     "late": "{days, plural, one {Late · # day} other {Late · # days}}",
@@ -1547,5 +1565,48 @@
     "points": "{points}/{max} points",
     "feedback": "Feedback from your instructor",
     "repoPlaceholder": "https://github.com/…"
+  },
+  "Messages": {
+    "title": "Messages",
+    "teamTitle": "Team inbox",
+    "studentIntro": "Write to your instructors and mentors, the Support team or the Payments team.",
+    "staffIntro": "Conversations with your students.",
+    "teamIntro": "Questions for the Support and Payments teams.",
+    "teams": {
+      "support": "Support team",
+      "payments": "Payments team",
+      "direct": "Direct"
+    },
+    "filterLabel": "Show",
+    "filters": {
+      "all": "All",
+      "unread": "Unread ({count})"
+    },
+    "search": "Search messages",
+    "searchPlaceholder": "Search names, subjects, messages",
+    "threads": "Conversations",
+    "noThreads": "No conversations here.",
+    "pick": "Choose a conversation, or start a new one.",
+    "unread": "{count} new",
+    "unreadBadge": "{count, plural, one {conversation with new messages} other {conversations with new messages}}",
+    "you": "You:",
+    "attachmentOnly": "Sent a file",
+    "conversationWith": "Conversation with {name}",
+    "seen": "Seen",
+    "download": "Download {name}",
+    "reply": "Your message",
+    "attach": "Attach files",
+    "attachHint": "Up to {count} files: images, PDF or code, 10 MB each. Files are virus-scanned.",
+    "send": "Send",
+    "new": {
+      "button": "New message",
+      "title": "New message",
+      "to": "To",
+      "subject": "Subject",
+      "optional": "(optional)",
+      "body": "Message",
+      "cancel": "Cancel",
+      "send": "Send"
+    }
   }
 }

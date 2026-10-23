@@ -12,6 +12,15 @@ import { PrismaService } from '../../common/prisma/prisma.service';
 import { cohortWeek, jerusalemToday } from '../../common/time/cohort-calendar';
 import { VideoProvider } from './video/video-provider';
 
+/** Who "Ask the instructor" writes to (null when the program has no instructor account). */
+const instructorOf = (
+  user:
+    { id: string; firstName: string; lastName: string; deletedAt: Date | null } | null | undefined,
+) =>
+  user && !user.deletedAt
+    ? { userId: user.id, firstName: user.firstName, lastName: user.lastName }
+    : null;
+
 /** Download links work for a few minutes only. */
 const DOWNLOAD_SECONDS = 5 * 60;
 
@@ -107,7 +116,7 @@ export class StudentLessonsService {
     const lesson = await this.prisma.lesson.findFirst({
       where: { id: lessonId, status: 'published' },
       include: {
-        program: true,
+        program: { include: { instructor: { include: { user: true } } } },
         videos: { where: { status: 'ready' }, orderBy: { position: 'asc' } },
         files: { where: { scanStatus: 'clean' }, orderBy: { createdAt: 'asc' } },
       },
@@ -144,6 +153,7 @@ export class StudentLessonsService {
       title: lesson.title,
       about: lesson.about,
       program: { slug: lesson.program.slug, title: localize(lesson.program.title, user.locale) },
+      instructor: instructorOf(lesson.program.instructor?.user),
       videos,
       files: lesson.files.map((file) => ({
         id: file.id,

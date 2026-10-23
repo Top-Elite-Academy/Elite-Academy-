@@ -3,14 +3,18 @@ import { expect, type Page, test as base } from '@playwright/test';
 
 /**
  * Browser-side API calls are mocked per test with page.route (the /api proxy
- * target is fixed when the app is built). The notification bell polls on every
- * signed-in page, so it gets a quiet default here; a test can register its own
+ * target is fixed when the app is built). The notification bell and the unread
+ * messages badge load on every signed-in page, so they get quiet defaults here; a test can register its own
  * routes afterwards, which take priority.
  */
 async function quietNotifications(page: Page) {
   await page.route(
     (url) => url.pathname === '/api/notifications',
     (route) => route.fulfill({ json: { items: [], unread: 0 } }),
+  );
+  await page.route(
+    (url) => url.pathname === '/api/messages/unread',
+    (route) => route.fulfill({ json: { unread: 0 } }),
   );
   await page.route(
     (url) => url.pathname === '/api/notifications/stream',

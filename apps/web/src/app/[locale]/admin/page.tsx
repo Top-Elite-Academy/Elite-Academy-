@@ -8,6 +8,7 @@ export default async function AdminHomePage() {
   await requireUser('/admin', ['admin']);
   const t = await getTranslations('Account');
   const tEnrollments = await getTranslations('AdminEnrollments');
+  const tMessages = await getTranslations('Messages');
 
   return (
     <section className="max-w-2xl rounded-[var(--radius-card)] bg-white p-8 shadow-sm">
@@ -18,6 +19,12 @@ export default async function AdminHomePage() {
         className="mt-6 inline-block font-semibold text-crimson-700 underline"
       >
         {tEnrollments('link')}
+      </Link>
+      <Link
+        href={ADMIN_ROUTES.messages}
+        className="mt-3 block font-semibold text-crimson-700 underline"
+      >
+        {tMessages('teamTitle')}
       </Link>
     </section>
   );

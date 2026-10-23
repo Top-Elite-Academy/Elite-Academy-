@@ -7,16 +7,25 @@ import { DownloadIcon } from '@/components/ui/icons';
 import { lessonFileDownloadPath } from '@/config/navigation';
 import { formatFileSize } from '@/lib/format/file-size';
 import { cn } from '@/lib/cn';
+import { AskInstructor } from './AskInstructor';
 
-const TABS = ['about', 'downloads'] as const;
-type Tab = (typeof TABS)[number];
+const ALL_TABS = ['about', 'downloads', 'ask'] as const;
+type Tab = (typeof ALL_TABS)[number];
 
-/** About and Downloads under the video (WAI-ARIA tabs: arrow keys move between them). */
+/**
+ * About, Downloads and Ask the instructor under the video (WAI-ARIA tabs:
+ * arrow keys move between them).
+ */
 export function LessonTabs({ lesson }: { lesson: StudentLesson }) {
   const t = useTranslations('StudentLesson');
   const id = useId();
   const [active, setActive] = useState<Tab>('about');
-  const buttons = useRef<Record<Tab, HTMLButtonElement | null>>({ about: null, downloads: null });
+  const buttons = useRef<Record<Tab, HTMLButtonElement | null>>({
+    about: null,
+    downloads: null,
+    ask: null,
+  });
+  const TABS = ALL_TABS.filter((tab) => tab !== 'ask' || lesson.instructor !== null);
 
   const onKeyDown = (event: KeyboardEvent) => {
     const step = { ArrowRight: 1, ArrowLeft: -1, Home: -TABS.length, End: TABS.length }[event.key];
@@ -32,7 +41,7 @@ export function LessonTabs({ lesson }: { lesson: StudentLesson }) {
   };
 
   const label = (tab: Tab) =>
-    tab === 'about' ? t('tabs.about') : t('tabs.downloads', { count: lesson.files.length });
+    tab === 'downloads' ? t('tabs.downloads', { count: lesson.files.length }) : t(`tabs.${tab}`);
 
   return (
     <div className="rounded-[var(--radius-card)] border border-border bg-white">
@@ -77,11 +86,17 @@ export function LessonTabs({ lesson }: { lesson: StudentLesson }) {
           hidden={active !== tab}
           className="p-5"
         >
-          {tab === 'about' ? <About text={lesson.about} /> : <Downloads lesson={lesson} />}
+          <Panel tab={tab} lesson={lesson} />
         </div>
       ))}
     </div>
   );
+}
+
+function Panel({ tab, lesson }: { tab: Tab; lesson: StudentLesson }) {
+  if (tab === 'about') return <About text={lesson.about} />;
+  if (tab === 'downloads') return <Downloads lesson={lesson} />;
+  return lesson.instructor && <AskInstructor lesson={lesson} instructor={lesson.instructor} />;
 }
 
 function About({ text }: { text: string }) {

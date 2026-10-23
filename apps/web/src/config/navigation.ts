@@ -181,6 +181,7 @@ export const TEACH_ROUTES = {
   sessions: '/teach/sessions',
   content: '/teach/content',
   grading: '/teach/grading',
+  messages: '/teach/messages',
 } as const;
 
 /** Grading for one cohort (design "Instructor 4"), optionally filtered and with a submission open. */
@@ -211,7 +212,7 @@ export const teachContentPath = (programId: string, lessonId?: string) =>
 export const teachCohortPath = (cohortId: string) =>
   `${TEACH_ROUTES.cohorts}/${encodeURIComponent(cohortId)}`;
 
-export type TeachNavIcon = 'today' | 'cohorts' | 'sessions' | 'content' | 'grading';
+export type TeachNavIcon = 'today' | 'cohorts' | 'sessions' | 'content' | 'grading' | 'messages';
 
 /** Instructor sidebar. Labels are keys under "Teach.nav". */
 export const TEACH_NAV: { label: string; href: string; icon: TeachNavIcon; exact?: boolean }[] = [
@@ -220,12 +221,33 @@ export const TEACH_NAV: { label: string; href: string; icon: TeachNavIcon; exact
   { label: 'sessions', href: TEACH_ROUTES.sessions, icon: 'sessions' },
   { label: 'content', href: TEACH_ROUTES.content, icon: 'content' },
   { label: 'grading', href: TEACH_ROUTES.grading, icon: 'grading' },
+  { label: 'messages', href: TEACH_ROUTES.messages, icon: 'messages' },
 ];
+
+/**
+ * Messages in any area (spec §4.9): the inbox at `base`, optionally with a
+ * thread open, a filter, a search, or the "New message" dialog for a recipient.
+ */
+export const messagesPath = (
+  base: string,
+  options: { thread?: string; filter?: string; q?: string; to?: string } = {},
+) => {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(options)) if (value) query.set(key, value);
+  const text = query.toString();
+  return text ? `${base}?${text}` : base;
+};
+
+/** An attachment of a message (the API answers with a short-lived link). */
+export const messageAttachmentPath = (attachmentId: string) =>
+  `/api/messages/attachments/${encodeURIComponent(attachmentId)}/download`;
 
 /** Admin pages built so far. */
 export const ADMIN_ROUTES = {
   home: '/admin',
   enrollments: '/admin/enrollments',
+  /** Team inbox: Support (admins) and Payments (admins and sales) */
+  messages: '/admin/messages',
 } as const;
 
 /** A student's progress page inside one of the instructor's cohorts (design "Instructor 3"). */

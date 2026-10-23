@@ -317,6 +317,13 @@
       "tooManyPoints": "הנקודות לא יכולות לעבור את המקסימום של הקריטריון.",
       "incomplete": "יש לתת נקודות לכל קריטריון קודם.",
       "alreadyReturned": "העבודה כבר הוחזרה."
+    },
+    "message": {
+      "required": "יש לכתוב הודעה.",
+      "tooLong": "הודעה יכולה להכיל עד 2,000 תווים.",
+      "subjectTooLong": "הנושא ארוך מדי.",
+      "tooManyFiles": "אפשר לצרף עד 3 קבצים.",
+      "fileTooLarge": "קובץ מצורף יכול להיות עד 10MB."
     }
   },
   "Levels": {
@@ -1032,7 +1039,8 @@
       "students": "{count, plural, one {סטודנט/ית אחד/ת} other {# סטודנטים}}",
       "sessions": "פגישות וזמינות",
       "content": "תוכן הקורס",
-      "grading": "בדיקת עבודות"
+      "grading": "בדיקת עבודות",
+      "messages": "הודעות"
     },
     "greeting": {
       "morning": "בוקר טוב, {name}",
@@ -1462,7 +1470,8 @@
     "tabs": {
       "label": "פרטי השיעור",
       "about": "על השיעור",
-      "downloads": "קבצים ({count})"
+      "downloads": "קבצים ({count})",
+      "ask": "שאלה למרצה"
     },
     "noAbout": "אין תיאור לשיעור הזה.",
     "noFiles": "אין קבצים לשיעור הזה.",
@@ -1476,7 +1485,16 @@
     "completedNote": "השלמת את השיעור הזה.",
     "lessonNav": "שיעורים",
     "previous": "השיעור הקודם",
-    "next": "השיעור הבא"
+    "next": "השיעור הבא",
+    "ask": {
+      "label": "השאלה שלך ל{name}",
+      "subject": "שיעור {number}: {title}",
+      "send": "לשלוח שאלה",
+      "open": "לפתוח את ההודעות",
+      "sent": "נשלח. התשובה תופיע בהודעות."
+    },
+    "technicalProblem": "בעיה טכנית?",
+    "contactSupport": "לפנות לתמיכה"
   },
   "Grading": {
     "late": "{days, plural, one {באיחור · יום אחד} two {באיחור · יומיים} other {באיחור · # ימים}}",
@@ -1547,5 +1565,48 @@
     "points": "{points}/{max} נקודות",
     "feedback": "משוב מהמרצה",
     "repoPlaceholder": "https://github.com/…"
+  },
+  "Messages": {
+    "title": "הודעות",
+    "teamTitle": "תיבת הצוות",
+    "studentIntro": "אפשר לכתוב למרצים ולמנטורים שלך, לצוות התמיכה או לצוות התשלומים.",
+    "staffIntro": "השיחות שלך עם הסטודנטים.",
+    "teamIntro": "שאלות לצוותי התמיכה והתשלומים.",
+    "teams": {
+      "support": "צוות התמיכה",
+      "payments": "צוות התשלומים",
+      "direct": "ישיר"
+    },
+    "filterLabel": "הצגה",
+    "filters": {
+      "all": "הכול",
+      "unread": "לא נקראו ({count})"
+    },
+    "search": "חיפוש בהודעות",
+    "searchPlaceholder": "חיפוש שמות, נושאים והודעות",
+    "threads": "שיחות",
+    "noThreads": "אין כאן שיחות.",
+    "pick": "יש לבחור שיחה או להתחיל שיחה חדשה.",
+    "unread": "{count} חדשות",
+    "unreadBadge": "{count, plural, one {שיחה עם הודעות חדשות} other {שיחות עם הודעות חדשות}}",
+    "you": "את/ה:",
+    "attachmentOnly": "נשלח קובץ",
+    "conversationWith": "שיחה עם {name}",
+    "seen": "נצפה",
+    "download": "להוריד את {name}",
+    "reply": "ההודעה שלך",
+    "attach": "צירוף קבצים",
+    "attachHint": "עד {count} קבצים: תמונות, PDF או קוד, עד 10MB לקובץ. הקבצים נסרקים לווירוסים.",
+    "send": "לשלוח",
+    "new": {
+      "button": "הודעה חדשה",
+      "title": "הודעה חדשה",
+      "to": "אל",
+      "subject": "נושא",
+      "optional": "(לא חובה)",
+      "body": "הודעה",
+      "cancel": "ביטול",
+      "send": "לשלוח"
+    }
   }
 }

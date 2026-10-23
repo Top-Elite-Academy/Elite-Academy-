@@ -8,7 +8,8 @@ import { LessonActions } from '@/components/student/course/LessonActions';
 import { LessonTabs } from '@/components/student/course/LessonTabs';
 import { LessonVideo } from '@/components/student/course/LessonVideo';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { STUDENT_ROUTES, studentCoursePath } from '@/config/navigation';
+import { messagesPath, STUDENT_ROUTES, studentCoursePath } from '@/config/navigation';
+import { Link } from '@/i18n/navigation';
 import { getAsUser } from '@/lib/api/server';
 import { isBookingId } from '@/lib/booking/booking-state';
 import { lessonNeighbours } from '@/lib/course/outline';
@@ -70,6 +71,15 @@ export default async function StudentLessonPage({ params }: { params: Params }) 
           {exercise?.assignment && (
             <ExerciseCard lessonId={lesson.id} assignment={exercise.assignment} />
           )}
+          <p className="text-sm text-ink-muted">
+            {t('technicalProblem')}{' '}
+            <Link
+              href={messagesPath(STUDENT_ROUTES.messages, { to: 'support' })}
+              className="font-semibold text-crimson-700 underline"
+            >
+              {t('contactSupport')}
+            </Link>
+          </p>
         </div>
         <aside>
           <CourseOutlineNav outline={outline} currentLessonId={lesson.id} />
