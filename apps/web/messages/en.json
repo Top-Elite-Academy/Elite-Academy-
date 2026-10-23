@@ -1053,8 +1053,11 @@
       "students": "My students",
       "pending": "{count, plural, =0 {No one waiting} one {# waiting for confirmation} other {# waiting for confirmation}}",
       "sessions": "Sessions this week",
-      "cohorts": "Active cohorts",
-      "cohortsNote": "{count, plural, =0 {None running yet} one {# running now} other {# running now}}"
+      "toGrade": "Submissions to grade",
+      "attendance": "Average attendance",
+      "attendanceNote": "Confirmed students, marked classes",
+      "percent": "{value}%",
+      "noData": "—"
     },
     "schedule": {
       "title": "Today’s schedule",
@@ -1120,6 +1123,16 @@
       "pendingNote": "Pending students see the class only after admin or sales confirm them.",
       "noStudents": "No students yet.",
       "noMatch": "No students match."
+    },
+    "attention": {
+      "title": "Needs your attention",
+      "empty": "Everyone is on track.",
+      "detail": "{cohort} · attendance {rate}%"
+    },
+    "toGrade": {
+      "title": "Submissions to grade",
+      "empty": "Nothing waiting for a grade.",
+      "detail": "{title} · handed in {when}"
     }
   },
   "Notifications": {

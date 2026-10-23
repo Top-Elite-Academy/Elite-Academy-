@@ -6,6 +6,8 @@ import { AnnouncementDialog } from '@/components/teach/AnnouncementDialog';
 import { AnnouncementList } from '@/components/announcements/AnnouncementList';
 import { ScheduleList } from '@/components/teach/ScheduleList';
 import { StatCard } from '@/components/teach/StatCard';
+import { GradeQueue } from '@/components/teach/today/GradeQueue';
+import { NeedsAttention } from '@/components/teach/today/NeedsAttention';
 import { TodayHeading } from '@/components/teach/TodayHeading';
 import { TEACH_ROUTES } from '@/config/navigation';
 import { getAsUser } from '@/lib/api/server';
@@ -39,18 +41,32 @@ export default async function TeachTodayPage() {
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label={t('stats.students')}
           value={today.stats.students}
           note={t('stats.pending', { count: today.stats.pending })}
         />
-        <StatCard label={t('stats.sessions')} value={today.stats.sessionsThisWeek} />
+        <StatCard label={t('stats.toGrade')} value={today.stats.toGrade} />
         <StatCard
-          label={t('stats.cohorts')}
-          value={today.cohorts.length}
-          note={t('stats.cohortsNote', { count: running.length })}
+          label={t('stats.attendance')}
+          value={
+            today.stats.averageAttendance === null
+              ? t('stats.noData')
+              : t('stats.percent', { value: today.stats.averageAttendance })
+          }
+          note={t('stats.attendanceNote')}
         />
+        <StatCard label={t('stats.sessions')} value={today.stats.sessionsThisWeek} />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <DashboardCard title={t('attention.title')}>
+          <NeedsAttention items={today.needsAttention} />
+        </DashboardCard>
+        <DashboardCard title={t('toGrade.title')}>
+          <GradeQueue items={today.toGrade} />
+        </DashboardCard>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-5">

@@ -150,7 +150,8 @@ test.describe('course content (design "Instructor 6")', () => {
     await expect(dialog.getByText('Write a title.')).toBeVisible();
     await dialog.getByLabel('Lesson title').fill('Retrieval with pgvector');
     await dialog.getByRole('button', { name: 'Add lesson' }).click();
-    await expect(page).toHaveURL(new RegExp(`lesson=${READY}$`));
+    // Opening the new lesson renders the whole page on the server; slower when the suite runs in parallel.
+    await expect(page).toHaveURL(new RegExp(`lesson=${READY}$`), { timeout: 15_000 });
     expect(sent.find((call) => call.path.endsWith('/lessons'))?.json).toEqual({
       title: 'Retrieval with pgvector',
       moduleId: 'b0000000-0000-4000-8000-000000000003',

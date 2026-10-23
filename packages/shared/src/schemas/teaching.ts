@@ -102,10 +102,44 @@ export interface TeachScheduleItem {
 
 export interface TeachToday {
   cohorts: TeachCohort[];
-  stats: { students: number; pending: number; sessionsThisWeek: number };
+  stats: {
+    students: number;
+    pending: number;
+    sessionsThisWeek: number;
+    /** Hand-ins waiting for a grade */
+    toGrade: number;
+    /** Average attendance of confirmed students with marked classes, 0-100 */
+    averageAttendance: number | null;
+  };
   /** Today and tomorrow, Jerusalem time. */
   schedule: TeachScheduleItem[];
   announcements: AnnouncementView[];
+  /** Students at risk or behind (attendance), at risk first */
+  needsAttention: AttentionItem[];
+  /** The oldest hand-ins waiting for a grade */
+  toGrade: GradeQueueItem[];
+}
+
+/** "Needs your attention" (design "Instructor 1"). */
+export interface AttentionItem {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  cohortId: string;
+  cohortName: string;
+  status: 'behind' | 'at_risk';
+  /** Attendance, 0-100 */
+  rate: number;
+}
+
+/** "Submissions to grade" (design "Instructor 1"). */
+export interface GradeQueueItem {
+  id: string;
+  cohortId: string;
+  student: { firstName: string; lastName: string };
+  title: string;
+  submittedAt: string;
+  lateDays: number;
 }
 
 /** For admin and sales: who is waiting to be confirmed. */

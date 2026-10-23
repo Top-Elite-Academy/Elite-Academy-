@@ -21,6 +21,7 @@ import {
   toAnnouncementView,
   toTeachCohort,
 } from './teaching.mapper';
+import { TodayInsightsService } from './today-insights.service';
 
 const TODAY_ANNOUNCEMENTS = 5;
 const WEEK_DAYS = 7;
@@ -31,7 +32,10 @@ const WEEK_DAYS = 7;
  */
 @Injectable()
 export class TeachingService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly insights: TodayInsightsService,
+  ) {}
 
   private scope(user: AuthUser): Prisma.CohortWhereInput {
     return user.roles.includes('admin') ? {} : { program: { instructor: { userId: user.id } } };
@@ -108,7 +112,7 @@ export class TeachingService {
   async today(user: AuthUser): Promise<TeachToday> {
     const cohorts = await this.cohorts(user);
     const today = jerusalemToday();
-    const [schedule, week, announcements] = await Promise.all([
+    const [schedule, week, announcements, insights] = await Promise.all([
       this.schedule(user, cohorts, today, 2),
       this.schedule(user, cohorts, today, WEEK_DAYS),
       this.prisma.announcement.findMany({
@@ -117,6 +121,7 @@ export class TeachingService {
         orderBy: { createdAt: 'desc' },
         take: TODAY_ANNOUNCEMENTS,
       }),
+      this.insights.insights(cohorts),
     ]);
     return {
       cohorts,
@@ -124,9 +129,13 @@ export class TeachingService {
         students: cohorts.reduce((sum, cohort) => sum + cohort.confirmed, 0),
         pending: cohorts.reduce((sum, cohort) => sum + cohort.pending, 0),
         sessionsThisWeek: week.length,
+        toGrade: insights.toGradeCount,
+        averageAttendance: insights.averageAttendance,
       },
       schedule,
       announcements: announcements.map(toAnnouncementView),
+      needsAttention: insights.needsAttention,
+      toGrade: insights.toGrade,
     };
   }
 

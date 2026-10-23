@@ -272,3 +272,37 @@ describe('exercises and grading (design "Instructor 4")', () => {
     expect((await maya.get(`/api/teach/submissions/${submissionId}`)).status).toBe(403);
   });
 });
+
+describe('Today (design "Instructor 1")', () => {
+  it('shows hand-ins to grade, students who need attention and average attendance', async () => {
+    await exercise();
+    await maya.multipart(`/api/me/lessons/${lessonId}/submission`, 'files', [], {
+      repoUrl: REPO,
+    });
+    const danaRow = await t.prisma.user.findFirstOrThrow({ where: { email: 'dania@test.dev' } });
+    // Maya came to 1 of 3 classes: at risk.
+    await t.prisma.attendance.createMany({
+      data: ['2030-01-07', '2030-01-09', '2030-01-14'].map((day, index) => ({
+        cohortId,
+        userId: mayaId,
+        classDate: new Date(`${day}T00:00:00Z`),
+        status: index === 0 ? 'present' : 'absent',
+        markedById: danaRow.id,
+      })),
+    });
+
+    const today = await teacher.get('/api/teach/today');
+    expect(today.body.stats).toMatchObject({ toGrade: 1, averageAttendance: 33 });
+    expect(today.body.toGrade).toEqual([
+      expect.objectContaining({ cohortId, title: 'Auth API', lateDays: 0 }),
+    ]);
+    expect(today.body.needsAttention).toEqual([
+      expect.objectContaining({
+        userId: mayaId,
+        cohortName: 'FSA-03',
+        status: 'at_risk',
+        rate: 33,
+      }),
+    ]);
+  });
+});

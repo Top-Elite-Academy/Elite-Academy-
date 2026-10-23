@@ -154,6 +154,22 @@ test.describe('grading (design "Instructor 4")', () => {
     await expect(graded.getByRole('button', { name: 'Hand in' })).toHaveCount(0);
   });
 
+  test('Today shows what to grade and who needs attention', async ({ page }) => {
+    await signIn(page, 'instructor');
+    await page.goto('/en/teach');
+    await expect(page.getByText('Average attendance')).toBeVisible();
+    await expect(page.getByText('77%')).toBeVisible();
+    const attention = page.getByRole('region', { name: 'Needs your attention' });
+    await expect(attention.getByRole('link').first()).toHaveText('Ahmad Zeidan');
+    await expect(attention).toContainText('FSA-03 · attendance 50%');
+    const queue = page.getByRole('region', { name: 'Submissions to grade' });
+    await expect(queue.getByRole('link', { name: 'Lina Hamdan' })).toHaveAttribute(
+      'href',
+      `/en/teach/grading?cohort=${COHORT}&submission=${SUBMISSION}`,
+    );
+    await expect(queue).toContainText('Late · 2 days');
+  });
+
   test('has no automatically detectable accessibility issues (en, ar)', async ({ page }) => {
     await signIn(page, 'instructor');
     for (const path of [gradingPath, gradingPath.replace('/en/', '/ar/')]) {

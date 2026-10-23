@@ -138,7 +138,21 @@ export const teachingRoutes = {
   }),
   '/api/teach/today': () => ({
     cohorts: [running, upcoming],
-    stats: { students: 3, pending: 1, sessionsThisWeek: 3 },
+    stats: { students: 3, pending: 1, sessionsThisWeek: 3, toGrade: 1, averageAttendance: 77 },
+    needsAttention: [
+      { ...attention(students[2], 'at_risk'), rate: 50 },
+      { ...attention(students[1], 'behind'), rate: 80 },
+    ],
+    toGrade: [
+      {
+        id: SUBMISSION,
+        cohortId: FSA03,
+        student: { firstName: 'Lina', lastName: 'Hamdan' },
+        title: 'Auth API',
+        submittedAt: inMinutes(-60 * 3),
+        lateDays: 2,
+      },
+    ],
     schedule: [
       {
         kind: 'liveClass',
@@ -515,6 +529,11 @@ export function notificationStream(response) {
 }
 
 export const MOCK_COHORT_ID = FSA03;
+
+function attention(student, status) {
+  const { userId, firstName, lastName } = student;
+  return { userId, firstName, lastName, cohortId: FSA03, cohortName: 'FSA-03', status };
+}
 
 function counterpart(session) {
   return session === 'instructor'
