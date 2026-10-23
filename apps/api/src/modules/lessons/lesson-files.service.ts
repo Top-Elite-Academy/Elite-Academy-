@@ -19,16 +19,26 @@ import { toFileView } from './lessons.mapper';
 import { TeachLessonsService } from './teach-lessons.service';
 
 export const FILE_SCAN_QUEUE = 'file-scan';
+export type ScanTarget = 'lesson' | 'submission';
 export interface FileScanJob {
   fileId: string;
+  /** Which table the file is in (jobs queued before submissions existed have none: lesson). */
+  target?: ScanTarget;
 }
+
+/** Retries for a scan job; after the last one the file is marked failed. */
+export const SCAN_JOB_OPTIONS = {
+  attempts: 3,
+  backoff: { type: 'exponential', delay: 10_000 },
+  removeOnComplete: true,
+} as const;
 
 /** Where a file waits until the virus scan, and where it lives afterwards. */
 export const quarantineKey = (fileId: string) => `quarantine/${fileId}`;
 export const approvedKey = (lessonId: string, fileId: string) => `lessons/${lessonId}/${fileId}`;
 
 /** Only the base name, without path parts or control characters. */
-function safeFileName(original: string): string {
+export function safeFileName(original: string): string {
   // Both separators: a Windows browser may send "C:\fakepath\notes.pdf".
   const base = original.split(/[\\/]/).pop() ?? '';
   return base.replace(/\p{Cc}/gu, '').slice(0, 200) || 'file';
@@ -96,15 +106,7 @@ export class LessonFilesService {
         where: { id: row.id },
         data: { storageKey: quarantineKey(row.id) },
       });
-      await this.queue.add(
-        'scan',
-        { fileId: row.id },
-        {
-          attempts: 3,
-          backoff: { type: 'exponential', delay: 10_000 },
-          removeOnComplete: true,
-        },
-      );
+      await this.queue.add('scan', { fileId: row.id, target: 'lesson' }, SCAN_JOB_OPTIONS);
       await this.audit.record({
         actorId: user.id,
         action: 'lessonFile.uploaded',

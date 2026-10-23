@@ -10,5 +10,6 @@ import { TeachingService } from './teaching.service';
 @Module({
   controllers: [TeachingController, MyEnrollmentsController, StaffEnrollmentsController],
   providers: [TeachingService, EnrollmentsService, AnnouncementsService, ProgressService],
+  exports: [TeachingService],
 })
 export class TeachingModule {}

@@ -137,6 +137,19 @@ export type NotificationView =
       data: SessionNotificationData;
       readAt: string | null;
       createdAt: string;
+    }
+  | {
+      id: string;
+      type: 'submission_returned';
+      data: {
+        submissionId: string;
+        lessonId: string;
+        programSlug: string;
+        title: string;
+        score: number;
+      };
+      readAt: string | null;
+      createdAt: string;
     };
 
 /** About one session; "audience" decides whether the link opens the student or mentor page. */

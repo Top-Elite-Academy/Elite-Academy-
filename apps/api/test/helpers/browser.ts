@@ -58,6 +58,22 @@ export class Browser {
     return request.attach('file', Buffer.from(file.content), file.name);
   }
 
+  /** A multipart form with any number of files under one field name (none is fine too). */
+  multipart(
+    path: string,
+    field: string,
+    files: { name: string; content: Buffer | string }[],
+    fields: Record<string, string> = {},
+  ) {
+    let request = this.agent
+      .post(path)
+      .set('Origin', WEB_ORIGIN)
+      .set('X-CSRF-Token', this.csrfToken);
+    for (const [name, value] of Object.entries(fields)) request = request.field(name, value);
+    for (const file of files) request = request.attach(field, Buffer.from(file.content), file.name);
+    return request;
+  }
+
   /** A raw body (e.g. a video file) sent with PUT. */
   putRaw(path: string, body: Buffer, contentType: string) {
     return this.agent

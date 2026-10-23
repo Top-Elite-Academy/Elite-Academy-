@@ -36,5 +36,6 @@ import { VideoProvider } from './video/video-provider';
       ) => (config.video.provider === 'cloudflare' ? cloudflare : local),
     },
   ],
+  exports: [TeachLessonsService, StudentLessonsService],
 })
 export class LessonsModule {}

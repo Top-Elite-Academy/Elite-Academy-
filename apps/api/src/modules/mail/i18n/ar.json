@@ -10,5 +10,9 @@
   "bookingConfirmed": {
     "subject": "تم تأكيد جلستك",
     "body": "مرحبًا {firstName}،\n\nتم تأكيد جلستك مع {mentorName} في {when} ({timeZone}).\nسيظهر رابط اللقاء في لوحة التحكم قبل الجلسة:\n\n{link}\n\nيمكنك تغيير الموعد أو الإلغاء مجانًا حتى 24 ساعة قبل الجلسة.\n\nأكاديمية إيليت تك · Scientia et Innovatio"
+  },
+  "feedbackReturned": {
+    "subject": "تم تقييم تمرينك: {title}",
+    "body": "مرحبًا {firstName}،\n\nأعاد المدرّس عملك في \"{title}\" بعلامة {score}/100 مع ملاحظات.\nاقرأها هنا:\n\n{link}\n\nأكاديمية إيليت تك · Scientia et Innovatio"
   }
 }

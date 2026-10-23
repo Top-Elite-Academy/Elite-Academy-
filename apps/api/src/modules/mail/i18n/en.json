@@ -10,5 +10,9 @@
   "bookingConfirmed": {
     "subject": "Your session is confirmed",
     "body": "Hello {firstName},\n\nYour session with {mentorName} is confirmed for {when} ({timeZone}).\nThe meeting link will appear in your dashboard before the session:\n\n{link}\n\nYou can reschedule or cancel free of charge up to 24 hours before.\n\nElite Tech Academy · Scientia et Innovatio"
+  },
+  "feedbackReturned": {
+    "subject": "Your exercise was graded: {title}",
+    "body": "Hello {firstName},\n\nYour instructor returned your work on \"{title}\" with a grade of {score}/100 and feedback.\nRead it here:\n\n{link}\n\nElite Tech Academy · Scientia et Innovatio"
   }
 }

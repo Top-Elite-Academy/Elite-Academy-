@@ -88,6 +88,8 @@ model User {
   notesAbout     StudentNote[]    @relation("NoteStudent")
   notesWritten   StudentNote[]    @relation("NoteAuthor")
   lessonProgress LessonProgress[]
+  submissions    Submission[]     @relation("SubmissionStudent")
+  graded         Submission[]     @relation("SubmissionGrader")
 
   @@map("users")
 }
@@ -282,6 +284,7 @@ model Cohort {
   announcements Announcement[]
   attendance    Attendance[]
   studentNotes  StudentNote[]
+  submissions   Submission[]
 
   @@index([programId, startDate])
   @@map("cohorts")
@@ -728,6 +731,7 @@ enum NotificationType {
   session_cancelled
   session_rescheduled
   session_notes
+  submission_returned
 }
 
 /// In-app notification (bell). "data" holds ids and names; the web app writes the sentence
@@ -838,8 +842,9 @@ model Lesson {
   program  Program          @relation(fields: [programId], references: [id], onDelete: Cascade)
   module   ProgramModule?   @relation(fields: [moduleId], references: [id], onDelete: SetNull)
   videos   LessonVideo[]
-  files    LessonFile[]
-  progress LessonProgress[]
+  files      LessonFile[]
+  progress   LessonProgress[]
+  assignment Assignment?
 
   @@index([programId, position])
   @@map("lessons")
@@ -918,4 +923,81 @@ model LessonProgress {
 
   @@id([userId, lessonId])
   @@map("lesson_progress")
+}
+
+/// The exercise of a lesson that students hand in (design "Instructor 4"). The
+/// deadline is a week of each cohort, so every cohort gets its own date.
+model Assignment {
+  id           String   @id @default(uuid()) @db.Uuid
+  lessonId     String   @unique @map("lesson_id") @db.Uuid
+  title        String
+  instructions String   @default("")
+  /// Due at the end of this week of the student's cohort (Saturday 23:59, Jerusalem)
+  dueWeek      Int      @map("due_week")
+  /// [{id, title, maxPoints}]; the points add up to 100
+  rubric       Json
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  lesson      Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  submissions Submission[]
+
+  @@map("assignments")
+}
+
+enum SubmissionStatus {
+  /// Handed in; the student can still change it
+  submitted
+  /// Graded and returned: the student sees the grade and feedback
+  returned
+}
+
+/// A student's work for an assignment. Late work is accepted and shown as late.
+model Submission {
+  id           String           @id @default(uuid()) @db.Uuid
+  assignmentId String           @map("assignment_id") @db.Uuid
+  userId       String           @map("user_id") @db.Uuid
+  cohortId     String           @map("cohort_id") @db.Uuid
+  repoUrl      String?          @map("repo_url")
+  note         String           @default("")
+  submittedAt  DateTime         @map("submitted_at")
+  status       SubmissionStatus @default(submitted)
+  /// [{criterionId, points, comment}] — a draft until returned
+  scores       Json?
+  feedback     String           @default("")
+  /// Sum of the points, 0–100
+  score        Int?
+  gradedById   String?          @map("graded_by_id") @db.Uuid
+  gradedAt     DateTime?        @map("graded_at")
+  returnedAt   DateTime?        @map("returned_at")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  assignment Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  user       User             @relation("SubmissionStudent", fields: [userId], references: [id], onDelete: Cascade)
+  cohort     Cohort           @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  gradedBy   User?            @relation("SubmissionGrader", fields: [gradedById], references: [id], onDelete: SetNull)
+  files      SubmissionFile[]
+
+  @@unique([assignmentId, userId])
+  @@index([cohortId, status])
+  @@map("submissions")
+}
+
+/// A file handed in with a submission; downloadable only once the virus scan says clean.
+model SubmissionFile {
+  id            String     @id @default(uuid()) @db.Uuid
+  submissionId  String     @map("submission_id") @db.Uuid
+  fileName      String     @map("file_name")
+  contentType   String     @map("content_type")
+  sizeBytes     Int        @map("size_bytes")
+  storageKey    String     @map("storage_key")
+  scanStatus    ScanStatus @default(scanning) @map("scan_status")
+  scanSignature String?    @map("scan_signature")
+  createdAt     DateTime   @default(now()) @map("created_at")
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId])
+  @@map("submission_files")
 }

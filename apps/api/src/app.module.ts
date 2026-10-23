@@ -11,6 +11,7 @@ import { CsrfGuard } from './common/security/csrf.guard';
 import { IpRateLimitGuard, UserRateLimitGuard } from './common/security/rate-limit.guards';
 import { AppConfig } from './config/app-config';
 import { AppConfigModule } from './config/app-config.module';
+import { AssignmentsModule } from './modules/assignments/assignments.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BookingModule } from './modules/booking/booking.module';
@@ -52,6 +53,7 @@ import { UsersModule } from './modules/users/users.module';
     NotificationsModule,
     TeachingModule,
     LessonsModule,
+    AssignmentsModule,
   ],
   controllers: [HealthController],
   providers: [

@@ -16,6 +16,7 @@ export interface MailParams {
     timeZone: string;
     link: string;
   };
+  feedbackReturned: { firstName: string; title: string; score: number; link: string };
 }
 
 export interface MailMessage<T extends MailTemplate = MailTemplate> {

@@ -28,7 +28,7 @@ export class StudentLessonsService {
   ) {}
 
   /** The student's furthest week in a confirmed cohort of the program; 404 if not enrolled. */
-  private async access(user: AuthUser, programId: string) {
+  async access(user: AuthUser, programId: string) {
     const enrollments = await this.prisma.enrollment.findMany({
       where: { userId: user.id, status: 'confirmed', cohort: { programId } },
       include: { cohort: { include: { program: { select: { lengthWeeks: true } } } } },
@@ -103,7 +103,7 @@ export class StudentLessonsService {
   }
 
   /** A published, open lesson of the student's program, or 404 (never reveals drafts). */
-  private async openLesson(user: AuthUser, lessonId: string) {
+  async openLesson(user: AuthUser, lessonId: string) {
     const lesson = await this.prisma.lesson.findFirst({
       where: { id: lessonId, status: 'published' },
       include: {

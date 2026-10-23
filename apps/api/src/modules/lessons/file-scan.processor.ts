@@ -11,11 +11,11 @@ export class FileScanProcessor extends WorkerHost {
   }
 
   async process(job: Job<FileScanJob>): Promise<void> {
-    await this.scans.scan(job.data.fileId);
+    await this.scans.scan(job.data);
   }
 
   @OnWorkerEvent('failed')
   async onFailed(job: Job<FileScanJob>): Promise<void> {
-    if (job.attemptsMade >= (job.opts.attempts ?? 1)) await this.scans.markFailed(job.data.fileId);
+    if (job.attemptsMade >= (job.opts.attempts ?? 1)) await this.scans.markFailed(job.data);
   }
 }
