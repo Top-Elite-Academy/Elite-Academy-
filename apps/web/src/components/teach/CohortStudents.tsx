@@ -1,7 +1,7 @@
 'use client';
 
 import type { CohortStudent } from '@eta/shared';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { useId, useState } from 'react';
 import { MentorAvatar } from '@/components/mentoring/MentorAvatar';
 import { Badge } from '@/components/ui/Badge';
@@ -10,6 +10,9 @@ import { teachStudentPath } from '@/config/navigation';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/cn';
 import { ProgressBadge } from './ProgressBadge';
+
+/** Relative times ("2 minutes ago") move on once a minute. */
+const NOW_INTERVAL = 60_000;
 
 type Filter = 'all' | 'on_track' | 'behind' | 'at_risk' | 'pending';
 const FILTERS: Filter[] = ['all', 'on_track', 'behind', 'at_risk', 'pending'];
@@ -29,6 +32,7 @@ export function CohortStudents({
   const t = useTranslations('Teach.cohort');
   const tProgress = useTranslations('TeachProgress');
   const format = useFormatter();
+  const now = useNow({ updateInterval: NOW_INTERVAL });
   const [filter, setFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
   const searchId = useId();
@@ -138,7 +142,7 @@ export function CohortStudents({
                     </td>
                     <td className="hidden py-3 pe-4 text-ink-muted md:table-cell">
                       {student.lastActiveAt
-                        ? format.relativeTime(new Date(student.lastActiveAt))
+                        ? format.relativeTime(new Date(student.lastActiveAt), now)
                         : tProgress('never')}
                     </td>
                     <td className="py-3 pe-4">

@@ -1,7 +1,7 @@
 'use client';
 
 import type { NotificationsResponse, NotificationView } from '@eta/shared';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, useState } from 'react';
 import { BellIcon } from '@/components/ui/icons';
 import { Link } from '@/i18n/navigation';
@@ -9,6 +9,9 @@ import { apiRequest } from '@/lib/api/client';
 import { cn } from '@/lib/cn';
 import { useLiveEvent } from '@/lib/realtime/live-events';
 import { useNotificationText } from './use-notification-text';
+
+/** Relative times ("2 minutes ago") move on once a minute. */
+const NOW_INTERVAL = 60_000;
 
 const KEEP = 20;
 
@@ -20,6 +23,7 @@ const KEEP = 20;
 export function NotificationBell() {
   const t = useTranslations('Notifications');
   const format = useFormatter();
+  const now = useNow({ updateInterval: NOW_INTERVAL });
   const { text, href } = useNotificationText();
   const [data, setData] = useState<NotificationsResponse>({ items: [], unread: 0 });
   const [latest, setLatest] = useState<NotificationView | null>(null);
@@ -150,7 +154,7 @@ export function NotificationBell() {
                     <span className="min-w-0">
                       <span className="block text-ink">{text(item)}</span>
                       <span className="block text-xs text-ink-muted">
-                        {format.relativeTime(new Date(item.createdAt))}
+                        {format.relativeTime(new Date(item.createdAt), now)}
                       </span>
                     </span>
                   </Link>

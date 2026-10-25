@@ -8,7 +8,7 @@ import {
   type TeachLessonList,
   updateLessonSchema,
 } from '@eta/shared';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { FormAlert } from '@/components/forms/FormAlert';
 import { SelectField } from '@/components/forms/SelectField';
@@ -24,6 +24,9 @@ import { PublishBar } from './PublishBar';
 import { useProcessingRefresh } from './use-processing-refresh';
 import { VideoSection } from './VideoSection';
 
+/** Relative times ("2 minutes ago") move on once a minute. */
+const NOW_INTERVAL = 60_000;
+
 /** The lesson editor (design "Instructor 6", right column). */
 export function LessonEditor({
   lesson,
@@ -36,6 +39,7 @@ export function LessonEditor({
 }) {
   const t = useTranslations('TeachContent.editor');
   const format = useFormatter();
+  const now = useNow({ updateInterval: NOW_INTERVAL });
   const router = useRouter();
   const { fieldErrors, formError, submitting, onSubmit } = useApiForm(updateLessonSchema);
   const [saved, setSaved] = useState(false);
@@ -114,7 +118,7 @@ export function LessonEditor({
           <span role="status" className="text-xs text-ink-muted">
             {saved
               ? t('saved')
-              : t('lastSaved', { time: format.relativeTime(new Date(lesson.updatedAt)) })}
+              : t('lastSaved', { time: format.relativeTime(new Date(lesson.updatedAt), now) })}
           </span>
         </div>
       </form>
