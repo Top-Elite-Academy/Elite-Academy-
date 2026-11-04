@@ -18,6 +18,7 @@ import { BookingModule } from './modules/booking/booking.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { SessionGuard } from './modules/auth/session.guard';
 import { ConsentModule } from './modules/consent/consent.module';
+import { DiscussionsModule } from './modules/discussions/discussions.module';
 import { HealthController } from './modules/health/health.controller';
 import { InvitationsModule } from './modules/invitations/invitations.module';
 import { LeadsModule } from './modules/leads/leads.module';
@@ -26,6 +27,7 @@ import { MessagingModule } from './modules/messaging/messaging.module';
 import { LessonsModule } from './modules/lessons/lessons.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { StudentModule } from './modules/student/student.module';
+import { SyllabusModule } from './modules/syllabus/syllabus.module';
 import { TeachingModule } from './modules/teaching/teaching.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -56,6 +58,8 @@ import { UsersModule } from './modules/users/users.module';
     LessonsModule,
     AssignmentsModule,
     MessagingModule,
+    DiscussionsModule,
+    SyllabusModule,
   ],
   controllers: [HealthController],
   providers: [

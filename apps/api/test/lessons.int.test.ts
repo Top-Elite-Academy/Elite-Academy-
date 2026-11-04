@@ -185,6 +185,20 @@ describe('course content for instructors (design "Instructor 6")', () => {
     );
   });
 
+  it('a video upload cut off halfway fails alone; the API keeps running and it can be sent again', async () => {
+    const { id } = await lesson();
+    const created = await teacher.post(`/api/teach/lessons/${id}/videos`, {
+      fileName: 'part1.mp4',
+      sizeBytes: 11,
+    });
+    const url = created.body.upload.url as string;
+    for (let attempt = 0; attempt < 3; attempt++) await teacher.abortedPut(url, 11, 'video/mp4');
+
+    expect((await teacher.get('/api/health')).status).toBe(200);
+    const again = await teacher.putRaw(url, Buffer.from('fake-video!'), 'video/mp4');
+    expect(again.body.status).toBe('ready');
+  });
+
   it('publishes only when every video is ready', async () => {
     const { id } = await lesson();
     const created = await teacher.post(`/api/teach/lessons/${id}/videos`, {

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { CohortSchedule } from '../content';
 import type { AttendanceSummary, ProgressStatus } from './progress';
+import type { DiscussionNotificationData } from './discussions';
 
 /** Teaching (instructor milestone 1): enrollments, announcements, notifications. */
 
@@ -182,6 +183,13 @@ export type NotificationView =
         title: string;
         score: number;
       };
+      readAt: string | null;
+      createdAt: string;
+    }
+  | {
+      id: string;
+      type: 'discussion_question' | 'discussion_reply' | 'discussion_report';
+      data: DiscussionNotificationData;
       readAt: string | null;
       createdAt: string;
     };

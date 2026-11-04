@@ -3,10 +3,10 @@ import { teachCohortPath } from '@/config/navigation';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/cn';
 
-export type CohortTab = 'students' | 'attendance' | 'schedule';
-const TABS: CohortTab[] = ['students', 'attendance', 'schedule'];
+export type CohortTab = 'students' | 'attendance' | 'schedule' | 'discussions';
+const TABS: CohortTab[] = ['students', 'attendance', 'schedule', 'discussions'];
 
-/** Students · Attendance · Class schedule (design "Instructor 2"); each is its own URL. */
+/** Students · Attendance · Class schedule · Discussions (design "Instructor 2"); each is its own URL. */
 export function CohortTabs({ cohortId, current }: { cohortId: string; current: CohortTab }) {
   const t = useTranslations('TeachProgress.tabs');
   return (

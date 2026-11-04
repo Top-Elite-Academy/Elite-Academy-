@@ -21,14 +21,25 @@ const TONE: Record<LessonFileView['scanStatus'], BadgeTone> = {
 };
 const ACCEPT = '.pdf,.png,.jpg,.jpeg,.gif,.webp,.csv,.txt,.md,.json,.ipynb,.zip,.py,.js,.ts,.sql';
 
-/** "Downloads for students": materials and exercises, each virus-scanned before students see it. */
-export function FilesSection({ lessonId, files }: { lessonId: string; files: LessonFileView[] }) {
+/**
+ * Lesson files of one kind, each virus-scanned before students see it:
+ * "Downloads for students" (materials) in the lesson, or the exercise's own
+ * files (starter code, data, a PDF brief) inside the exercise form.
+ */
+export function FilesSection({
+  lessonId,
+  kind,
+  files,
+}: {
+  lessonId: string;
+  kind: LessonFileKind;
+  files: LessonFileView[];
+}) {
   const t = useTranslations('TeachContent.files');
   const tErrors = useTranslations('errors');
   const locale = useLocale();
   const router = useRouter();
-  const kindId = useId();
-  const [kind, setKind] = useState<LessonFileKind>('material');
+  const headingId = useId();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -64,27 +75,12 @@ export function FilesSection({ lessonId, files }: { lessonId: string; files: Les
   };
 
   return (
-    <section aria-labelledby={`${kindId}-title`} className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <h3 id={`${kindId}-title`} className="text-sm font-semibold text-ink">
-          {t('title')}
+    <section aria-labelledby={headingId} className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <h3 id={headingId} className="text-sm font-semibold text-ink">
+          {t(kind === 'exercise' ? 'exerciseTitle' : 'title')}
         </h3>
-        <div className="flex items-center gap-2 text-sm">
-          <label htmlFor={kindId} className="text-ink-muted">
-            {t('kind')}
-          </label>
-          <select
-            id={kindId}
-            value={kind}
-            onChange={(event) => {
-              setKind(event.target.value as LessonFileKind);
-            }}
-            className="min-h-10 rounded-[var(--radius-control)] border border-ink/25 bg-white px-2"
-          >
-            <option value="material">{t('kinds.material')}</option>
-            <option value="exercise">{t('kinds.exercise')}</option>
-          </select>
-        </div>
+        {kind === 'exercise' && <p className="text-sm text-ink-muted">{t('exerciseHint')}</p>}
       </div>
 
       {files.length === 0 ? (

@@ -9,6 +9,10 @@ import { approvedKey, type FileScanJob, type ScanTarget } from './lesson-files.s
 export const messageFileKey = (messageId: string, fileId: string) =>
   `messages/${messageId}/${fileId}`;
 
+/** Where a clean syllabus PDF lives. */
+export const syllabusFileKey = (programId: string, fileId: string) =>
+  `syllabi/${programId}/${fileId}`;
+
 /** Where a clean submission file lives. */
 export const submissionFileKey = (submissionId: string, fileId: string) =>
   `submissions/${submissionId}/${fileId}`;
@@ -17,6 +21,7 @@ const AUDIT_ENTITY: Record<ScanTarget, string> = {
   lesson: 'lessonFile',
   submission: 'submissionFile',
   message: 'messageAttachment',
+  syllabus: 'syllabusFile',
 };
 
 interface Scannable {
@@ -46,6 +51,16 @@ export class FileScanService {
   ) {}
 
   private async find(target: ScanTarget, fileId: string): Promise<Scannable | null> {
+    if (target === 'syllabus') {
+      const file = await this.prisma.syllabusFile.findUnique({ where: { id: fileId } });
+      return (
+        file && {
+          ...file,
+          approvedKey: syllabusFileKey(file.programId, file.id),
+          owner: { programId: file.programId },
+        }
+      );
+    }
     if (target === 'message') {
       const file = await this.prisma.messageAttachment.findUnique({ where: { id: fileId } });
       return (
@@ -81,7 +96,9 @@ export class FileScanService {
     fileId: string,
     data: { scanStatus: 'clean' | 'infected'; storageKey?: string; scanSignature?: string },
   ) {
-    if (target === 'message')
+    if (target === 'syllabus')
+      await this.prisma.syllabusFile.update({ where: { id: fileId }, data });
+    else if (target === 'message')
       await this.prisma.messageAttachment.update({ where: { id: fileId }, data });
     else if (target === 'submission')
       await this.prisma.submissionFile.update({ where: { id: fileId }, data });
@@ -97,6 +114,7 @@ export class FileScanService {
       await this.storage.copy(file.storageKey, file.approvedKey);
       await this.update(target, file.id, { scanStatus: 'clean', storageKey: file.approvedKey });
       await this.storage.delete(file.storageKey);
+      if (target === 'syllabus') await this.replaceOlderSyllabi(file.id);
       return;
     }
 
@@ -116,8 +134,25 @@ export class FileScanService {
   async markFailed({ fileId, target = 'lesson' }: FileScanJob): Promise<void> {
     const where = { id: fileId, scanStatus: 'scanning' as const };
     const data = { scanStatus: 'failed' as const };
-    if (target === 'message') await this.prisma.messageAttachment.updateMany({ where, data });
+    if (target === 'syllabus') await this.prisma.syllabusFile.updateMany({ where, data });
+    else if (target === 'message') await this.prisma.messageAttachment.updateMany({ where, data });
     else if (target === 'submission') await this.prisma.submissionFile.updateMany({ where, data });
     else await this.prisma.lessonFile.updateMany({ where, data });
+  }
+
+  /** A new syllabus passed the scan: the program's older versions are deleted. */
+  private async replaceOlderSyllabi(fileId: string): Promise<void> {
+    const current = await this.prisma.syllabusFile.findUniqueOrThrow({ where: { id: fileId } });
+    const older = await this.prisma.syllabusFile.findMany({
+      where: {
+        programId: current.programId,
+        id: { not: current.id },
+        createdAt: { lte: current.createdAt },
+      },
+    });
+    for (const file of older) {
+      await this.prisma.syllabusFile.delete({ where: { id: file.id } });
+      await this.storage.delete(file.storageKey).catch(() => undefined);
+    }
   }
 }

@@ -11,7 +11,8 @@ import { CancelSessionButton } from './CancelSessionButton';
 
 /**
  * One session (spec §4.3, §4.5). Upcoming: Join (from 15 minutes before), Add
- * to calendar, and Reschedule / Cancel until 24 hours before. Past: what
+ * to calendar, and Reschedule (while moves are left) / Cancel until 24 hours
+ * before. Past: what
  * happened and the mentor's notes.
  */
 export function SessionItem({
@@ -79,15 +80,20 @@ export function SessionItem({
         <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
           {session.canChange ? (
             <>
-              <ButtonLink href={rescheduleSessionPath(session.id)} variant="ghost" size="sm">
-                {tChange('reschedule')}
-                <span className="sr-only">{`: ${description}`}</span>
-              </ButtonLink>
+              {session.canReschedule && (
+                <ButtonLink href={rescheduleSessionPath(session.id)} variant="ghost" size="sm">
+                  {tChange('reschedule')}
+                  <span className="sr-only">{`: ${description}`}</span>
+                </ButtonLink>
+              )}
               <CancelSessionButton
                 bookingId={session.id}
                 fromPlan={session.fromPlan}
                 description={description}
               />
+              {!session.canReschedule && (
+                <p className="text-sm text-ink-muted">{tChange('rescheduleUsed')}</p>
+              )}
             </>
           ) : (
             <p className="text-sm text-ink-muted">{tChange('tooLate')}</p>

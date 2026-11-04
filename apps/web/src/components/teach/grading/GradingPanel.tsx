@@ -9,6 +9,7 @@ import {
 } from '@eta/shared';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { useCriterionName } from '@/components/assignments/use-criterion-name';
 import { CONTROL_CLASS } from '@/components/forms/FieldParts';
 import { FormAlert } from '@/components/forms/FormAlert';
 import { TextAreaField } from '@/components/forms/TextAreaField';
@@ -22,6 +23,7 @@ import { SubmittedWork } from './SubmittedWork';
 /** The rubric form for one hand-in: points and a comment per criterion, overall feedback. */
 export function GradingPanel({ submission }: { submission: TeachSubmission }) {
   const t = useTranslations('TeachGrading');
+  const criterionName = useCriterionName();
   const errorMessage = useErrorMessage();
   const router = useRouter();
   const [scores, setScores] = useState<CriterionScore[]>(submission.scores);
@@ -71,12 +73,15 @@ export function GradingPanel({ submission }: { submission: TeachSubmission }) {
       >
         <h3 className="font-semibold text-ink">{t('rubric')}</h3>
         {status && <FormAlert tone={status.tone}>{status.text}</FormAlert>}
-        {submission.rubric.map((criterion) => {
+        {submission.rubric.map((criterion, index) => {
           const score = scores.find((item) => item.criterionId === criterion.id);
           return (
             <fieldset key={criterion.id} disabled={returned} className="flex flex-col gap-2">
               <legend className="text-sm font-semibold text-ink">
-                {t('criterionTitle', { title: criterion.title, max: criterion.maxPoints })}
+                {t('criterionTitle', {
+                  title: criterionName(criterion, index),
+                  max: criterion.maxPoints,
+                })}
               </legend>
               <div className="flex flex-wrap items-start gap-3">
                 <label className="flex w-28 flex-col gap-1.5 text-sm text-ink">

@@ -13,7 +13,8 @@
   },
   "A11y": {
     "skipToContent": "דילוג לתוכן הראשי",
-    "opensInNewTab": "(נפתח בכרטיסייה חדשה)"
+    "opensInNewTab": "(נפתח בכרטיסייה חדשה)",
+    "loading": "טוען…"
   },
   "Nav": {
     "primary": "ניווט ראשי",
@@ -243,6 +244,7 @@
     },
     "session": {
       "tooLate": "אפשר לשנות עד 24 שעות לפני הפגישה.",
+      "rescheduleLimit": "כבר הזזת את הפגישה הזו. עדיין אפשר לבטל אותה עד 24 שעות לפני.",
       "notStarted": "אפשר להוסיף סיכום אחרי שהפגישה התחילה.",
       "started": "הפגישה כבר התחילה."
     },
@@ -296,7 +298,6 @@
       "titleRequired": "יש לכתוב כותרת לתרגיל.",
       "titleTooLong": "הכותרת ארוכה מדי.",
       "instructionsTooLong": "ההנחיות ארוכות מדי.",
-      "criterionRequired": "יש לתת שם לכל קריטריון.",
       "criterionTooLong": "שם של קריטריון ארוך מדי.",
       "rubricRequired": "יש להוסיף לפחות קריטריון אחד.",
       "rubricTooLong": "מחוון יכול לכלול עד 10 קריטריונים.",
@@ -324,6 +325,20 @@
       "subjectTooLong": "הנושא ארוך מדי.",
       "tooManyFiles": "אפשר לצרף עד 3 קבצים.",
       "fileTooLarge": "קובץ מצורף יכול להיות עד 10MB."
+    },
+    "discussion": {
+      "titleRequired": "כתבו את השאלה בשורה אחת.",
+      "titleTooLong": "עד 120 תווים.",
+      "bodyRequired": "הוסיפו קצת פרטים.",
+      "bodyTooLong": "עד 4,000 תווים.",
+      "reasonTooLong": "עד 500 תווים.",
+      "removed": "השאלה הזו הוסרה.",
+      "answerInvalid": "אי אפשר לסמן את התגובה הזו כתשובה.",
+      "cannotReport": "אי אפשר לדווח על הפוסט הזה."
+    },
+    "syllabus": {
+      "pdfOnly": "יש להעלות את הסילבוס כקובץ PDF.",
+      "tooLarge": "הסילבוס יכול להיות עד 25 MB."
     }
   },
   "Levels": {
@@ -655,6 +670,10 @@
         "eight": "ליווי לאורך תוכנית מלאה ופרויקט",
         "twelve": "ליווי אינטנסיבי"
       }
+    },
+    "sale": {
+      "instead": "במקום {price}",
+      "save": "חיסכון של {amount}"
     },
     "mentors": {
       "titleInstructor": "מרצים זמינים לליווי",
@@ -1122,7 +1141,8 @@
       },
       "pendingNote": "סטודנטים ממתינים רואים את המחזור רק אחרי שההנהלה או המכירות מאשרים אותם.",
       "noStudents": "עדיין אין סטודנטים.",
-      "noMatch": "אין סטודנטים מתאימים."
+      "noMatch": "אין סטודנטים מתאימים.",
+      "discussionsTitle": "שאלות מהמחזור הזה"
     },
     "attention": {
       "title": "דורש את תשומת לבך",
@@ -1143,7 +1163,10 @@
     "announcement": "{cohortName}: {title}",
     "enrollmentConfirmed": "ההרשמה שלך ל-{programTitle} ({cohortName}) אושרה. המחזור פתוח עכשיו.",
     "live": "התראה חדשה: {text}",
-    "submissionReturned": "התרגיל שלך „{title}” נבדק: {score}/100."
+    "submissionReturned": "התרגיל שלך „{title}” נבדק: {score}/100.",
+    "discussionQuestion": "{name} שאל/ה: {title}",
+    "discussionReply": "{name} הגיב/ה ל„{title}”",
+    "discussionReport": "{name} דיווח/ה על פוסט ב„{title}”"
   },
   "StudentCourses": {
     "pendingBadge": "ממתין/ה לאישור",
@@ -1251,6 +1274,7 @@
     "keep": "להשאיר",
     "confirmCancel": "ביטול הפגישה",
     "tooLate": "אפשר לשנות עד 24 שעות לפני הפגישה.",
+    "rescheduleUsed": "הפגישה כבר הוזזה. עדיין אפשר לבטל עד 24 שעות לפני.",
     "notes": "סיכום מ{name}",
     "refundRequested": "התבקש החזר",
     "rescheduleTitle": "בחירת זמן חדש",
@@ -1278,7 +1302,8 @@
       "label": "חלקי המחזור",
       "students": "סטודנטים",
       "attendance": "נוכחות",
-      "schedule": "מערכת שיעורים"
+      "schedule": "מערכת שיעורים",
+      "discussions": "דיונים"
     },
     "takeAttendance": "רישום נוכחות",
     "table": {
@@ -1425,7 +1450,6 @@
     "files": {
       "title": "הורדות לסטודנטים",
       "add": "הוספת קבצים",
-      "kind": "סוג",
       "kinds": {
         "material": "חומר",
         "exercise": "תרגיל"
@@ -1440,7 +1464,9 @@
         "infected": "נמצא וירוס · הוסר",
         "failed": "הסריקה נכשלה"
       },
-      "scanningNote": "סטודנטים יוכלו להוריד אחרי הסריקה."
+      "scanningNote": "סטודנטים יוכלו להוריד אחרי הסריקה.",
+      "exerciseTitle": "קבצים לתרגיל",
+      "exerciseHint": "קוד התחלתי, נתונים או קובץ PDF עם הנחיות. הסטודנטים רואים אותם עם התרגיל, אחרי בדיקת וירוסים."
     },
     "exercise": {
       "title": "תרגיל להגשה",
@@ -1464,7 +1490,25 @@
       "deleteTitle": "למחוק את התרגיל?",
       "deleteBody": "הסטודנטים לא יראו אותו יותר. עדיין אף אחד לא הגיש.",
       "keep": "להשאיר",
-      "confirmDelete": "למחוק"
+      "confirmDelete": "למחוק",
+      "optional": "(לא חובה)"
+    },
+    "syllabus": {
+      "title": "סילבוס (PDF)",
+      "intro": "סטודנטים מאושרים בתוכנית מורידים אותו מדף הקורס. העלאת PDF חדש מחליפה את הנוכחי אחרי שהוא עובר בדיקת וירוסים.",
+      "none": "עדיין אין סילבוס.",
+      "current": "מוצג לסטודנטים",
+      "replacesAfterScan": "יחליף את הנוכחי אחרי הבדיקה",
+      "download": "הורדה",
+      "delete": "מחיקה",
+      "deleteTitle": "למחוק את קובץ הסילבוס?",
+      "deleteBody": "הגרסה הזו תוסר.",
+      "deleteCurrentBody": "הסטודנטים לא יוכלו להוריד את הסילבוס עד שתעלו גרסה חדשה.",
+      "keep": "להשאיר",
+      "add": "העלאת קובץ הסילבוס (PDF)",
+      "replace": "העלאת גרסה חדשה",
+      "allowed": "PDF בלבד · עד 25 MB · נבדק לווירוסים לפני שהסטודנטים יכולים לפתוח אותו.",
+      "uploading": "מעלה…"
     }
   },
   "StudentLesson": {
@@ -1507,7 +1551,13 @@
       "sent": "נשלח. התשובה תופיע בהודעות."
     },
     "technicalProblem": "בעיה טכנית?",
-    "contactSupport": "לפנות לתמיכה"
+    "contactSupport": "לפנות לתמיכה",
+    "syllabus": {
+      "title": "סילבוס הקורס",
+      "updated": "עודכן {when}",
+      "download": "הורדת PDF",
+      "downloadNamed": "הורדת הסילבוס ({name})"
+    }
   },
   "Grading": {
     "late": "{days, plural, one {באיחור · יום אחד} two {באיחור · יומיים} other {באיחור · # ימים}}",
@@ -1517,7 +1567,8 @@
       "clean": "נסרק · בטוח",
       "infected": "נחסם: וירוס",
       "failed": "לא ניתן לסרוק"
-    }
+    },
+    "criterionNumber": "קריטריון {number}"
   },
   "TeachGrading": {
     "title": "בדיקת עבודות",
@@ -1577,7 +1628,8 @@
     "grade": "הציון שלך: {score}/{max}",
     "points": "{points}/{max} נקודות",
     "feedback": "משוב מהמרצה",
-    "repoPlaceholder": "https://github.com/…"
+    "repoPlaceholder": "https://github.com/…",
+    "exerciseFiles": "קבצים לתרגיל"
   },
   "Messages": {
     "title": "הודעות",
@@ -1621,5 +1673,52 @@
       "cancel": "ביטול",
       "send": "לשלוח"
     }
+  },
+  "Discussion": {
+    "title": "שאלות על התרגיל הזה",
+    "intro": "שאלו את חברי הכיתה ואת המדריך. רק המחזור שלכם רואה את זה.",
+    "guideline": "שאלו על רעיונות, שגיאות ודרכי פתרון — בבקשה אל תפרסמו פתרון מלא. המדריך יכול להסיר פוסטים.",
+    "ask": "שאלו שאלה",
+    "questionTitle": "השאלה שלך בשורה אחת",
+    "questionBody": "פרטים",
+    "codeHint": "כדי לשתף קוד, שימו ``` בשורה לפניו ובשורה אחריו.",
+    "post": "פרסום השאלה",
+    "empty": "עדיין אין שאלות. היו הראשונים לשאול.",
+    "pinned": "נעוץ",
+    "answered": "נענה",
+    "answer": "תשובה",
+    "removedBadge": {
+      "author": "נמחק על ידי הכותב",
+      "staff": "הוסר"
+    },
+    "removed": {
+      "author": "הכותב מחק את הפוסט הזה.",
+      "staff": "המדריך הסיר את הפוסט הזה."
+    },
+    "reports": "{count, plural, one {דיווח אחד} other {# דיווחים}}",
+    "replies": "{count, plural, =0 {עדיין אין תגובות} one {תגובה אחת} other {# תגובות}}",
+    "active": "פעילות אחרונה {when}",
+    "you": "את/ה",
+    "staffName": "{name} (מדריך/ה)",
+    "yourReply": "התגובה שלך",
+    "reply": "פרסום התגובה",
+    "closed": "השאלה הוסרה, ולכן אי אפשר להגיב עוד.",
+    "backToLesson": "חזרה לשיעור",
+    "markAnswer": "סימון כתשובה",
+    "unmarkAnswer": "ביטול סימון התשובה",
+    "report": "דיווח",
+    "reportTitle": "לדווח על הפוסט הזה?",
+    "reportBody": "המדריך יבדוק אותו. דווחו על פוסטים שמשתפים פתרון מלא, שאינם מכבדים או שאינם קשורים לנושא.",
+    "reportReason": "מה הבעיה? (לא חובה)",
+    "sendReport": "שליחת הדיווח",
+    "cancel": "ביטול",
+    "delete": "מחיקה",
+    "deleteQuestionTitle": "למחוק את השאלה?",
+    "deleteReplyTitle": "למחוק את התגובה?",
+    "deleteOwnBody": "חברי הכיתה לא יראו אותה יותר. אי אפשר לבטל את זה.",
+    "removeBody": "התלמידים לא יראו אותה יותר. עדיין אפשר לקרוא אותה כאן.",
+    "pin": "נעיצה למעלה",
+    "unpin": "ביטול נעיצה",
+    "keepReported": "{count, plural, one {השארת הפוסט שדווח} other {השארת # הפוסטים שדווחו}}"
   }
 }

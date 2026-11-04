@@ -3,9 +3,14 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { CourseOutlineNav } from '@/components/student/course/CourseOutlineNav';
+import { SyllabusCard } from '@/components/student/course/SyllabusCard';
 import { ButtonLink } from '@/components/ui/Button';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { STUDENT_ROUTES, studentLessonPath } from '@/config/navigation';
+import {
+  STUDENT_ROUTES,
+  studentLessonPath,
+  studentSyllabusDownloadPath,
+} from '@/config/navigation';
 import { getAsUser } from '@/lib/api/server';
 import { lessonToContinue } from '@/lib/course/outline';
 
@@ -22,7 +27,7 @@ export async function generateMetadata({
   return { title: outline?.program.title ?? t('metaTitle') };
 }
 
-/** One course the student studies: progress, where to continue, and all lessons (spec §4.8). */
+/** One course the student studies: progress, where to continue, the syllabus and all lessons (spec §4.8). */
 export default async function StudentCoursePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [outline, t, tCourses] = await Promise.all([
@@ -58,6 +63,12 @@ export default async function StudentCoursePage({ params }: { params: Promise<{ 
         </div>
       ) : (
         outline.progressPercent === 100 && <p className="text-ink">{t('allDone')}</p>
+      )}
+      {outline.syllabus && (
+        <SyllabusCard
+          syllabus={outline.syllabus}
+          href={studentSyllabusDownloadPath(outline.program.slug)}
+        />
       )}
       <div className="max-w-2xl">
         <CourseOutlineNav outline={outline} />

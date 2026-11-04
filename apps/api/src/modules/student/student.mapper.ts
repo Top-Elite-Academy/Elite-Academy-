@@ -6,7 +6,7 @@ import {
   type StudentOrder,
   type StudentSession,
 } from '@eta/shared';
-import { canChange, liveHoldUntil } from '../booking/booking.mapper';
+import { canChange, canReschedule, liveHoldUntil } from '../booking/booking.mapper';
 
 export const SESSION_INCLUDE = {
   mentor: true,
@@ -22,6 +22,7 @@ type OrderRecord = Prisma.OrderGetPayload<{ include: typeof ORDER_INCLUDE }>;
 export function toStudentSession(
   booking: SessionRecord,
   locale: Locale,
+  maxReschedules: number,
   now = new Date(),
 ): StudentSession {
   const joinOpensAt = new Date(booking.startAt.getTime() - JOIN_OPENS_MINUTES * 60_000);
@@ -43,6 +44,7 @@ export function toStudentSession(
     joinOpensAt: joinOpensAt.toISOString(),
     notes: booking.notes,
     canChange: canChange(booking, now),
+    canReschedule: canReschedule(booking, maxReschedules, now),
     refundRequested: Boolean(booking.order?.refundRequestedAt),
     fromPlan: booking.creditId !== null,
   };

@@ -66,7 +66,7 @@ export class StudentLessonsService {
     if (!program) throw ApiException.notFound();
     const { cohort, week } = await this.access(user, program.id);
 
-    const [modules, lessons, done] = await Promise.all([
+    const [modules, lessons, done, syllabus] = await Promise.all([
       this.prisma.programModule.findMany({
         where: { programId: program.id },
         orderBy: { sortOrder: 'asc' },
@@ -78,6 +78,10 @@ export class StudentLessonsService {
       this.prisma.lessonProgress.findMany({
         where: { userId: user.id, completedAt: { not: null }, lesson: { programId: program.id } },
         select: { lessonId: true },
+      }),
+      this.prisma.syllabusFile.findFirst({
+        where: { programId: program.id, scanStatus: 'clean' },
+        orderBy: { createdAt: 'desc' },
       }),
     ]);
     const completed = new Set(done.map((row) => row.lessonId));
@@ -101,6 +105,11 @@ export class StudentLessonsService {
 
     return {
       program: { slug: program.slug, title: localize(program.title, user.locale) },
+      syllabus: syllabus && {
+        fileName: syllabus.fileName,
+        sizeBytes: syllabus.sizeBytes,
+        updatedAt: syllabus.createdAt.toISOString(),
+      },
       cohort: {
         id: cohort.id,
         name: cohort.name,

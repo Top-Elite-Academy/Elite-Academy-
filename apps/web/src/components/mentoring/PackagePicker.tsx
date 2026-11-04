@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useId } from 'react';
 import { cn } from '@/lib/cn';
 import { useMoney } from '@/lib/format/use-money';
+import { PackageSale } from './PackageSale';
 
 /** Note under each package, by number of sessions (translation keys). */
 const NOTES: Record<number, 'single' | 'four' | 'eight' | 'twelve'> = {
@@ -84,6 +85,9 @@ export function PackagePicker({
                 {t('detail', { count: pkg.sessions, minutes: sessionMinutes })}
               </span>
               <span className="mt-3 text-2xl font-bold text-ink">{money(pkg.priceAgorot)}</span>
+              <span className="mt-1">
+                <PackageSale pkg={pkg} packages={packages} />
+              </span>
               {pkg.sessions > 1 && (
                 <span className="mt-1 text-xs text-ink-muted">
                   {t('perSession', { price: money(Math.round(pkg.priceAgorot / pkg.sessions)) })}

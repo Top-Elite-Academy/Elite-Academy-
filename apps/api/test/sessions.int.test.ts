@@ -279,6 +279,42 @@ describe('student: book the next meeting, reschedule, cancel (spec §4.3, §4.5)
       data: { startAt: target, previousStartAt: booking.startAt.toISOString() },
     });
   });
+
+  it('allows one reschedule per session (SESSION_MAX_RESCHEDULES); cancelling stays open', async () => {
+    const { booking } = await session(hours(72));
+    const [first, second] = (await freeSlots()).filter(
+      (slot) => Math.abs(Date.parse(slot) - booking.startAt.getTime()) > 4 * 3_600_000,
+    );
+    const listed = async () =>
+      (
+        (await student.browser.get('/api/me/sessions')).body as {
+          id: string;
+          canChange: boolean;
+          canReschedule: boolean;
+        }[]
+      ).find((s) => s.id === booking.id);
+    expect(await listed()).toMatchObject({ canChange: true, canReschedule: true });
+
+    expect(
+      (await student.browser.post(`/api/me/sessions/${booking.id}/reschedule`, { startAt: first }))
+        .status,
+    ).toBe(204);
+    expect(await listed()).toMatchObject({ canChange: true, canReschedule: false });
+
+    const again = await student.browser.post(`/api/me/sessions/${booking.id}/reschedule`, {
+      startAt: second,
+    });
+    expect(again.body.code).toBe('session.rescheduleLimit');
+    expect(
+      (
+        await t.prisma.booking.findUniqueOrThrow({ where: { id: booking.id } })
+      ).startAt.toISOString(),
+    ).toBe(first);
+
+    expect((await student.browser.post(`/api/me/sessions/${booking.id}/cancel`, {})).status).toBe(
+      204,
+    );
+  });
 });
 
 describe('mentor: sessions, notes and cancelling', () => {

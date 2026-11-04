@@ -1,7 +1,13 @@
-import type { CourseOutline, StudentAssignment, StudentLesson } from '@eta/shared';
+import type {
+  CourseOutline,
+  StudentAssignment,
+  StudentDiscussion,
+  StudentLesson,
+} from '@eta/shared';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { ExerciseDiscussion } from '@/components/discussions/ExerciseDiscussion';
 import { CourseOutlineNav } from '@/components/student/course/CourseOutlineNav';
 import { ExerciseCard } from '@/components/student/course/ExerciseCard';
 import { LessonActions } from '@/components/student/course/LessonActions';
@@ -27,15 +33,23 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return { title: lesson?.title ?? t('metaTitle') };
 }
 
-/** The lesson player (spec §4.8): video, About and Downloads, done, next — with the course outline. */
+/**
+ * The lesson player (spec §4.8): video, About and Downloads, done, next — with
+ * the course outline — and the exercise with its discussion (spec §4.11).
+ */
 export default async function StudentLessonPage({ params }: { params: Params }) {
   const { slug, id } = await params;
-  const [lesson, outline, exercise, t, tCourses] = await Promise.all([
+  const [lesson, outline, exercise, discussion, t, tCourses] = await Promise.all([
     loadLesson(id),
     getAsUser<CourseOutline>(`/api/me/courses/${encodeURIComponent(slug)}`).catch(() => null),
     isBookingId(id)
       ? getAsUser<{ assignment: StudentAssignment | null }>(
           `/api/me/lessons/${id}/assignment`,
+        ).catch(() => null)
+      : null,
+    isBookingId(id)
+      ? getAsUser<{ discussion: StudentDiscussion | null }>(
+          `/api/me/lessons/${id}/discussion`,
         ).catch(() => null)
       : null,
     getTranslations('StudentLesson'),
@@ -69,7 +83,18 @@ export default async function StudentLessonPage({ params }: { params: Params }) 
           <LessonActions lesson={lesson} previousId={previousId} nextId={nextId} />
           <LessonTabs lesson={lesson} />
           {exercise?.assignment && (
-            <ExerciseCard lessonId={lesson.id} assignment={exercise.assignment} />
+            <ExerciseCard
+              lessonId={lesson.id}
+              assignment={exercise.assignment}
+              files={lesson.files.filter((file) => file.kind === 'exercise')}
+            />
+          )}
+          {discussion?.discussion && (
+            <ExerciseDiscussion
+              programSlug={outline.program.slug}
+              lessonId={lesson.id}
+              discussion={discussion.discussion}
+            />
           )}
           <p className="text-sm text-ink-muted">
             {t('technicalProblem')}{' '}

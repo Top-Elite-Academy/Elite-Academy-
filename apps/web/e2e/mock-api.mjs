@@ -207,6 +207,7 @@ const session = (id, startIn, extra = {}) => ({
   notes: null,
   // Changes close 24 hours before the start.
   canChange: startIn >= 24 * 60,
+  canReschedule: startIn >= 24 * 60,
   refundRequested: false,
   fromPlan: true,
   ...extra,

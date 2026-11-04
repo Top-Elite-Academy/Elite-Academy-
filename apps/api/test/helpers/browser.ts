@@ -84,6 +84,25 @@ export class Browser {
       .send(body);
   }
 
+  /**
+   * Starts a raw PUT that announces `declaredBytes` but drops the connection
+   * after a few bytes, like a browser tab closed in the middle of an upload.
+   */
+  async abortedPut(path: string, declaredBytes: number, contentType: string): Promise<void> {
+    const request = this.agent
+      .put(path)
+      .set('Origin', WEB_ORIGIN)
+      .set('X-CSRF-Token', this.csrfToken)
+      .set('Content-Type', contentType)
+      .set('Content-Length', String(declaredBytes));
+    request.on('error', () => undefined);
+    request.write(Buffer.from('fake'));
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    request.abort();
+    // Let the server notice the dropped connection.
+    await new Promise((resolve) => setTimeout(resolve, 300));
+  }
+
   delete(path: string) {
     return this.agent.delete(path).set('Origin', WEB_ORIGIN).set('X-CSRF-Token', this.csrfToken);
   }

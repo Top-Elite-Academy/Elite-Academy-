@@ -39,11 +39,8 @@ const criterionSchema = z.object({
     .string()
     .regex(/^[a-z0-9-]{1,40}$/)
     .optional(),
-  title: z
-    .string()
-    .trim()
-    .min(1, { error: 'assignment.criterionRequired' })
-    .max(120, { error: 'assignment.criterionTooLong' }),
+  /** Optional: an unnamed criterion is shown as "Criterion 2" in the reader's language. */
+  title: z.string().trim().max(120, { error: 'assignment.criterionTooLong' }),
   maxPoints: z.number().int().min(1).max(RUBRIC_TOTAL),
 });
 

@@ -1,8 +1,15 @@
-import type { AnnouncementView, CohortAttendance, CohortStudent, TeachCohort } from '@eta/shared';
+import type {
+  AnnouncementView,
+  CohortAttendance,
+  CohortStudent,
+  DiscussionSummary,
+  TeachCohort,
+} from '@eta/shared';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { AnnouncementList } from '@/components/announcements/AnnouncementList';
+import { DiscussionList } from '@/components/discussions/DiscussionList';
 import { DashboardCard } from '@/components/student/DashboardCard';
 import { AnnouncementDialog } from '@/components/teach/AnnouncementDialog';
 import { CohortHeader } from '@/components/teach/CohortHeader';
@@ -13,7 +20,7 @@ import { ScheduleTab } from '@/components/teach/progress/ScheduleTab';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
-import { TEACH_ROUTES, teachCohortPath } from '@/config/navigation';
+import { TEACH_ROUTES, teachCohortPath, teachThreadPath } from '@/config/navigation';
 import { getAsUser } from '@/lib/api/server';
 import { isBookingId } from '@/lib/booking/booking-state';
 
@@ -22,10 +29,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('title') };
 }
 
-const TABS: CohortTab[] = ['students', 'attendance', 'schedule'];
+const TABS: CohortTab[] = ['students', 'attendance', 'schedule', 'discussions'];
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-/** One cohort (design "Instructor 2"): Students, Attendance and Class schedule tabs. */
+/** One cohort (design "Instructor 2"): Students, Attendance, Class schedule and Discussions tabs. */
 export default async function TeachCohortPage({
   params,
   searchParams,
@@ -102,6 +109,19 @@ async function TabContent({
     );
   }
   if (tab === 'schedule') return <ScheduleTab cohort={cohort} />;
+  if (tab === 'discussions') {
+    const threads = await getAsUser<DiscussionSummary[]>(
+      `/api/teach/cohorts/${cohort.id}/discussions`,
+    );
+    const hrefs = Object.fromEntries(
+      threads.map((thread) => [thread.id, teachThreadPath(cohort.id, thread.id)]),
+    );
+    return (
+      <DashboardCard title={t('cohort.discussionsTitle')}>
+        <DiscussionList threads={threads} hrefs={hrefs} showAssignment />
+      </DashboardCard>
+    );
+  }
 
   const [students, announcements] = await Promise.all([
     getAsUser<CohortStudent[]>(`/api/teach/cohorts/${cohort.id}/students`),

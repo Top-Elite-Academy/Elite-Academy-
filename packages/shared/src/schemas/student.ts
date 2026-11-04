@@ -30,6 +30,8 @@ export interface StudentSession {
   notes: string | null;
   /** Reschedule and cancel are allowed until 24 hours before the start. */
   canChange: boolean;
+  /** canChange, and the student has not used up their reschedules (SESSION_MAX_RESCHEDULES). */
+  canReschedule: boolean;
   /** A paid single session cancelled in time: the refund is on its way. */
   refundRequested: boolean;
   /** Booked from a multi-session plan (cancelling gives the session back). */

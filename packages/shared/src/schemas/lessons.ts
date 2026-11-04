@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { StudentSyllabus } from './syllabus';
 
 /** Course content (design "Instructor 6") and the lesson player (spec §4.8). */
 
@@ -178,6 +179,8 @@ export interface CreateVideoResponse {
 /** Student: the course content sidebar (spec §4.8). */
 export interface CourseOutline {
   program: { slug: string; title: string };
+  /** The program's syllabus PDF, once one has passed the virus scan. */
+  syllabus: StudentSyllabus | null;
   cohort: { id: string; name: string; week: number | null };
   /** Completed published lessons, 0–100 */
   progressPercent: number;

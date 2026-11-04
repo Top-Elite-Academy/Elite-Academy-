@@ -1,10 +1,17 @@
-import type { AssignmentView, TeachLesson, TeachLessonList, TeachProgram } from '@eta/shared';
+import type {
+  AssignmentView,
+  SyllabusFileView,
+  TeachLesson,
+  TeachLessonList,
+  TeachProgram,
+} from '@eta/shared';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { EmptyState } from '@/components/student/DashboardCard';
 import { AddLessonDialog } from '@/components/teach/content/AddLessonDialog';
 import { LessonEditor } from '@/components/teach/content/LessonEditor';
 import { LessonList } from '@/components/teach/content/LessonList';
+import { SyllabusSection } from '@/components/teach/content/SyllabusSection';
 import { PillNav } from '@/components/ui/PillNav';
 import { teachContentPath } from '@/config/navigation';
 import { getAsUser } from '@/lib/api/server';
@@ -25,7 +32,7 @@ async function loadLesson(lessonId: string) {
 
 const single = (value: string | string[] | undefined) => (typeof value === 'string' ? value : null);
 
-/** Course content (design "Instructor 6"): lessons of a program and the lesson editor. */
+/** Course content (design "Instructor 6"): the program's syllabus, its lessons and the lesson editor. */
 export default async function TeachContentPage({
   searchParams,
 }: {
@@ -50,7 +57,10 @@ export default async function TeachContentPage({
     );
   }
 
-  const list = await getAsUser<TeachLessonList>(`/api/teach/programs/${program.id}/lessons`);
+  const [list, syllabus] = await Promise.all([
+    getAsUser<TeachLessonList>(`/api/teach/programs/${program.id}/lessons`),
+    getAsUser<SyllabusFileView[]>(`/api/teach/programs/${program.id}/syllabus`),
+  ]);
   const lessonId =
     list.lessons.find((lesson) => lesson.id === single(query['lesson']))?.id ?? list.lessons[0]?.id;
   const opened = lessonId ? await loadLesson(lessonId) : null;
@@ -76,6 +86,8 @@ export default async function TeachContentPage({
           }))}
         />
       )}
+
+      <SyllabusSection programId={program.id} files={syllabus} />
 
       <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
         <div className="overflow-hidden rounded-[var(--radius-card)] border border-border bg-white shadow-sm">

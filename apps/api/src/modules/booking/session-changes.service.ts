@@ -5,6 +5,7 @@ import type { AuthUser } from '../../common/authz/auth-context';
 import { ApiException } from '../../common/errors/api.exception';
 import type { ClientInfo } from '../../common/http/client-info';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { AppConfig } from '../../config/app-config';
 import { AuditService } from '../audit/audit.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { AvailabilityService } from './availability.service';
@@ -32,6 +33,7 @@ export class SessionChangesService {
     private readonly availability: AvailabilityService,
     private readonly notifications: NotificationsService,
     private readonly audit: AuditService,
+    private readonly config: AppConfig,
   ) {}
 
   private async ownSession(user: AuthUser, bookingId: string): Promise<ChangeRecord> {
@@ -94,6 +96,9 @@ export class SessionChangesService {
     client: ClientInfo,
   ): Promise<void> {
     const booking = await this.ownSession(user, bookingId);
+    const { maxReschedules } = this.config.sessions;
+    if (booking.rescheduleCount >= maxReschedules)
+      throw ApiException.conflict('session.rescheduleLimit');
     const free = await this.availability.isFree(
       booking.mentorId,
       booking.package.sessionMinutes,
@@ -101,13 +106,16 @@ export class SessionChangesService {
     );
     if (!free) throw ApiException.conflict('slot.unavailable');
     try {
-      await this.prisma.booking.update({
-        where: { id: booking.id },
+      // Counted in the same write, so two tabs cannot both use the last move.
+      const moved = await this.prisma.booking.updateMany({
+        where: { id: booking.id, rescheduleCount: { lt: maxReschedules } },
         data: {
           startAt,
           endAt: new Date(startAt.getTime() + booking.package.sessionMinutes * 60_000),
+          rescheduleCount: { increment: 1 },
         },
       });
+      if (moved.count === 0) throw ApiException.conflict('session.rescheduleLimit');
     } catch (error) {
       if (isUniqueViolation(error)) throw ApiException.conflict('slot.unavailable');
       throw error;

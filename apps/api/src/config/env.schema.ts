@@ -60,6 +60,9 @@ export const envSchema = z
     /** HMAC secret of the built-in test provider (signs its webhooks). */
     PAYMENT_TEST_SECRET: z.string().min(32).optional(),
 
+    /** Times a student may move one booked session (0 = never). */
+    SESSION_MAX_RESCHEDULES: z.coerce.number().int().min(0).default(1),
+
     /** S3-compatible storage for lesson files and local videos. Endpoint omitted for AWS S3. */
     STORAGE_ENDPOINT: z.url().optional(),
     /** The address browsers use for signed links (defaults to STORAGE_ENDPOINT). */

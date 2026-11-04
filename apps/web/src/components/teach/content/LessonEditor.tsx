@@ -124,8 +124,17 @@ export function LessonEditor({
       </form>
 
       <VideoSection lessonId={lesson.id} videos={lesson.videos} provider={list.videoProvider} />
-      <FilesSection lessonId={lesson.id} files={lesson.files} />
-      <ExerciseSection lessonId={lesson.id} assignment={assignment} weeks={weekCount} />
+      <FilesSection
+        lessonId={lesson.id}
+        kind="material"
+        files={lesson.files.filter((file) => file.kind === 'material')}
+      />
+      <ExerciseSection
+        lessonId={lesson.id}
+        assignment={assignment}
+        weeks={weekCount}
+        files={lesson.files.filter((file) => file.kind === 'exercise')}
+      />
       <PublishBar lesson={lesson} />
     </div>
   );

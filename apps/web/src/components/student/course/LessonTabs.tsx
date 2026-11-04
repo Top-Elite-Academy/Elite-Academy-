@@ -1,13 +1,11 @@
 'use client';
 
 import type { StudentLesson } from '@eta/shared';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { type KeyboardEvent, useId, useRef, useState } from 'react';
-import { DownloadIcon } from '@/components/ui/icons';
-import { lessonFileDownloadPath } from '@/config/navigation';
-import { formatFileSize } from '@/lib/format/file-size';
 import { cn } from '@/lib/cn';
 import { AskInstructor } from './AskInstructor';
+import { LessonFileList } from './LessonFileList';
 
 const ALL_TABS = ['about', 'downloads', 'ask'] as const;
 type Tab = (typeof ALL_TABS)[number];
@@ -110,31 +108,6 @@ function About({ text }: { text: string }) {
 
 function Downloads({ lesson }: { lesson: StudentLesson }) {
   const t = useTranslations('StudentLesson');
-  const locale = useLocale();
   if (lesson.files.length === 0) return <p className="text-ink-muted">{t('noFiles')}</p>;
-  return (
-    <ul className="flex flex-col divide-y divide-border">
-      {lesson.files.map((file) => (
-        <li key={file.id} className="flex flex-wrap items-center gap-3 py-3">
-          <span className="rounded-full bg-sand px-2 py-0.5 text-xs font-semibold text-ink">
-            {t(`kind.${file.kind}`)}
-          </span>
-          <span className="min-w-0 flex-1 break-all text-ink" dir="ltr">
-            {file.fileName}
-          </span>
-          <span className="text-sm text-ink-muted" dir="ltr">
-            {formatFileSize(file.sizeBytes, locale)}
-          </span>
-          <a
-            href={lessonFileDownloadPath(lesson.id, file.id)}
-            aria-label={t('download', { name: file.fileName })}
-            className="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] px-3 text-sm font-semibold text-crimson-700 underline"
-          >
-            <DownloadIcon className="size-4" aria-hidden="true" />
-            {t('downloadShort')}
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
+  return <LessonFileList lessonId={lesson.id} files={lesson.files} />;
 }

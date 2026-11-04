@@ -3,6 +3,7 @@
 import type { MentorCard, PackageInfo } from '@eta/shared';
 import { useLocale, useTranslations } from 'next-intl';
 import { MentorAvatar } from '@/components/mentoring/MentorAvatar';
+import { PackageSale } from '@/components/mentoring/PackageSale';
 import { useMoney } from '@/lib/format/use-money';
 import { RadioCard, RadioDot } from './RadioCard';
 import { useServiceText } from './use-service-text';
@@ -49,7 +50,10 @@ export function ServiceStep({
                   <span className="block font-semibold text-ink">{text.title(pkg.code)}</span>
                   <span className="mt-1 block text-sm text-ink-muted">{text.body(pkg)}</span>
                 </span>
-                <span className="text-lg font-bold text-ink">{money(pkg.priceAgorot)}</span>
+                <span className="flex flex-col items-end gap-1">
+                  <span className="text-lg font-bold text-ink">{money(pkg.priceAgorot)}</span>
+                  <PackageSale pkg={pkg} packages={options} />
+                </span>
               </RadioCard>
             );
           })}

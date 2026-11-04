@@ -15,3 +15,5 @@ export * from './schemas/progress';
 export * from './schemas/lessons';
 export * from './schemas/assignments';
 export * from './schemas/messages';
+export * from './schemas/discussions';
+export * from './schemas/syllabus';

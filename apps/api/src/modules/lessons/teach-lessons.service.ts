@@ -47,7 +47,8 @@ export class TeachLessonsService {
     }));
   }
 
-  private async program(user: AuthUser, programId: string) {
+  /** One of the instructor's programs (any program for an admin), or 404. */
+  async programRecord(user: AuthUser, programId: string) {
     const program = await this.prisma.program.findFirst({
       where: { id: programId, deletedAt: null, ...this.programScope(user) },
     });
@@ -66,7 +67,7 @@ export class TeachLessonsService {
   }
 
   async list(user: AuthUser, programId: string): Promise<TeachLessonList> {
-    const program = await this.program(user, programId);
+    const program = await this.programRecord(user, programId);
     const [modules, lessons] = await Promise.all([
       this.prisma.programModule.findMany({ where: { programId }, orderBy: { sortOrder: 'asc' } }),
       this.prisma.lesson.findMany({
@@ -110,7 +111,7 @@ export class TeachLessonsService {
     input: CreateLessonInput,
     client: ClientInfo,
   ): Promise<TeachLesson> {
-    await this.program(user, programId);
+    await this.programRecord(user, programId);
     await this.assertModule(programId, input.moduleId);
     const last = await this.prisma.lesson.aggregate({
       where: { programId },

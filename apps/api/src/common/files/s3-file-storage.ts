@@ -34,6 +34,13 @@ export class S3FileStorage extends FileStorage implements OnModuleInit {
     const base = {
       region: settings.region,
       forcePathStyle: settings.forcePathStyle,
+      // No automatic CRC32 on uploads. The SDK computes it by wrapping a
+      // streamed body in its own stream, which has no error listener: when a
+      // browser drops a video upload halfway, that wrapper's "aborted" error
+      // stopped the whole API. Only checksums an operation requires are sent
+      // (the SDK's behaviour before 2025, and what R2 and other S3-compatible
+      // stores expect).
+      requestChecksumCalculation: 'WHEN_REQUIRED' as const,
       credentials: {
         accessKeyId: settings.accessKeyId,
         secretAccessKey: settings.secretAccessKey,

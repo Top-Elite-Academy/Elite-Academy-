@@ -85,6 +85,10 @@ export class AppConfig {
     };
   }
 
+  get sessions() {
+    return { maxReschedules: this.env.SESSION_MAX_RESCHEDULES };
+  }
+
   get storage() {
     return {
       endpoint: this.env.STORAGE_ENDPOINT,

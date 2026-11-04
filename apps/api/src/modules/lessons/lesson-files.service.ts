@@ -19,7 +19,7 @@ import { toFileView } from './lessons.mapper';
 import { TeachLessonsService } from './teach-lessons.service';
 
 export const FILE_SCAN_QUEUE = 'file-scan';
-export type ScanTarget = 'lesson' | 'submission' | 'message';
+export type ScanTarget = 'lesson' | 'submission' | 'message' | 'syllabus';
 export interface FileScanJob {
   fileId: string;
   /** Which table the file is in (jobs queued before submissions existed have none: lesson). */

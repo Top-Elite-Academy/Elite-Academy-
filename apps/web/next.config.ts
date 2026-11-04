@@ -24,6 +24,14 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  // Bundle @eta/shared from its TypeScript source (ES modules) instead of the
+  // CommonJS build the API uses, so each page ships only the parts it imports.
+  // Otherwise one import (e.g. LOCALES in the header) pulls in all of Zod and
+  // the phone-number data on every page.
+  transpilePackages: ['@eta/shared'],
+  turbopack: {
+    resolveAlias: { '@eta/shared': '../../packages/shared/src/index.ts' },
+  },
   headers: () => Promise.resolve([{ source: '/:path*', headers: SECURITY_HEADERS }]),
   // The browser only talks to this origin; /api/* is forwarded to the NestJS API,
   // so session cookies are first-party and no CORS is needed.

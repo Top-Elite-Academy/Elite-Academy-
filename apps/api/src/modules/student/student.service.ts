@@ -10,6 +10,7 @@ import {
 } from '@eta/shared';
 import type { AuthUser } from '../../common/authz/auth-context';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { AppConfig } from '../../config/app-config';
 import { ORDER_INCLUDE, SESSION_INCLUDE, toStudentOrder, toStudentSession } from './student.mapper';
 
 const LIST_LIMIT = 50;
@@ -21,7 +22,10 @@ const OVERVIEW_SESSIONS = 3;
  */
 @Injectable()
 export class StudentService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly config: AppConfig,
+  ) {}
 
   async overview(user: AuthUser): Promise<StudentOverview> {
     const [upcoming, packages] = await Promise.all([
@@ -43,7 +47,9 @@ export class StudentService {
       orderBy: { startAt: scope === 'upcoming' ? 'asc' : 'desc' },
       take,
     });
-    return bookings.map((booking) => toStudentSession(booking, user.locale, now));
+    return bookings.map((booking) =>
+      toStudentSession(booking, user.locale, this.config.sessions.maxReschedules, now),
+    );
   }
 
   async packages(user: AuthUser): Promise<StudentPackage[]> {

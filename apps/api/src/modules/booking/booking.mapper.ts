@@ -44,3 +44,10 @@ export function toBookingView(booking: BookingRecord, locale: Locale): BookingVi
 export const canChange = (booking: { status: string; startAt: Date }, now = new Date()) =>
   booking.status === 'confirmed' &&
   booking.startAt.getTime() - now.getTime() >= CHANGE_DEADLINE_HOURS * 60 * 60 * 1000;
+
+/** Rescheduling also needs a move left (SESSION_MAX_RESCHEDULES); cancelling does not. */
+export const canReschedule = (
+  booking: { status: string; startAt: Date; rescheduleCount: number },
+  maxReschedules: number,
+  now = new Date(),
+) => canChange(booking, now) && booking.rescheduleCount < maxReschedules;

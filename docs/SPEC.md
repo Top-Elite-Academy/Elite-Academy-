@@ -23,7 +23,7 @@ Elite Tech Academy's platform is one product with three faces: a public website 
 | Data Analysis with AI | TBD | Rana Arafat |
 | DevOps | TBD | TBD |
 
-Every program has a learning stage and a practical stage on a partner company's product, included in the price. Program prices are **not shown on the website**; an advisor discusses price and installments on the call. The only public prices are mentoring: ₪250 per session, 8-session plan ₪2,000.
+Every program has a learning stage and a practical stage on a partner company's product, included in the price. Program prices are **not shown on the website**; an advisor discusses price and installments on the call. The only public prices are mentoring: ₪360 per session, 8-session plan ₪2,500.
 
 **User roles**
 
@@ -169,7 +169,7 @@ One syllabus page per program, built from the same data as the PDF (section 6).
 | --- | --- |
 | Header *Apply now* | → Enroll form for this program |
 | Breadcrumb Programs › {program} | → Catalog › Course details |
-| *Download syllabus (PDF)* | Downloads the current PDF for this program (served from storage, file name `Elite-Tech-{program}-Syllabus.pdf`) |
+| *Download syllabus (PDF)* | Not on the public page: the PDF is for confirmed students only (see 6.2). The public page invites visitors to *Talk to an advisor* instead |
 | *Talk to an advisor* | → Enroll form |
 | **24 weeks at a glance** | A week strip (1–24) coloured by module, and module chips. Clicking a week or a module shows that module's detail panel below (title, weeks, topics per week, hands-on task, module project, tools) |
 | By the end you can / Before you join / How you are assessed | Outcomes, prerequisites, assessment weights (e.g. projects 25%, module tasks 35%, capstone 25%, participation 15%) |
@@ -179,7 +179,7 @@ One syllabus page per program, built from the same data as the PDF (section 6).
 
 **Two services, chosen with two large option cards at the top:**
 
-- **Teacher mentoring** — ₪250 per session; one-to-one meetings with a program instructor. Packages: Single session ₪250 · 4 sessions ₪1,000 · **8-session plan ₪2,000 (highlighted, recommended)** · 12 sessions ₪3,000.
+- **Teacher mentoring** — ₪360 per session; one-to-one meetings with a program instructor. Packages: Single session ₪360 · 4 sessions ₪1,350 · **8-session plan ₪2,500 (highlighted, recommended)** · 12 sessions ₪3,700. Packages are on sale: each shows the price of the same sessions one by one, crossed out, and how much it saves (e.g. 8-session plan: ~~₪2,880~~ Save ₪380).
 - **Career advice** — a single session with a tech professional (CV review, mock interview, career direction).
 
 Selecting a card switches the list below between program instructors (Rana Arafat, Dania Hih, Dr. Muhammad Wattad) and career advisors. Filters: specialty and session language (Arabic, Hebrew, English). Each mentor card shows photo, name, specialty, languages, "Session length" and *Choose a time* → Booking flow with the service and mentor preselected (`/book?service=mentoring-8&mentor={id}`).
@@ -217,7 +217,7 @@ A 5-step wizard with a progress bar and a booking summary panel (sticky on deskt
 
 | Step | What the user does | Rules |
 | --- | --- | --- |
-| 1 Service | Pick: Single mentoring session ₪250 · Mentoring plan · 8 sessions ₪2,000 · Career advice: CV review / mock interview. Then choose a mentor | Price always comes from the server, never from the page |
+| 1 Service | Pick: Single mentoring session ₪360 · Mentoring plan · 8 sessions ₪2,500 (with its saving) · Career advice: CV review / mock interview. Then choose a mentor | Price always comes from the server, never from the page |
 | 2 Date & time | Pick a day (next 14 days) and a free slot; times in the user's time zone (default Jerusalem) | Only real free slots from the mentor's calendar; a slot is held for 10 minutes while paying |
 | 3 Review | Check service, mentor, time, price; *Change* returns to the step; tick "I agree to the cancellation policy and terms" | Must tick to continue |
 | 4 Payment | *Pay ₪{price} now* → redirect to the payment provider's hosted page | Sign-in or account creation is required before this step. Card data never touches our servers |
@@ -257,6 +257,8 @@ Left sidebar (right side in RTL): crest → public Landing · **Overview** · **
 
 Tabs *In progress* / *Completed* with counts. Each course card: title, cohort, instructor, progress bar, stage (Learning / Practical stage), next live class. *Continue* → Lesson player. Empty state: *Browse courses* → public Catalog.
 
+The course page (`/app/courses/{slug}`) shows a **Course syllabus** card (size, last update, *Download PDF*) once the program has a syllabus PDF (6.2).
+
 ### 4.5 Sessions (`/app/sessions`)
 
 *Upcoming* and *Past* lists. Upcoming row: type (Live class / Mentoring / Career advice), title, date & time, mentor, *Join*, *Reschedule*, *Cancel*. Cancel asks for confirmation; within 24 h of start it is blocked and shows the policy. A cancelled mentoring session returns the credit to the package. Past row: recording link (if any) and the mentor's notes.
@@ -286,7 +288,7 @@ Table of orders: date, item, amount, status (Paid / Failed / Refunded / Installm
 
 ### 4.9 Messages & support (`/app/messages`)
 
-Two panes: thread list (filters *All* / *Unread*, search) and the open thread. Threads exist with: each instructor/mentor of the student, the Support team and the Payments team. *New message* → choose recipient from that allowed list. Composer: text up to 2,000 characters, attachments (images, PDF, code files up to 10 MB, scanned — section 9), *Send*. Read receipts and a typing indicator are optional. New messages notify by email if unread for 30 minutes. Students cannot message other students.
+Two panes: thread list (filters *All* / *Unread*, search) and the open thread. Threads exist with: each instructor/mentor of the student, the Support team and the Payments team. *New message* → choose recipient from that allowed list. Composer: text up to 2,000 characters, attachments (images, PDF, code files up to 10 MB, scanned — section 9), *Send*. Read receipts and a typing indicator are optional. New messages notify by email if unread for 30 minutes. Students cannot message other students privately; the only place classmates talk is the assignment discussion (4.11).
 
 ### 4.10 Mobile screens
 
@@ -296,6 +298,19 @@ The website is responsive; four mobile boards show the key layouts:
 - **Mobile · Menu open** — full-screen menu (section 2).
 - **Mobile · Booking** — date/time step with a fixed *Continue to review* button.
 - **Mobile · Dashboard** — cards stacked; bottom tab bar: Home · Courses · Sessions · Messages · Account; *Join session* and *Continue lesson* stay at the top.
+
+### 4.11 Assignment discussions (`/app/courses/{slug}/lessons/{id}/discussion/{threadId}`)
+
+Under each exercise in the lesson player, classmates ask and answer questions about it.
+
+- **Who sees it:** the cohort's confirmed students, the program's instructor and admins. Each cohort has its own discussion; other cohorts, pending students and everyone else get *not found*.
+- **Questions with replies:** a student opens a question (one-line title up to 120 characters, details up to 4,000); anyone who can see it replies. Posts are plain text; a line with ``` before and after marks a code block (shown left-to-right, never as HTML). No files in v1.
+- **Names:** classmates appear as first name and last initial ("Maya R."); the instructor is labelled *Instructor*.
+- **Guideline:** shown above the list and the reply box: ask about ideas, errors and approaches; don't post a full solution.
+- **Students:** delete their own question or reply (it reads "The author deleted this post"); *Report* someone else's post with an optional reason (once per post).
+- **Instructor** (Cohort → *Discussions* tab, `/teach/cohorts/{id}/discussions/{threadId}`): reply, *Pin to top*, *Mark as answer*, remove any post (students see "The instructor removed this post"; the instructor can still read it), see open reports and *Keep* the reported posts. A removed question disappears for students and takes no more replies.
+- **Notifications (bell):** the instructor on a new question and on a report; the person who asked on each reply. Classmates are not notified of every post.
+- **Order:** pinned questions first, then by latest activity.
 
 ## 5. Staff back office: Admin and CRM
 
@@ -387,7 +402,7 @@ Side panel **Leads that arrive by themselves**: website enroll form, chat assist
 
 **How it works (version 1 → version 2):**
 
-1. **v1 — scripted:** keyword rules answer the common questions (which program, prices → "an advisor will explain", dates, mentoring ₪250/session, practical stage, talk to a person). No AI cost, no risk.
+1. **v1 — scripted:** keyword rules answer the common questions (which program, prices → "an advisor will explain", dates, mentoring ₪360/session, practical stage, talk to a person). No AI cost, no risk.
 2. **v2 — AI with retrieval (RAG):** an AI model answers only from an approved knowledge base (program pages, syllabi, FAQ, policies). Rules: never invent prices or dates; never ask for ID numbers or card details; if unsure, offer *Talk to an advisor*. The model runs on the server; the API key is never in the browser.
 3. **Hand-off:** "Talk to a person" asks for name + phone + consent inside the chat and creates a CRM lead with source "Chat assistant" and the transcript attached.
 
@@ -404,7 +419,11 @@ A 4-page A4 document sent to prospective students, built from the same syllabus 
 | 3 Weekly plan, weeks 1–12 | Per module: weeks, topics, hands-on task, module project, tools |
 | 4 Weekly plan, weeks 13–24 | Remaining modules, capstone, practical stage (onboarding, project work, finish & polish, career week), "Good to know", admissions contact |
 
-**Generation:** admin clicks *Generate syllabus PDF* in Courses; the server renders the print template with a headless browser to PDF, stores it in file storage and links it from *Download syllabus (PDF)*. Regenerated whenever the syllabus data changes; the file name and a version date are printed in the footer.
+**Who sees it:** only the program's **confirmed** (paid) students, its instructor and admins — never visitors or students whose enrollment is still pending. Students download it from their course page (4.4) through a short-lived link.
+
+**v1 — uploaded PDF:** the instructor or an admin uploads the designed PDF in *Content* (section *Syllabus (PDF)*, one per program; PDF only, max 25 MB). It is virus-scanned like every upload and reaches students only once clean. Uploading a new version replaces the current one after its scan passes; the instructor can download or delete any version.
+
+**Later — generated:** admin clicks *Generate syllabus PDF* in Courses; the server renders the print template with a headless browser to PDF and stores it as the program's syllabus. Regenerated whenever the syllabus data changes; the file name and a version date are printed in the footer.
 
 ### 6.3 Syllabus template
 

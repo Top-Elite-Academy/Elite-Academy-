@@ -24,6 +24,18 @@ describe('assignment deadlines', () => {
 describe('assignment schemas', () => {
   const base = { title: 'Auth API', instructions: '', dueWeek: 12 };
 
+  it('accepts criteria without a name (shown as "Criterion N")', () => {
+    const parsed = saveAssignmentSchema.safeParse({
+      ...base,
+      rubric: [
+        { title: '', maxPoints: 60 },
+        { title: '  ', maxPoints: 40 },
+      ],
+    });
+    expect(parsed.success).toBe(true);
+    expect(parsed.data?.rubric.map((row) => row.title)).toEqual(['', '']);
+  });
+
   it('needs rubric points that add up to 100', () => {
     const ok = saveAssignmentSchema.safeParse({
       ...base,

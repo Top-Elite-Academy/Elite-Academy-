@@ -17,7 +17,7 @@ export function ServiceCards({
   careerPrice,
 }: {
   selected: MentorKind;
-  /** Already formatted, e.g. "₪250"; null hides the price. */
+  /** Already formatted, e.g. "₪360"; null hides the price. */
   mentoringPrice: string | null;
   careerPrice: string | null;
 }) {

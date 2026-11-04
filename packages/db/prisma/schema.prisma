@@ -69,31 +69,35 @@ model User {
   updatedAt     DateTime   @updatedAt @map("updated_at")
   deletedAt     DateTime?  @map("deleted_at")
 
-  roles          UserRole[]
-  sessions       Session[]
-  authTokens     AuthToken[]
-  consents       Consent[]
-  auditLogs      AuditLog[]
-  mentorProfile  MentorProfile?
-  ownedLeads     Lead[]             @relation("LeadOwner")
-  bookings       Booking[]
-  orders         Order[]
-  credits        PackageCredit[]
-  activities     Activity[]
-  tasks          Task[]
-  enrollments    Enrollment[]
-  announcements  Announcement[]     @relation("AnnouncementAuthor")
-  notifications  Notification[]
-  attendance     Attendance[]       @relation("AttendanceStudent")
-  notesAbout     StudentNote[]      @relation("NoteStudent")
-  notesWritten   StudentNote[]      @relation("NoteAuthor")
-  lessonProgress LessonProgress[]
-  submissions    Submission[]       @relation("SubmissionStudent")
-  graded         Submission[]       @relation("SubmissionGrader")
-  studentThreads Conversation[]     @relation("ConversationStudent")
-  staffThreads   Conversation[]     @relation("ConversationStaff")
-  messagesSent   Message[]
-  threadReads    ConversationRead[]
+  roles             UserRole[]
+  sessions          Session[]
+  authTokens        AuthToken[]
+  consents          Consent[]
+  auditLogs         AuditLog[]
+  mentorProfile     MentorProfile?
+  ownedLeads        Lead[]             @relation("LeadOwner")
+  bookings          Booking[]
+  orders            Order[]
+  credits           PackageCredit[]
+  activities        Activity[]
+  tasks             Task[]
+  enrollments       Enrollment[]
+  announcements     Announcement[]     @relation("AnnouncementAuthor")
+  notifications     Notification[]
+  attendance        Attendance[]       @relation("AttendanceStudent")
+  notesAbout        StudentNote[]      @relation("NoteStudent")
+  notesWritten      StudentNote[]      @relation("NoteAuthor")
+  lessonProgress    LessonProgress[]
+  submissions       Submission[]       @relation("SubmissionStudent")
+  graded            Submission[]       @relation("SubmissionGrader")
+  studentThreads    Conversation[]     @relation("ConversationStudent")
+  staffThreads      Conversation[]     @relation("ConversationStaff")
+  messagesSent      Message[]
+  threadReads       ConversationRead[]
+  discussionThreads DiscussionThread[]
+  discussionReplies DiscussionReply[]
+  discussionReports DiscussionReport[]
+  syllabiUploaded   SyllabusFile[]
 
   @@map("users")
 }
@@ -261,6 +265,7 @@ model Program {
   cohorts    Cohort[]
   modules    ProgramModule[]
   lessons    Lesson[]
+  syllabi    SyllabusFile[]
   leads      Lead[]
   faqs       Faq[]
   stories    SuccessStory[]
@@ -282,13 +287,14 @@ model Cohort {
   createdAt    DateTime     @default(now()) @map("created_at")
   updatedAt    DateTime     @updatedAt @map("updated_at")
 
-  program       Program        @relation(fields: [programId], references: [id], onDelete: Cascade)
+  program       Program            @relation(fields: [programId], references: [id], onDelete: Cascade)
   leads         Lead[]
   enrollments   Enrollment[]
   announcements Announcement[]
   attendance    Attendance[]
   studentNotes  StudentNote[]
   submissions   Submission[]
+  discussions   DiscussionThread[]
 
   @@index([programId, startDate])
   @@map("cohorts")
@@ -590,25 +596,27 @@ enum OrderStatus {
 }
 
 model Booking {
-  id            String        @id @default(uuid()) @db.Uuid
-  userId        String        @map("user_id") @db.Uuid
-  mentorId      String        @map("mentor_id") @db.Uuid
-  packageId     String        @map("package_id") @db.Uuid
-  startAt       DateTime      @map("start_at")
-  endAt         DateTime      @map("end_at")
-  status        BookingStatus @default(held)
+  id              String        @id @default(uuid()) @db.Uuid
+  userId          String        @map("user_id") @db.Uuid
+  mentorId        String        @map("mentor_id") @db.Uuid
+  packageId       String        @map("package_id") @db.Uuid
+  startAt         DateTime      @map("start_at")
+  endAt           DateTime      @map("end_at")
+  status          BookingStatus @default(held)
   /// A held slot is kept for 10 minutes while paying (spec §3.7)
-  holdExpiresAt DateTime?     @map("hold_expires_at")
-  zoomLink      String?       @map("zoom_link")
+  holdExpiresAt   DateTime?     @map("hold_expires_at")
+  zoomLink        String?       @map("zoom_link")
   /// Mentor's notes after the session; the student sees them (max 2,000 characters)
-  notes         String?
-  notesAt       DateTime?     @map("notes_at")
-  cancelledAt   DateTime?     @map("cancelled_at")
-  cancelledBy   CancelledBy?  @map("cancelled_by")
-  creditId      String?       @map("credit_id") @db.Uuid
-  orderId       String?       @map("order_id") @db.Uuid
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
+  notes           String?
+  notesAt         DateTime?     @map("notes_at")
+  /// Times the student moved this session; limited by SESSION_MAX_RESCHEDULES
+  rescheduleCount Int           @default(0) @map("reschedule_count")
+  cancelledAt     DateTime?     @map("cancelled_at")
+  cancelledBy     CancelledBy?  @map("cancelled_by")
+  creditId        String?       @map("credit_id") @db.Uuid
+  orderId         String?       @map("order_id") @db.Uuid
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
 
   user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   mentor  MentorProfile  @relation(fields: [mentorId], references: [id], onDelete: Restrict)
@@ -736,6 +744,9 @@ enum NotificationType {
   session_rescheduled
   session_notes
   submission_returned
+  discussion_question
+  discussion_reply
+  discussion_report
 }
 
 /// In-app notification (bell). "data" holds ids and names; the web app writes the sentence
@@ -943,8 +954,9 @@ model Assignment {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  lesson      Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lesson      Lesson             @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   submissions Submission[]
+  discussions DiscussionThread[]
 
   @@map("assignments")
 }
@@ -1082,4 +1094,106 @@ model ConversationRead {
 
   @@id([conversationId, userId])
   @@map("conversation_reads")
+}
+
+// ---------------------------------------------------------------------------
+// Assignment discussions (spec §4.11): classmates of one cohort ask and answer
+// questions about an exercise; the cohort's instructor moderates.
+// ---------------------------------------------------------------------------
+
+enum DiscussionRemovedBy {
+  /// The writer deleted their own post
+  author
+  /// The instructor or an admin removed it
+  staff
+}
+
+/// A question about an assignment. Only the cohort's confirmed students, the
+/// program's instructor and admins can see it.
+model DiscussionThread {
+  id             String               @id @default(uuid()) @db.Uuid
+  assignmentId   String               @map("assignment_id") @db.Uuid
+  cohortId       String               @map("cohort_id") @db.Uuid
+  authorId       String               @map("author_id") @db.Uuid
+  title          String
+  body           String
+  /// Kept at the top of the list by the instructor
+  pinned         Boolean              @default(false)
+  /// The reply the instructor marked as the answer
+  answerReplyId  String?              @unique @map("answer_reply_id") @db.Uuid
+  removedAt      DateTime?            @map("removed_at")
+  removedBy      DiscussionRemovedBy? @map("removed_by")
+  /// Newest post in the thread; the list is sorted by it
+  lastActivityAt DateTime             @default(now()) @map("last_activity_at")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+
+  assignment Assignment         @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  cohort     Cohort             @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  author     User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  answer     DiscussionReply?   @relation("ThreadAnswer", fields: [answerReplyId], references: [id], onDelete: SetNull)
+  replies    DiscussionReply[]  @relation("ThreadReplies")
+  reports    DiscussionReport[]
+
+  @@index([cohortId, assignmentId, lastActivityAt])
+  @@map("discussion_threads")
+}
+
+model DiscussionReply {
+  id        String               @id @default(uuid()) @db.Uuid
+  threadId  String               @map("thread_id") @db.Uuid
+  authorId  String               @map("author_id") @db.Uuid
+  body      String
+  removedAt DateTime?            @map("removed_at")
+  removedBy DiscussionRemovedBy? @map("removed_by")
+  createdAt DateTime             @default(now()) @map("created_at")
+  updatedAt DateTime             @updatedAt @map("updated_at")
+
+  thread   DiscussionThread   @relation("ThreadReplies", fields: [threadId], references: [id], onDelete: Cascade)
+  answerOf DiscussionThread?  @relation("ThreadAnswer")
+  author   User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  reports  DiscussionReport[]
+
+  @@index([threadId, createdAt])
+  @@map("discussion_replies")
+}
+
+/// A student flags a question (replyId null) or a reply for the instructor.
+model DiscussionReport {
+  id         String    @id @default(uuid()) @db.Uuid
+  threadId   String    @map("thread_id") @db.Uuid
+  replyId    String?   @map("reply_id") @db.Uuid
+  reporterId String    @map("reporter_id") @db.Uuid
+  reason     String    @default("")
+  /// Set when the instructor removes the post or keeps it
+  resolvedAt DateTime? @map("resolved_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  thread   DiscussionThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  reply    DiscussionReply? @relation(fields: [replyId], references: [id], onDelete: Cascade)
+  reporter User             @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@index([threadId, resolvedAt])
+  @@map("discussion_reports")
+}
+
+/// A program's syllabus PDF, uploaded by its instructor or an admin. Only the
+/// newest clean file counts; older ones are removed once a newer one passes
+/// the virus scan. Confirmed students, the instructor and admins can open it.
+model SyllabusFile {
+  id            String     @id @default(uuid()) @db.Uuid
+  programId     String     @map("program_id") @db.Uuid
+  fileName      String     @map("file_name")
+  sizeBytes     Int        @map("size_bytes")
+  storageKey    String     @map("storage_key")
+  scanStatus    ScanStatus @default(scanning) @map("scan_status")
+  scanSignature String?    @map("scan_signature")
+  uploadedById  String?    @map("uploaded_by_id") @db.Uuid
+  createdAt     DateTime   @default(now()) @map("created_at")
+
+  program    Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+  uploadedBy User?   @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([programId, createdAt])
+  @@map("syllabus_files")
 }

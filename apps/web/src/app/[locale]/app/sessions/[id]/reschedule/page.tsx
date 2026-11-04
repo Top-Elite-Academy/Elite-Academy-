@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('rescheduleTitle') };
 }
 
-/** Reschedule one of the student's sessions (spec §4.5), until 24 hours before. */
+/** Reschedule one of the student's sessions (spec §4.5), until 24 hours before and while moves are left. */
 export default async function RescheduleSessionPage({
   params,
 }: {
@@ -25,7 +25,7 @@ export default async function RescheduleSessionPage({
     getTranslations('StudentSessionChanges'),
     getFormatter(),
   ]);
-  const session = sessions.find((item) => item.id === id && item.canChange);
+  const session = sessions.find((item) => item.id === id && item.canReschedule);
   if (!session) notFound();
 
   const when = format.dateTime(new Date(session.startAt), {

@@ -239,9 +239,9 @@ export const FAQS: SeedFaq[] = [
       he: 'מה ההבדל בין ליווי אישי לייעוץ קריירה?',
     },
     answer: {
-      en: 'Mentoring is one-to-one meetings with a program instructor for help with lessons and projects: ₪250 per session, or the 8-session plan for ₪2,000. Career advice is a single session with a tech professional: CV review, mock interview or choosing a direction.',
-      ar: 'الإرشاد هو لقاءات فردية مع مدرّس البرنامج للمساعدة في الدروس والمشاريع: ‎₪250 للجلسة، أو باقة 8 جلسات بـ ‎₪2,000. الاستشارة المهنية جلسة واحدة مع مختص في التكنولوجيا: مراجعة السيرة الذاتية، أو مقابلة تجريبية، أو اختيار الاتجاه.',
-      he: 'ליווי אישי הוא פגישות אחד-על-אחד עם מרצה התוכנית לעזרה בשיעורים ובפרויקטים: ‎₪250 לפגישה, או חבילת 8 פגישות ב-‎₪2,000. ייעוץ קריירה הוא פגישה אחת עם איש/אשת מקצוע מההייטק: בדיקת קורות חיים, ראיון דמה או בחירת כיוון.',
+      en: 'Mentoring is one-to-one meetings with a program instructor for help with lessons and projects: ₪360 per session, or the 8-session plan for ₪2,500. Career advice is a single session with a tech professional: CV review, mock interview or choosing a direction.',
+      ar: 'الإرشاد هو لقاءات فردية مع مدرّس البرنامج للمساعدة في الدروس والمشاريع: ‎₪360 للجلسة، أو باقة 8 جلسات بـ ‎₪2,500. الاستشارة المهنية جلسة واحدة مع مختص في التكنولوجيا: مراجعة السيرة الذاتية، أو مقابلة تجريبية، أو اختيار الاتجاه.',
+      he: 'ליווי אישי הוא פגישות אחד-על-אחד עם מרצה התוכנית לעזרה בשיעורים ובפרויקטים: ‎₪360 לפגישה, או חבילת 8 פגישות ב-‎₪2,500. ייעוץ קריירה הוא פגישה אחת עם איש/אשת מקצוע מההייטק: בדיקת קורות חיים, ראיון דמה או בחירת כיוון.',
     },
   },
   {
@@ -317,7 +317,8 @@ export interface SeedPackage {
 }
 
 /**
- * Mentoring and career advice prices (spec §1, §3.5, §3.7), in agorot.
+ * Mentoring and career advice prices (spec §1, §3.5, §3.7), in agorot. Packages
+ * sell below the single-session price; the site shows the saving.
  * ⚠ Career advice prices and lengths come from the booking design (CV review ₪250,
  * mock interview ₪300, 45 minutes) — to confirm. Packages not listed here are switched off.
  */
@@ -326,7 +327,7 @@ export const PACKAGES: SeedPackage[] = [
     code: 'mentoring-1',
     kind: 'instructor',
     sessions: 1,
-    priceAgorot: 25_000,
+    priceAgorot: 36_000,
     sessionMinutes: 60,
     recommended: false,
   },
@@ -334,7 +335,7 @@ export const PACKAGES: SeedPackage[] = [
     code: 'mentoring-4',
     kind: 'instructor',
     sessions: 4,
-    priceAgorot: 100_000,
+    priceAgorot: 135_000,
     sessionMinutes: 60,
     recommended: false,
   },
@@ -342,7 +343,7 @@ export const PACKAGES: SeedPackage[] = [
     code: 'mentoring-8',
     kind: 'instructor',
     sessions: 8,
-    priceAgorot: 200_000,
+    priceAgorot: 250_000,
     sessionMinutes: 60,
     recommended: true,
   },
@@ -350,7 +351,7 @@ export const PACKAGES: SeedPackage[] = [
     code: 'mentoring-12',
     kind: 'instructor',
     sessions: 12,
-    priceAgorot: 300_000,
+    priceAgorot: 370_000,
     sessionMinutes: 60,
     recommended: false,
   },

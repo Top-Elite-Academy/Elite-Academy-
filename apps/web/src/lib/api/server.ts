@@ -1,13 +1,15 @@
 import 'server-only';
 import type { MeResponse } from '@eta/shared';
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 import { API_INTERNAL_URL } from './internal-url';
 
 /**
  * The signed-in user for server components, or null. The browser's cookies
  * are forwarded so the API makes the decision — the web app never trusts itself.
+ * Asked once per request: the layout, page and header share the answer.
  */
-export async function getCurrentUser(): Promise<MeResponse | null> {
+export const getCurrentUser = cache(async (): Promise<MeResponse | null> => {
   const cookieHeader = (await cookies()).toString();
   if (!cookieHeader) return null;
   try {
@@ -19,7 +21,7 @@ export async function getCurrentUser(): Promise<MeResponse | null> {
   } catch {
     return null;
   }
-}
+});
 
 /**
  * Signed-in GET for server components (student area). Forwards the browser's

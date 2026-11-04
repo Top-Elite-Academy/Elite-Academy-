@@ -17,7 +17,7 @@ export function MentorCardView({
   mentor: MentorCard;
   /** Package code for the booking link, e.g. "mentoring-8" or "career". */
   service: string;
-  /** Already formatted, e.g. "₪250". */
+  /** Already formatted, e.g. "₪360". */
   priceLabel: string | null;
 }) {
   const t = useTranslations('Mentoring');

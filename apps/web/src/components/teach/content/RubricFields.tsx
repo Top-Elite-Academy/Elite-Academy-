@@ -2,8 +2,8 @@
 
 import { type AssignmentView, RUBRIC_MAX_CRITERIA, RUBRIC_TOTAL } from '@eta/shared';
 import { useTranslations } from 'next-intl';
-import type { Dispatch, SetStateAction } from 'react';
-import { CONTROL_CLASS } from '@/components/forms/FieldParts';
+import { type Dispatch, type SetStateAction, useId } from 'react';
+import { CONTROL_CLASS, FieldError } from '@/components/forms/FieldParts';
 import { Button } from '@/components/ui/Button';
 import { CloseIcon, PlusIcon } from '@/components/ui/icons';
 import { cn } from '@/lib/cn';
@@ -26,15 +26,24 @@ export const toRubricRows = (assignment: AssignmentView | null): RubricRow[] =>
 export const rubricTotal = (rows: RubricRow[]) =>
   rows.reduce((sum, row) => sum + (Number.isFinite(row.maxPoints) ? row.maxPoints : 0), 0);
 
-/** Criteria with their maximum points; the total must reach 100. */
+/** The input of row `index`'s criterion name (to move focus to it after an error). */
+export const criterionFieldName = (index: number) => `criterion-${index}`;
+
+/**
+ * Criteria with their maximum points; the total must reach 100. `errors` holds
+ * a translated message per row key (e.g. a criterion without a name).
+ */
 export function RubricFields({
   rows,
   setRows,
+  errors = {},
 }: {
   rows: RubricRow[];
   setRows: Dispatch<SetStateAction<RubricRow[]>>;
+  errors?: Record<string, string>;
 }) {
   const t = useTranslations('TeachContent.exercise');
+  const idPrefix = useId();
   const total = rubricTotal(rows);
   const update = (key: string, change: Partial<RubricRow>) => {
     setRows((current) => current.map((row) => (row.key === key ? { ...row, ...change } : row)));
@@ -46,14 +55,20 @@ export function RubricFields({
       {rows.map((row, index) => (
         <div key={row.key} className="flex flex-wrap items-end gap-3">
           <label className="flex min-w-48 flex-1 flex-col gap-1.5 text-sm text-ink">
-            {t('criterion', { number: index + 1 })}
+            <span>
+              {t('criterion', { number: index + 1 })}
+              <span className="text-ink-muted">{` ${t('optional')}`}</span>
+            </span>
             <input
+              name={criterionFieldName(index)}
               value={row.title}
               maxLength={120}
+              aria-invalid={errors[row.key] ? true : undefined}
+              aria-describedby={errors[row.key] ? `${idPrefix}-${row.key}-error` : undefined}
               onChange={(event) => {
                 update(row.key, { title: event.target.value });
               }}
-              className={CONTROL_CLASS}
+              className={cn(CONTROL_CLASS, errors[row.key] ? 'border-danger' : 'border-ink/30')}
             />
           </label>
           <label className="flex w-28 flex-col gap-1.5 text-sm text-ink">
@@ -81,6 +96,13 @@ export function RubricFields({
           >
             <CloseIcon className="size-4" aria-hidden="true" />
           </Button>
+          {/* Its own line under the row, so the inputs stay aligned. */}
+          <div className="basis-full empty:hidden">
+            <FieldError
+              id={errors[row.key] ? `${idPrefix}-${row.key}-error` : undefined}
+              text={errors[row.key]}
+            />
+          </div>
         </div>
       ))}
       <div className="flex flex-wrap items-center justify-between gap-3">

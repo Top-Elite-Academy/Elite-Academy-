@@ -13,7 +13,8 @@
   },
   "A11y": {
     "skipToContent": "انتقل إلى المحتوى الرئيسي",
-    "opensInNewTab": "(يفتح في علامة تبويب جديدة)"
+    "opensInNewTab": "(يفتح في علامة تبويب جديدة)",
+    "loading": "جارٍ التحميل…"
   },
   "Nav": {
     "primary": "القائمة الرئيسية",
@@ -243,6 +244,7 @@
     },
     "session": {
       "tooLate": "يمكن إجراء تغييرات حتى 24 ساعة قبل الجلسة.",
+      "rescheduleLimit": "لقد نقلت هذه الجلسة من قبل. لا يزال بإمكانك إلغاؤها حتى 24 ساعة قبل موعدها.",
       "notStarted": "يمكنك إضافة الملاحظات بعد بدء الجلسة.",
       "started": "بدأت هذه الجلسة بالفعل."
     },
@@ -296,7 +298,6 @@
       "titleRequired": "اكتب عنوانًا للتمرين.",
       "titleTooLong": "العنوان طويل جدًا.",
       "instructionsTooLong": "التعليمات طويلة جدًا.",
-      "criterionRequired": "أعطِ كل معيار اسمًا.",
       "criterionTooLong": "اسم أحد المعايير طويل جدًا.",
       "rubricRequired": "أضف معيارًا واحدًا على الأقل.",
       "rubricTooLong": "يمكن أن يحتوي سلّم التقييم على 10 معايير كحد أقصى.",
@@ -324,6 +325,20 @@
       "subjectTooLong": "الموضوع طويل جدًا.",
       "tooManyFiles": "يمكنك إرفاق 3 ملفات كحد أقصى.",
       "fileTooLarge": "يمكن أن يكون حجم المرفق 10 ميغابايت كحد أقصى."
+    },
+    "discussion": {
+      "titleRequired": "اكتب سؤالك في سطر واحد.",
+      "titleTooLong": "استخدم 120 حرفًا على الأكثر.",
+      "bodyRequired": "أضف بعض التفاصيل.",
+      "bodyTooLong": "استخدم 4,000 حرف على الأكثر.",
+      "reasonTooLong": "استخدم 500 حرف على الأكثر.",
+      "removed": "تم حذف هذا السؤال.",
+      "answerInvalid": "لا يمكن اعتماد هذا الرد كإجابة.",
+      "cannotReport": "لا يمكنك الإبلاغ عن هذا المنشور."
+    },
+    "syllabus": {
+      "pdfOnly": "ارفع المنهج كملف PDF.",
+      "tooLarge": "يمكن أن يكون حجم المنهج 25 ميغابايت على الأكثر."
     }
   },
   "Levels": {
@@ -655,6 +670,10 @@
         "eight": "دعم برنامج كامل ومشروع",
         "twelve": "دعم مكثّف"
       }
+    },
+    "sale": {
+      "instead": "بدلًا من {price}",
+      "save": "وفّر {amount}"
     },
     "mentors": {
       "titleInstructor": "مدرّسون متاحون للإرشاد",
@@ -1122,7 +1141,8 @@
       },
       "pendingNote": "لا يرى الطلاب بانتظار التأكيد المجموعة إلا بعد أن تؤكّدهم الإدارة أو المبيعات.",
       "noStudents": "لا يوجد طلاب بعد.",
-      "noMatch": "لا يوجد طلاب مطابقون."
+      "noMatch": "لا يوجد طلاب مطابقون.",
+      "discussionsTitle": "أسئلة هذه المجموعة"
     },
     "attention": {
       "title": "بحاجة إلى انتباهك",
@@ -1143,7 +1163,10 @@
     "announcement": "{cohortName}: {title}",
     "enrollmentConfirmed": "تم تأكيد تسجيلك في {programTitle} ({cohortName}). مجموعتك مفتوحة الآن.",
     "live": "إشعار جديد: {text}",
-    "submissionReturned": "تم تقييم تمرينك «{title}»: {score}/100."
+    "submissionReturned": "تم تقييم تمرينك «{title}»: {score}/100.",
+    "discussionQuestion": "سأل {name}: {title}",
+    "discussionReply": "ردّ {name} على «{title}»",
+    "discussionReport": "أبلغ {name} عن منشور في «{title}»"
   },
   "StudentCourses": {
     "pendingBadge": "بانتظار التأكيد",
@@ -1251,6 +1274,7 @@
     "keep": "الإبقاء عليها",
     "confirmCancel": "إلغاء الجلسة",
     "tooLate": "يمكن إجراء تغييرات حتى 24 ساعة قبل الجلسة.",
+    "rescheduleUsed": "تمت إعادة الجدولة من قبل. لا يزال بإمكانك الإلغاء حتى 24 ساعة قبل الجلسة.",
     "notes": "ملاحظات من {name}",
     "refundRequested": "تم طلب الاسترداد",
     "rescheduleTitle": "اختر وقتًا جديدًا",
@@ -1278,7 +1302,8 @@
       "label": "أقسام المجموعة",
       "students": "الطلاب",
       "attendance": "الحضور",
-      "schedule": "جدول الدروس"
+      "schedule": "جدول الدروس",
+      "discussions": "النقاشات"
     },
     "takeAttendance": "تسجيل الحضور",
     "table": {
@@ -1425,7 +1450,6 @@
     "files": {
       "title": "ملفات للتنزيل للطلاب",
       "add": "إضافة ملفات",
-      "kind": "النوع",
       "kinds": {
         "material": "مادة",
         "exercise": "تمرين"
@@ -1440,7 +1464,9 @@
         "infected": "وُجد فيروس · تمت الإزالة",
         "failed": "فشل الفحص"
       },
-      "scanningNote": "يمكن للطلاب تنزيله بعد الفحص."
+      "scanningNote": "يمكن للطلاب تنزيله بعد الفحص.",
+      "exerciseTitle": "ملفات هذا التمرين",
+      "exerciseHint": "كود البداية أو بيانات أو ملف PDF بالتعليمات. يراها الطلاب مع التمرين بعد فحص الفيروسات."
     },
     "exercise": {
       "title": "تمرين للتسليم",
@@ -1464,7 +1490,25 @@
       "deleteTitle": "هل تريد حذف هذا التمرين؟",
       "deleteBody": "لن يراه الطلاب بعد الآن. لم يسلّمه أحد بعد.",
       "keep": "أبقِه",
-      "confirmDelete": "احذف"
+      "confirmDelete": "احذف",
+      "optional": "(اختياري)"
+    },
+    "syllabus": {
+      "title": "المنهج الدراسي (PDF)",
+      "intro": "يحمّله الطلاب المؤكَّدون في هذا البرنامج من صفحة الدورة. رفع ملف PDF جديد يستبدل الحالي بعد اجتيازه فحص الفيروسات.",
+      "none": "لا يوجد منهج بعد.",
+      "current": "يظهر للطلاب",
+      "replacesAfterScan": "سيستبدل الحالي بعد الفحص",
+      "download": "تنزيل",
+      "delete": "حذف",
+      "deleteTitle": "حذف ملف المنهج هذا؟",
+      "deleteBody": "ستُحذف هذه النسخة.",
+      "deleteCurrentBody": "لن يتمكن الطلاب من تنزيل المنهج حتى ترفع نسخة جديدة.",
+      "keep": "إبقاؤه",
+      "add": "ارفع ملف المنهج PDF",
+      "replace": "ارفع نسخة جديدة",
+      "allowed": "PDF فقط · 25 ميغابايت كحد أقصى · يُفحص من الفيروسات قبل أن يفتحه الطلاب.",
+      "uploading": "جارٍ الرفع…"
     }
   },
   "StudentLesson": {
@@ -1507,7 +1551,13 @@
       "sent": "تم الإرسال. سيظهر الرد في الرسائل."
     },
     "technicalProblem": "مشكلة تقنية؟",
-    "contactSupport": "تواصل مع الدعم"
+    "contactSupport": "تواصل مع الدعم",
+    "syllabus": {
+      "title": "منهج الدورة",
+      "updated": "آخر تحديث {when}",
+      "download": "تنزيل PDF",
+      "downloadNamed": "تنزيل المنهج ({name})"
+    }
   },
   "Grading": {
     "late": "{days, plural, one {متأخر · يوم واحد} two {متأخر · يومان} few {متأخر · # أيام} many {متأخر · # يومًا} other {متأخر · # يوم}}",
@@ -1517,7 +1567,8 @@
       "clean": "تم الفحص · آمن",
       "infected": "محظور: فيروس",
       "failed": "تعذّر الفحص"
-    }
+    },
+    "criterionNumber": "المعيار {number}"
   },
   "TeachGrading": {
     "title": "التقييم",
@@ -1577,7 +1628,8 @@
     "grade": "علامتك: {score}/{max}",
     "points": "{points}/{max} نقاط",
     "feedback": "ملاحظات المدرّس",
-    "repoPlaceholder": "https://github.com/…"
+    "repoPlaceholder": "https://github.com/…",
+    "exerciseFiles": "ملفات هذا التمرين"
   },
   "Messages": {
     "title": "الرسائل",
@@ -1621,5 +1673,52 @@
       "cancel": "إلغاء",
       "send": "أرسل"
     }
+  },
+  "Discussion": {
+    "title": "أسئلة حول هذا التمرين",
+    "intro": "اسأل زملاءك ومدرّبك. مجموعتك فقط ترى هذا.",
+    "guideline": "اسأل عن الأفكار والأخطاء وطرق الحل — من فضلك لا تنشر حلًا كاملًا. يمكن لمدرّبك حذف المنشورات.",
+    "ask": "اطرح سؤالًا",
+    "questionTitle": "سؤالك في سطر واحد",
+    "questionBody": "التفاصيل",
+    "codeHint": "لمشاركة كود، ضع ``` في سطر قبله وسطر بعده.",
+    "post": "انشر السؤال",
+    "empty": "لا توجد أسئلة بعد. كن أول من يسأل.",
+    "pinned": "مثبّت",
+    "answered": "تمت الإجابة",
+    "answer": "الإجابة",
+    "removedBadge": {
+      "author": "حذفه الكاتب",
+      "staff": "محذوف"
+    },
+    "removed": {
+      "author": "حذف الكاتب هذا المنشور.",
+      "staff": "حذف المدرّب هذا المنشور."
+    },
+    "reports": "{count, plural, one {بلاغ واحد} two {بلاغان} few {# بلاغات} many {# بلاغًا} other {# بلاغ}}",
+    "replies": "{count, plural, =0 {لا توجد ردود بعد} one {رد واحد} two {ردّان} few {# ردود} many {# ردًا} other {# رد}}",
+    "active": "آخر نشاط {when}",
+    "you": "أنت",
+    "staffName": "{name} (المدرّب)",
+    "yourReply": "ردّك",
+    "reply": "انشر الرد",
+    "closed": "تم حذف هذا السؤال، لذلك أُغلقت الردود الجديدة.",
+    "backToLesson": "العودة إلى الدرس",
+    "markAnswer": "اعتمادها كإجابة",
+    "unmarkAnswer": "إلغاء اعتماد الإجابة",
+    "report": "إبلاغ",
+    "reportTitle": "الإبلاغ عن هذا المنشور؟",
+    "reportBody": "سيطّلع عليه مدرّبك. أبلغ عن المنشورات التي تشارك حلًا كاملًا أو غير اللائقة أو الخارجة عن الموضوع.",
+    "reportReason": "ما المشكلة؟ (اختياري)",
+    "sendReport": "إرسال البلاغ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "deleteQuestionTitle": "حذف هذا السؤال؟",
+    "deleteReplyTitle": "حذف هذا الرد؟",
+    "deleteOwnBody": "لن يراه زملاؤك بعد الآن. لا يمكن التراجع عن ذلك.",
+    "removeBody": "لن يراه الطلاب بعد الآن. يمكنك قراءته هنا.",
+    "pin": "تثبيت في الأعلى",
+    "unpin": "إلغاء التثبيت",
+    "keepReported": "{count, plural, one {إبقاء المنشور المُبلَّغ عنه} other {إبقاء المنشورات المُبلَّغ عنها (#)}}"
   }
 }

@@ -131,9 +131,17 @@ export const STUDENT_ROUTES = {
 export const studentCoursePath = (slug: string) =>
   `${STUDENT_ROUTES.courses}/${encodeURIComponent(slug)}`;
 
+/** A confirmed student's download of the program syllabus (the API answers with a short-lived link). */
+export const studentSyllabusDownloadPath = (slug: string) =>
+  `/api/me/courses/${encodeURIComponent(slug)}/syllabus/download`;
+
 /** One lesson in the player. */
 export const studentLessonPath = (slug: string, lessonId: string) =>
   `${studentCoursePath(slug)}/lessons/${encodeURIComponent(lessonId)}`;
+
+/** One question in a lesson's exercise discussion (spec §4.11). */
+export const studentThreadPath = (slug: string, lessonId: string, threadId: string) =>
+  `${studentLessonPath(slug, lessonId)}/discussion/${encodeURIComponent(threadId)}`;
 
 /** Download a scanned lesson file (the API answers with a short-lived link). */
 export const lessonFileDownloadPath = (lessonId: string, fileId: string) =>
@@ -208,9 +216,17 @@ export const teachContentPath = (programId: string, lessonId?: string) =>
   `${TEACH_ROUTES.content}?program=${encodeURIComponent(programId)}` +
   (lessonId ? `&lesson=${encodeURIComponent(lessonId)}` : '');
 
+/** The instructor's download of one syllabus version. */
+export const teachSyllabusDownloadPath = (fileId: string) =>
+  `/api/teach/syllabus/${encodeURIComponent(fileId)}/download`;
+
 /** One cohort's page in the instructor area. */
 export const teachCohortPath = (cohortId: string) =>
   `${TEACH_ROUTES.cohorts}/${encodeURIComponent(cohortId)}`;
+
+/** One question of a cohort's discussions, for its instructor. */
+export const teachThreadPath = (cohortId: string, threadId: string) =>
+  `${teachCohortPath(cohortId)}/discussions/${encodeURIComponent(threadId)}`;
 
 export type TeachNavIcon = 'today' | 'cohorts' | 'sessions' | 'content' | 'grading' | 'messages';
 

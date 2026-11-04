@@ -12,6 +12,7 @@ const lesson = (id: string, completed: boolean, lockedUntilWeek: number | null =
 
 const outline: CourseOutline = {
   program: { slug: 'fsa', title: 'Full Stack' },
+  syllabus: null,
   cohort: { id: 'c', name: 'FSA-03', week: 12 },
   progressPercent: 25,
   modules: [
