@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0"
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1"
   },
   "devDependencies": {
     "@eta/tsconfig": "workspace:*",
     "dotenv": "^17.4.2",
-    "prisma": "^7.10.0",
+    "prisma": "^7.10.1",
     "typescript": "~5.9.3"
   },
   "main": "dist/index.js",
