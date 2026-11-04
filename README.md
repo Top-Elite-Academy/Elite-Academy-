@@ -34,6 +34,7 @@ authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…).
 | Command                 | What it does                                                      |
 | ----------------------- | ----------------------------------------------------------------- |
 | `pnpm dev`              | Run web + API in watch mode                                       |
+| `pnpm start`            | Build, then run web + API at full speed (no reload on edits)      |
 | `pnpm build`            | Production build of every package                                 |
 | `pnpm lint`             | ESLint everywhere + the RTL logical-CSS check                     |
 | `pnpm typecheck`        | TypeScript (strict) everywhere                                    |
@@ -74,3 +75,4 @@ packages/
 - **Config:** every setting comes from `.env`, validated by `apps/api/src/config/env.schema.ts`; document new variables in `.env.example`.
 - **Security:** the server decides access. Every route needs a session unless marked `@Public()`; use `@Roles()` and `AccessPolicy` for ownership. See [SECURITY.md](SECURITY.md).
 - **Validation:** request bodies are validated with the shared Zod schemas; never accept roles, prices or ids of other users from the browser.
+# Elite-Academy-
