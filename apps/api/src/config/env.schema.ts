@@ -52,9 +52,12 @@ export const envSchema = z
     SMTP_PASSWORD: z.string().optional(),
     MAIL_FROM: z.string().min(3),
 
-    /** Gateway adapter name; more are added when the gateway is chosen (spec §12). */
+    /**
+     * Gateway adapter name; more are added when the gateway is chosen (spec §12).
+     * "disabled": no online payments yet — paid bookings are refused with a clear message.
+     */
     PAYMENT_PROVIDER: z
-      .enum(['test'])
+      .enum(['test', 'disabled'])
       .default('test')
       .transform((name): string => name),
     /** HMAC secret of the built-in test provider (signs its webhooks). */
