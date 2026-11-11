@@ -22,6 +22,11 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+  // The Docker image (apps/web/Dockerfile) sets NEXT_OUTPUT=standalone: a minimal
+  // self-contained server. Local `pnpm build` / `pnpm start` are unchanged.
+  ...(process.env['NEXT_OUTPUT'] === 'standalone'
+    ? { output: 'standalone' as const, outputFileTracingRoot: path.resolve(__dirname, '../..') }
+    : {}),
   poweredByHeader: false,
   reactStrictMode: true,
   // Bundle @eta/shared from its TypeScript source (ES modules) instead of the
