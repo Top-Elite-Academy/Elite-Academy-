@@ -1,0 +1,13 @@
+# Optional: lesson files stored on this server (the "storage" service) instead of
+# Cloudflare R2. Enabled by scripts/server/configure.sh, which copies this file to
+# deploy/caddy/sites-enabled/. FILES_DOMAIN is e.g. files.example.com.
+{$FILES_DOMAIN} {
+	header -Server
+
+	# Browsers only download, with short-lived signed links. Uploads and every other
+	# storage operation come from the API inside Docker, never from the internet.
+	@notDownload not method GET HEAD
+	respond @notDownload 405
+
+	reverse_proxy storage:9000
+}
