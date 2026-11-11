@@ -220,7 +220,8 @@
     },
     "booking": {
       "holdExpired": "The held time has run out. Please choose a time again.",
-      "alreadyPaid": "This booking is already paid."
+      "alreadyPaid": "This booking is already paid.",
+      "paymentsUnavailable": "Online booking opens soon. Please contact us to book a session."
     },
     "service": {
       "invalid": "This service is not available."
