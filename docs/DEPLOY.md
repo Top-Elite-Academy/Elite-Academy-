@@ -517,3 +517,75 @@ server types were temporarily not orderable; check the console before you buy.
 | Upload fails with 413                           | Cloudflare's 100 MB request limit (section 0).                                                                                                                       |
 | Server slow, out of memory                      | `docker stats --no-stream`; check the swap file exists (`swapon --show`); consider CX33 and higher limits in `.env.production`.                                      |
 | Disk full                                       | `docker system df`, `docker image prune -f`, `docker builder prune -f`.                                                                                              |
+
+---
+
+## 12. Automatic deploys from GitHub (CI/CD)
+
+Once this is set up, every change merged into `main` goes live by itself:
+
+```
+push / merge to main ─▶ CI (lint, types, tests, audit, secret scan)
+                           │ all green
+                           ▼
+                  Deploy workflow ──SSH──▶ server: scripts/server/deploy.sh
+                                            fetch → build → backup → migrate
+                                            → swap containers → health check
+                                            (rolls back if not healthy)
+```
+
+A failing CI run never deploys. Pull requests run CI only. You can redeploy the
+latest `main` by hand: **Actions → Deploy → Run workflow**.
+
+### 12.1 One-time setup
+
+**On the server** (as `deploy`), make a key that only GitHub Actions uses:
+
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/github_actions -N "" -C "github-actions-deploy"
+cat ~/.ssh/github_actions.pub >> ~/.ssh/authorized_keys
+cat ~/.ssh/github_actions          # the PRIVATE key → secret DEPLOY_SSH_KEY
+ssh-keyscan -t ed25519 localhost 2>/dev/null | sed "s/^localhost/SERVER_IP/"
+#                                  # → secret DEPLOY_KNOWN_HOSTS (replace SERVER_IP)
+rm ~/.ssh/github_actions           # GitHub keeps the only copy
+```
+
+The server must follow `main`: `cd /opt/elite-tech && git fetch origin && git status`
+should show no local changes to tracked files (`.env.production` is not tracked,
+so it is kept).
+
+**In GitHub** → repository → **Settings → Environments → New environment**
+`production`, then add:
+
+| Kind     | Name                 | Value                                                   |
+| -------- | -------------------- | ------------------------------------------------------- |
+| Secret   | `DEPLOY_HOST`        | SERVER_IP                                               |
+| Secret   | `DEPLOY_SSH_KEY`     | the whole private key, including the BEGIN/END lines    |
+| Secret   | `DEPLOY_KNOWN_HOSTS` | the `ssh-keyscan` line (starts with the server IP)      |
+| Variable | `DOMAIN`             | your domain, e.g. `elitetech.co.il` (live health check) |
+| Variable | `DEPLOY_USER`        | optional, default `deploy`                              |
+
+Optional: in the same environment, **Required reviewers** makes every deploy wait
+for a click on "Approve", and **Deployment branches → main** stops other
+branches from using these secrets.
+
+Also protect `main` (**Settings → Branches → Add rule**): require a pull request
+and the CI checks to pass, so nothing reaches production without green tests.
+
+### 12.2 What a deploy does
+
+`scripts/server/deploy.sh <commit>` (the same steps as §9.1):
+
+1. Refuses commits that are not on `main` or have no `docker-compose.prod.yml`.
+2. Checks out the commit and builds the images, tagged with the commit.
+3. Runs a database backup (skip with `SKIP_BACKUP=1`), then `migrate`.
+4. Replaces the containers and waits up to 5 minutes for `web`, `api` and
+   `caddy` to be healthy.
+5. If they are not healthy, starts the previous version again and the
+   workflow fails (you get GitHub's failure email). **Migrations are not
+   undone**, so write them backwards compatible (add a column now, remove
+   the old one in a later release).
+6. Keeps the images of this and the previous release, removes older ones.
+
+The site is unavailable for a few seconds while the containers are swapped.
+To deploy by hand, on the server: `bash scripts/server/deploy.sh $(git rev-parse origin/main)`.
