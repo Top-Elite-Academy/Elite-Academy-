@@ -1,0 +1,76 @@
+# Continuous deployment (docs/DEPLOY.md §12).
+# When CI passes on main, the same commit is deployed to the Hetzner server:
+# build images → back up the database → migrate → swap containers → health check,
+# with an automatic rollback if the new version does not become healthy.
+# "Run workflow" in the Actions tab redeploys the latest main by hand.
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never two deploys at once; a newer commit waits for the running deploy.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to production
+    # Only after a green CI run for a push to main (not for pull requests).
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: production
+      url: https://${{ vars.DOMAIN }}
+    env:
+      SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SHA }}
+
+      - name: Set up SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Pinned host key: the job refuses to talk to a server it does not recognise.
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Deploy ${{ env.SHA }}
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER || 'deploy' }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes -o ServerAliveInterval=30 \
+            "$DEPLOY_USER@$HOST" "bash -s -- '$SHA'" < scripts/server/deploy.sh
+
+      - name: Check the live site
+        if: vars.DOMAIN != ''
+        run: |
+          for _ in $(seq 1 10); do
+            if curl -fsS --max-time 10 "https://${{ vars.DOMAIN }}/api/health"; then
+              echo; echo "Live site is healthy."; exit 0
+            fi
+            sleep 6
+          done
+          echo "https://${{ vars.DOMAIN }}/api/health did not answer." >&2
+          exit 1
+
+      - name: Remove the SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
