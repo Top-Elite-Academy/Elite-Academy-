@@ -1,0 +1,28 @@
+# Keeps the Docker build context small and free of secrets.
+# Images are built from source; anything built or installed locally is ignored.
+
+**/node_modules
+**/.next
+**/dist
+**/.turbo
+**/*.tsbuildinfo
+**/next-env.d.ts
+packages/db/src/generated
+
+# Secrets: never baked into an image. Production values reach containers at run time.
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# Not needed to build
+.git
+.github
+**/coverage
+**/playwright-report
+**/test-results
+**/blob-report
+**/*.log
+.DS_Store
+.vscode
+.idea

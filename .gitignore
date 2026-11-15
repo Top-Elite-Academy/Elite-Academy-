@@ -22,6 +22,7 @@ blob-report/
 .env
 .env.*
 !.env.example
+!.env.production.example
 
 # logs and OS files
 *.log
@@ -30,3 +31,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# server-specific Caddy sites (scripts/server/configure.sh)
+deploy/caddy/sites-enabled/*.caddy

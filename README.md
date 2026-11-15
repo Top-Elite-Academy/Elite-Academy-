@@ -29,6 +29,12 @@ pnpm dev                      # web on http://localhost:3000, API on http://loca
 The first admin sign-in asks you to set up two-step verification with an
 authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…).
 
+## Production
+
+One server with Docker Compose (Caddy, Next.js, NestJS, Postgres, Redis, ClamAV),
+Cloudflare in front, files and backups in Cloudflare R2. Step-by-step guide:
+[docs/DEPLOY.md](docs/DEPLOY.md). Settings: [.env.production.example](.env.production.example).
+
 ## Commands
 
 | Command                 | What it does                                                      |
@@ -75,4 +81,5 @@ packages/
 - **Config:** every setting comes from `.env`, validated by `apps/api/src/config/env.schema.ts`; document new variables in `.env.example`.
 - **Security:** the server decides access. Every route needs a session unless marked `@Public()`; use `@Roles()` and `AccessPolicy` for ownership. See [SECURITY.md](SECURITY.md).
 - **Validation:** request bodies are validated with the shared Zod schemas; never accept roles, prices or ids of other users from the browser.
+
 # Elite-Academy-

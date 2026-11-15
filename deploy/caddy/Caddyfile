@@ -1,0 +1,45 @@
+# =============================================================================
+# Elite Tech Academy — Caddy (the only service reachable from the internet).
+#
+# Values come from the container environment (docker-compose.prod.yml):
+#   DOMAIN        the site's host name, e.g. elitetech.co.il
+#   ACME_EMAIL    address for certificate-expiry notices from Let's Encrypt
+#   WEB_UPSTREAM  where the Next.js server listens inside Docker (web:3000)
+#
+# HTTPS: Caddy gets and renews a Let's Encrypt certificate by itself. That
+# certificate is what Cloudflare checks in "Full (strict)" mode.
+# Every request goes to the web app; the web app forwards /api/* to the API
+# (next.config.ts rewrites), exactly as in development.
+# =============================================================================
+
+{
+	email {$ACME_EMAIL}
+
+	servers {
+		# Visitors reach us through Cloudflare. Its CF-Connecting-IP header holds
+		# the visitor's real IP, but only connections that really come from a
+		# Cloudflare address are allowed to set it.
+		import /etc/caddy/cloudflare-ips.caddy
+		client_ip_headers CF-Connecting-IP
+	}
+}
+
+{$DOMAIN} {
+	# Don't advertise the server software.
+	header -Server
+
+	reverse_proxy {$WEB_UPSTREAM} {
+		# The API (CLIENT_IP_HEADER=cf-connecting-ip) uses this header for rate limits
+		# and audit logs. Overwrite it with the IP Caddy verified above, so someone
+		# who connects to the server directly (not through Cloudflare) cannot forge it.
+		header_up CF-Connecting-IP {client_ip}
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
+
+# Extra sites switched on per server (e.g. files.DOMAIN for on-server file storage).
+import /etc/caddy/sites-enabled/*.caddy
