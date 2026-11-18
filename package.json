@@ -24,7 +24,7 @@
     "db:seed:dev": "pnpm --filter @eta/api build && pnpm --filter @eta/api seed:dev"
   },
   "devDependencies": {
-    "prettier": "^3.9.10",
-    "turbo": "^2.11.8"
+    "prettier": "^3.10.0",
+    "turbo": "^2.11.10"
   }
 }
